@@ -39,6 +39,8 @@ dependencies {
     implementation "com.google.android.material:material:$material_design_version"
     implementation "androidx.cardview:cardview:$cardview_version"
 
+    implementation "com.squareup.picasso:picasso:$picasso_version"
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
