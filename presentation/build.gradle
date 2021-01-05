@@ -46,7 +46,7 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:$recycler_version"
 
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-simplexml:$retrofit_xml_converter"
+    implementation "com.squareup.retrofit2:converter-gson:$gson_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$logger_version"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_rxjava_adapter_version"
 

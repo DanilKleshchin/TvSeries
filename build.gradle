@@ -40,7 +40,6 @@ ext {
     recycler_version = '1.0.0'
     retrofit_version = '2.9.0'
     retrofit_rxjava_adapter_version = '2.4.0'
-    retrofit_xml_converter = '2.4.0'
     logger_version = '3.12.2'
     gson_version = '2.7.2'
     picasso_version = '2.71828'
