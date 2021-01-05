@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Tv Series</string>
     <string name="most_popular">Most popular</string>
+    <string name="network">Network: %1$s</string>
+    <string name="country">Country: %1$s</string>
+    <string name="start_date">Start date: %1$s</string>
+    <string name="status">Status: %1$s</string>
 </resources>

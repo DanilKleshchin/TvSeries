@@ -24,8 +24,10 @@
             android:layout_weight="1"
             android:maxLines="1"
             android:text="@string/most_popular"
+            android:fontFamily="@font/ubuntu_bold"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/text_size_primary" />
+            android:layout_marginStart="@dimen/margin_small"
+            android:textSize="@dimen/text_size_big" />
 
     </LinearLayout>
 
@@ -34,7 +36,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/margin_primary"
-        android:layout_marginTop="@dimen/margin_big"
         android:layout_marginEnd="@dimen/margin_primary"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

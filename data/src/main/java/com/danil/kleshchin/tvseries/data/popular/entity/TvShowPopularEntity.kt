@@ -9,7 +9,7 @@ data class TvShowPopularEntity(
     @SerializedName("permalink")
     val detailUrl: String,
 
-    @SerializedName("start-date")
+    @SerializedName("start_date")
     val startDate: String,
 
     val country: String,

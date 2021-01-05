@@ -1,28 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary"
-    android:layout_marginBottom="@dimen/margin_primary">
+    android:layout_marginBottom="@dimen/margin_primary"
+    android:background="@color/colorPrimary">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/section_cardview_height"
-        android:padding="@dimen/padding_small"
+        android:layout_height="@dimen/tv_show_popular_cardview_height"
         android:layout_margin="@dimen/margin_small"
-        card_view:cardCornerRadius="@dimen/cardview_radius"
-        card_view:cardBackgroundColor="@color/colorItemBackground">
+        android:padding="@dimen/padding_small"
+        card_view:cardBackgroundColor="@color/colorOtherItemBackground"
+        card_view:cardCornerRadius="@dimen/cardview_radius">
 
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="@color/colorTextPrimary"
-            android:textSize="@dimen/text_size_big"
-            tools:text="Section name"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/padding_small"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/text_size_primary"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:fontFamily="@font/ubuntu_bold"
+                android:includeFontPadding="false"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginStart="@dimen/margin_primary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Movie title" />
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="180dp"
+                android:layout_height="240dp"
+                android:contentDescription="@null"
+                android:scaleType="fitXY"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginStart="@dimen/margin_primary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/name"
+                tools:src="@drawable/ic_launcher"/>
+
+            <TextView
+                android:id="@+id/network"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/text_size_primary"
+                android:fontFamily="@font/ubuntu_light"
+                android:includeFontPadding="false"
+                android:layout_marginTop="@dimen/margin_big_x"
+                android:layout_marginStart="@dimen/margin_primary"
+                app:layout_constraintStart_toEndOf="@id/icon"
+                app:layout_constraintTop_toBottomOf="@id/name"
+                tools:text="The CW" />
+
+            <TextView
+                android:id="@+id/country"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/text_size_primary"
+                android:fontFamily="@font/ubuntu_light"
+                android:includeFontPadding="false"
+                android:layout_marginTop="@dimen/margin_big_x"
+                android:layout_marginStart="@dimen/margin_primary"
+                app:layout_constraintStart_toEndOf="@id/icon"
+                app:layout_constraintTop_toBottomOf="@id/network"
+                tools:text="RU" />
+
+            <TextView
+                android:id="@+id/start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/text_size_primary"
+                android:fontFamily="@font/ubuntu_light"
+                android:includeFontPadding="false"
+                android:layout_marginTop="@dimen/margin_big_x"
+                android:layout_marginStart="@dimen/margin_primary"
+                app:layout_constraintStart_toEndOf="@id/icon"
+                app:layout_constraintTop_toBottomOf="@id/country"
+                tools:text="2014-10-07" />
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/text_size_primary"
+                android:fontFamily="@font/ubuntu_light"
+                android:includeFontPadding="false"
+                android:layout_marginTop="@dimen/margin_big_x"
+                android:layout_marginStart="@dimen/margin_primary"
+                app:layout_constraintStart_toEndOf="@id/icon"
+                app:layout_constraintTop_toBottomOf="@id/start_date"
+                tools:text="Status" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>

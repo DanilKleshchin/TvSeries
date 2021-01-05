@@ -4,8 +4,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.danil.kleshchin.tvseries.R
 import com.danil.kleshchin.tvseries.databinding.ItemTvShowPopularListBinding
 import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
+import com.squareup.picasso.Picasso
 
 class TvShowPopularListAdapter(
     private val tvShowPopularList: List<TvShowPopular>,
@@ -23,7 +25,8 @@ class TvShowPopularListAdapter(
         parent: ViewGroup,
         viewType: Int
     ): TvShowPopularViewHolder {
-        val binding = ItemTvShowPopularListBinding.inflate(LayoutInflater.from(context), parent, false)
+        val binding =
+            ItemTvShowPopularListBinding.inflate(LayoutInflater.from(context), parent, false)
         return TvShowPopularViewHolder(binding, tvShowPopularClickListener)
     }
 
@@ -41,7 +44,24 @@ class TvShowPopularListAdapter(
 
         fun bind(tvShowPopular: TvShowPopular) {
             binding.apply {
+                val resources = binding.root.resources
+                val networkString =
+                    String.format(resources.getString(R.string.network), tvShowPopular.network)
+                val countryString =
+                    String.format(resources.getString(R.string.country), tvShowPopular.country)
+                val startDateString =
+                    String.format(resources.getString(R.string.start_date), tvShowPopular.startDate)
+                val statusString =
+                    String.format(resources.getString(R.string.status), tvShowPopular.status)
+
                 name.text = tvShowPopular.name
+                network.text = networkString
+                country.text = countryString
+                startDate.text = startDateString
+                status.text = statusString
+
+                Picasso.get().load(tvShowPopular.iconUrl).into(icon);
+
                 root.setOnClickListener { clickListener.onTvShowClick(tvShowPopular) }
             }
         }
