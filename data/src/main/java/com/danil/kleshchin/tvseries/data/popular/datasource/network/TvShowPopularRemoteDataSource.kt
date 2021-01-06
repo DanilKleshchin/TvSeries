@@ -5,11 +5,10 @@ import com.danil.kleshchin.tvseries.data.popular.entity.TvShowPopularEntityObjec
 import io.reactivex.Observable
 
 class TvShowPopularRemoteDataSource(
-    private val tvShowPopularApi: TvShowPopularApi,
-    private val pageNumber: Int
+    private val tvShowPopularApi: TvShowPopularApi
 ) : TvShowPopularDataSource {
 
-    override fun getTvShowPopularApiResponse(): Observable<TvShowPopularEntityObject> {
+    override fun getTvShowPopularApiResponse(pageNumber: Int): Observable<TvShowPopularEntityObject> {
         return tvShowPopularApi.getTvShowPopular(pageNumber)
     }
 }

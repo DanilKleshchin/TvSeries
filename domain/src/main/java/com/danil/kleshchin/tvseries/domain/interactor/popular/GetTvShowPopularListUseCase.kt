@@ -8,9 +8,13 @@ import javax.inject.Inject
 
 class GetTvShowPopularListUseCase @Inject constructor(
         private val tvShowPopularRepository: TvShowPopularRepository
-): UseCase<List<TvShowPopular>, Unit> {
+): UseCase<List<TvShowPopular>, GetTvShowPopularListUseCase.Params> {
 
-    override fun execute(params: Unit): Observable<List<TvShowPopular>> {
-        return tvShowPopularRepository.getTvShowPopularList()
+    override fun execute(params: Params): Observable<List<TvShowPopular>> {
+        return tvShowPopularRepository.getTvShowPopularList(params.pageNumber)
     }
+
+    data class Params(
+        val pageNumber: Int
+    )
 }

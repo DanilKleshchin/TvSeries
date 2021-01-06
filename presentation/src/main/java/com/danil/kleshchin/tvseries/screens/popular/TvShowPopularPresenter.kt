@@ -13,13 +13,14 @@ class TvShowPopularPresenter(
     private lateinit var tvShowPopularView: TvShowPopularContract.View
     private var tvShowPopularList: List<TvShowPopular> = emptyList()
 
+    private var currentPage = 1
     override fun setView(view: TvShowPopularContract.View) {
         this.tvShowPopularView = view
     }
 
     override fun onAttach() {
         tvShowPopularView.showLoadingView()
-        executeGetTvShowPopularList()
+        executeGetTvShowPopularListUseCase()
     }
 
     override fun onTvShowPopularSelected(tvShowPopular: TvShowPopular) {
@@ -28,11 +29,14 @@ class TvShowPopularPresenter(
 
     private fun executeGetTvShowPopularList() {
         getTvShowPopularListUseCase.execute(Unit)
+    private fun executeGetTvShowPopularListUseCase() {
+        getTvShowPopularListUseCase.execute(
+            GetTvShowPopularListUseCase.Params(currentPage)
+        )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                {
-                    tvShows ->
+                { tvShows ->
                     tvShowPopularList = tvShows
                     tvShowPopularView.showTvShowPopularList(tvShowPopularList)
                     tvShowPopularView.hideLoadingView()

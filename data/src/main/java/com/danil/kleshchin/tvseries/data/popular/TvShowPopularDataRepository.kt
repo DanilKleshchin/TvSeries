@@ -12,8 +12,8 @@ class TvShowPopularDataRepository @Inject constructor(
     private val mapper: TvShowPopularDataMapper
 ) : TvShowPopularRepository {
 
-    override fun getTvShowPopularList(): Observable<List<TvShowPopular>> {
-        return remoteDataSource.getTvShowPopularApiResponse()
+    override fun getTvShowPopularList(pageNumber: Int): Observable<List<TvShowPopular>> {
+        return remoteDataSource.getTvShowPopularApiResponse(pageNumber)
             .map(mapper::transform)
     }
 }

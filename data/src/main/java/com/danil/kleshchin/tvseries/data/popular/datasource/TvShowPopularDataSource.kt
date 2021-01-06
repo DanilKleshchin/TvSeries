@@ -6,5 +6,5 @@ import io.reactivex.Observable
 
 interface TvShowPopularDataSource {
 
-    fun getTvShowPopularApiResponse(): Observable<TvShowPopularEntityObject>
+    fun getTvShowPopularApiResponse(pageNumber: Int): Observable<TvShowPopularEntityObject>
 }
