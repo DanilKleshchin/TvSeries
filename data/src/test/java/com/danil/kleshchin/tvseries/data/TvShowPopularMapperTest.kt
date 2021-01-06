@@ -3,7 +3,7 @@ package com.danil.kleshchin.tvseries.data
 import com.danil.kleshchin.tvseries.data.popular.entity.TvShowPopularEntity
 import com.danil.kleshchin.tvseries.data.popular.mapper.TvShowPopularDataMapper
 import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
-import junit.framework.TestCase.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
