@@ -18,6 +18,15 @@
         android:padding="@dimen/toolbar_padding"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+            android:id="@+id/back_button"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:scaleType="fitXY"
+            android:layout_gravity="center"
+            android:src="@drawable/arrow_back"
+            android:contentDescription="@null"/>
+
         <TextView
             android:id="@+id/name"
             android:layout_width="0dp"
