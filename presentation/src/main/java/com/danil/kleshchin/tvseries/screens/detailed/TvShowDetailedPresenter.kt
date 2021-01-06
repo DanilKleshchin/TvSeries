@@ -19,7 +19,7 @@ class TvShowDetailedPresenter(
     }
 
     override fun onAttach() {
-        tvShowDetailedView.showLoadingView()
+        tvShowDetailedView.showHideLoadingView(false)
     }
 
     override fun initialize(tvShowPopular: TvShowPopular) {
@@ -41,11 +41,11 @@ class TvShowDetailedPresenter(
                 { tvShow ->
                     tvShowDetailed = tvShow
                     tvShowDetailedView.showTvShowDetailed(tvShowDetailed)
-                    tvShowDetailedView.hideLoadingView()
+                    tvShowDetailedView.showHideLoadingView(true)
                 },
                 {
                     it.printStackTrace()
-                    tvShowDetailedView.hideLoadingView()
+                    tvShowDetailedView.showHideLoadingView(true)
                     tvShowDetailedView.showRetry()
                 }
             )

@@ -47,6 +47,9 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
         initializeFragment(savedInstanceState)
 
         _binding = FragmentTvShowDetailedBinding.inflate(inflater, container, false)
+        setBackPressedCallback()
+        tvShowDetailedPresenter.setView(this)
+        tvShowDetailedPresenter.onAttach()
         return binding.root
     }
 
@@ -57,13 +60,6 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
         initPresenterForTvShowPopular()
 
         binding.backButton.setOnClickListener { finish() }
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        setBackPressedCallback()
-        tvShowDetailedPresenter.setView(this)
-        tvShowDetailedPresenter.onAttach()
     }
 
     override fun onDestroy() {
@@ -79,12 +75,12 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
         bind(tvShowDetailed)
     }
 
-    override fun showLoadingView() {
-
-    }
-
-    override fun hideLoadingView() {
-
+    override fun showHideLoadingView(hide: Boolean) {
+        if (hide) {
+            binding.loadingView.visibility = View.GONE
+        } else {
+            binding.loadingView.visibility = View.VISIBLE
+        }
     }
 
     override fun showRetry() {

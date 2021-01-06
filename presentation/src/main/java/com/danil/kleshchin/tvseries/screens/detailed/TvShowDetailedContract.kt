@@ -7,8 +7,7 @@ interface TvShowDetailedContract {
 
     interface View {
         fun showTvShowDetailed(tvShowDetailed: TvShowDetailed)
-        fun showLoadingView()
-        fun hideLoadingView()
+        fun showHideLoadingView(hide: Boolean)
         fun showRetry()
         fun hideRetry()
         fun showTvShowDetailedName(name: String)
