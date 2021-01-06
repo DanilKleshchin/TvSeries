@@ -88,10 +88,12 @@
                 android:fontFamily="@font/ubuntu_light"
                 android:includeFontPadding="false"
                 android:text="@string/description_more"
-                android:textColor="@color/colorTextPrimary"
                 android:textSize="@dimen/text_size_primary"
+                android:textColor="@color/colorTextLink"
+                android:textAllCaps="false"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/description" />
+                app:layout_constraintTop_toBottomOf="@id/description"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
 
             <TextView
                 android:id="@+id/network"
