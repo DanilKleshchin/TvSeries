@@ -3,8 +3,9 @@ package com.danil.kleshchin.tvseries.data.detailed.mapper
 import com.danil.kleshchin.tvseries.data.detailed.entity.TvShowDetailedEntity
 import com.danil.kleshchin.tvseries.data.detailed.entity.TvShowDetailedEntityObject
 import com.danil.kleshchin.tvseries.domain.entity.TvShowDetailed
+import javax.inject.Inject
 
-class TvShowDetailedDataMapper {
+class TvShowDetailedDataMapper @Inject constructor() {
 
     fun transform(tvShowDetailedEntity: TvShowDetailedEntity): TvShowDetailed {
         val id = tvShowDetailedEntity.id

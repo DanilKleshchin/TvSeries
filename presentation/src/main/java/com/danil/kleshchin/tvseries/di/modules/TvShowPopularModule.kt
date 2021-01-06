@@ -7,6 +7,7 @@ import com.danil.kleshchin.tvseries.data.popular.datasource.network.TvShowPopula
 import com.danil.kleshchin.tvseries.data.popular.datasource.network.TvShowPopularRemoteDataSource
 import com.danil.kleshchin.tvseries.data.popular.mapper.TvShowPopularDataMapper
 import com.danil.kleshchin.tvseries.domain.interactor.popular.GetTvShowPopularListUseCase
+import com.danil.kleshchin.tvseries.domain.interactor.popular.GetTvShowPopularPageCountUseCase
 import com.danil.kleshchin.tvseries.domain.repository.popular.TvShowPopularRepository
 import com.danil.kleshchin.tvseries.screens.popular.TvShowPopularContract
 import com.danil.kleshchin.tvseries.screens.popular.TvShowPopularNavigator
@@ -27,9 +28,13 @@ class TvShowPopularModule(
 
     @Provides
     fun provideTvShowPopularPresenter(
-        getTvShowPopularListUseCase: GetTvShowPopularListUseCase
+        getTvShowPopularListUseCase: GetTvShowPopularListUseCase,
+        getTvShowPopularPageCountUseCase: GetTvShowPopularPageCountUseCase
     ): TvShowPopularContract.Presenter =
-        TvShowPopularPresenter(getTvShowPopularListUseCase, navigator)
+        TvShowPopularPresenter(
+            getTvShowPopularListUseCase,
+            getTvShowPopularPageCountUseCase,
+            navigator)
 
     @Provides
     fun provideTvShowRepository(

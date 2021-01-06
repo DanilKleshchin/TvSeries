@@ -5,5 +5,5 @@ import io.reactivex.Observable
 
 interface TvShowDetailedDataSource {
 
-    fun getTvShowDetailedApiResponse(): Observable<TvShowDetailedEntityObject>
+    fun getTvShowDetailedApiResponse(tvShowDetailedUrl: String): Observable<TvShowDetailedEntityObject>
 }

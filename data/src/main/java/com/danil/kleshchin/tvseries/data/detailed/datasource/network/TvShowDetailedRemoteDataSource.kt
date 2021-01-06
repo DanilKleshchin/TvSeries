@@ -5,11 +5,10 @@ import com.danil.kleshchin.tvseries.data.detailed.entity.TvShowDetailedEntityObj
 import io.reactivex.Observable
 
 class TvShowDetailedRemoteDataSource(
-    private val tvShowDetailedApi: TvShowDetailedApi,
-    private val tvShowDetailedUrl: String
+    private val tvShowDetailedApi: TvShowDetailedApi
 ) : TvShowDetailedDataSource {
 
-    override fun getTvShowDetailedApiResponse(): Observable<TvShowDetailedEntityObject> {
+    override fun getTvShowDetailedApiResponse(tvShowDetailedUrl: String): Observable<TvShowDetailedEntityObject> {
         return tvShowDetailedApi.getTvShowDetailed(tvShowDetailedUrl)
     }
 }

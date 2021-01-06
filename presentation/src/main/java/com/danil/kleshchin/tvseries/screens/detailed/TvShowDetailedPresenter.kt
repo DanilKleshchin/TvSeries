@@ -1,6 +1,7 @@
 package com.danil.kleshchin.tvseries.screens.detailed
 
 import com.danil.kleshchin.tvseries.domain.entity.TvShowDetailed
+import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
 import com.danil.kleshchin.tvseries.domain.interactor.detailed.GetTvShowDetailedUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -21,18 +22,18 @@ class TvShowDetailedPresenter(
         tvShowDetailedView.showLoadingView()
     }
 
-    override fun initialize(tvShowDetailed: TvShowDetailed) {
-        tvShowDetailedView.showTvShowDetailedName(tvShowDetailed.name)
-        executeGetTvShowDetailed()
+    override fun initialize(tvShowPopular: TvShowPopular) {
+        tvShowDetailedView.showTvShowDetailedName(tvShowPopular.name)
+        executeGetTvShowDetailed(tvShowPopular)
     }
 
     override fun onDescriptionMoreSelected(tvShowDetailed: TvShowDetailed) {
         tvShowDetailedNavigator.showWebPage(tvShowDetailed.moreDescriptionUrl)
     }
 
-    private fun executeGetTvShowDetailed() {
+    private fun executeGetTvShowDetailed(tvShowPopular: TvShowPopular) {
         getTvShowDetailedUseCase.execute(
-            GetTvShowDetailedUseCase.Params(tvShowDetailed.moreDescriptionUrl)
+            GetTvShowDetailedUseCase.Params(tvShowPopular.detailUrl)
         )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

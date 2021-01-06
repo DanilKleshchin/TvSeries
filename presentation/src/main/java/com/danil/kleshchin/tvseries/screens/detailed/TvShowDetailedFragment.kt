@@ -20,7 +20,7 @@ class TvShowDetailedFragment: Fragment(), TvShowDetailedContract.View, TvShowDet
     @Inject
     lateinit var tvShowDetailedPresenter: TvShowDetailedContract.Presenter
 
-    private var tvShowDetailed: TvShowDetailed? = null
+    private var tvShowPopular: TvShowPopular? = null
 
     private var _binding: FragmentTvShowDetailedBinding? = null
     private val binding get() = _binding!!
@@ -47,6 +47,15 @@ class TvShowDetailedFragment: Fragment(), TvShowDetailedContract.View, TvShowDet
 
         _binding = FragmentTvShowDetailedBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        tvShowDetailedPresenter.setView(this)
+        tvShowDetailedPresenter.onAttach()
+        initPresenterForTvShowPopular()
+
+        binding.backButton.setOnClickListener { finish() }
     }
 
     override fun onAttach(context: Context) {
@@ -95,7 +104,7 @@ class TvShowDetailedFragment: Fragment(), TvShowDetailedContract.View, TvShowDet
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putSerializable(INSTANCE_STATE_PARAM_SECTION, tvShowDetailed)
+        outState.putSerializable(INSTANCE_STATE_PARAM_SECTION, tvShowPopular)
         super.onSaveInstanceState(outState)
     }
 
@@ -109,20 +118,20 @@ class TvShowDetailedFragment: Fragment(), TvShowDetailedContract.View, TvShowDet
     }
 
     private fun initializeFragment(savedInstanceState: Bundle?) {
-        tvShowDetailed = if (savedInstanceState == null) {
-            getTvShowDetailed()
+        tvShowPopular = if (savedInstanceState == null) {
+            getTvShowPopular()
         } else ({
             savedInstanceState.getSerializable(INSTANCE_STATE_PARAM_SECTION)
-        }) as TvShowDetailed?
+        }) as TvShowPopular?
     }
 
-    private fun initPresenterForTvShowDetailed() {
-        val tvShowDetailed = getTvShowDetailed()
-        tvShowDetailedPresenter.initialize(tvShowDetailed ?: throw NullPointerException("Section is null"))
+    private fun initPresenterForTvShowPopular() {
+        val tvShowPopular = getTvShowPopular()
+        tvShowDetailedPresenter.initialize(tvShowPopular ?: throw NullPointerException("Section is null"))
     }
 
-    private fun getTvShowDetailed(): TvShowDetailed? {
-        return arguments?.getSerializable(KEY_SECTION) as TvShowDetailed?
+    private fun getTvShowPopular(): TvShowPopular? {
+        return arguments?.getSerializable(KEY_SECTION) as TvShowPopular?
     }
 
     private fun finish() {
@@ -131,15 +140,4 @@ class TvShowDetailedFragment: Fragment(), TvShowDetailedContract.View, TvShowDet
             ?.remove(this)
             ?.commitNow()
     }
-
-    //TODO where should I init feed component?
-    /*private fun initFeedView(context: FragmentActivity, section: Section) {
-        val feedFragment = FeedFragment.newInstance(section)
-        (context.application as NYTimesRSSFeedsApp).initFeedComponent(feedFragment)
-        (context.application as NYTimesRSSFeedsApp).getFeedComponent().inject(feedFragment)
-        context.supportFragmentManager
-            .beginTransaction()
-            .add(R.id.fragment_container, feedFragment)
-            .commitNow()
-    }*/
 }

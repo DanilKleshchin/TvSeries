@@ -1,6 +1,7 @@
 package com.danil.kleshchin.tvseries.screens.detailed
 
 import com.danil.kleshchin.tvseries.domain.entity.TvShowDetailed
+import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
 
 interface TvShowDetailedContract {
 
@@ -17,6 +18,6 @@ interface TvShowDetailedContract {
         fun onAttach()
         fun setView(view: View)
         fun onDescriptionMoreSelected(tvShowDetailed: TvShowDetailed)
-        fun initialize(tvShowDetailed: TvShowDetailed)
+        fun initialize(tvShowPopular: TvShowPopular)
     }
 }

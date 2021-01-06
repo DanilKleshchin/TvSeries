@@ -13,7 +13,7 @@ class TvShowDetailedDataRepository @Inject constructor(
 ) : TvShowDetailedRepository {
 
     override fun getTvShowDetailed(tvShowDetailedUrl: String): Observable<TvShowDetailed> {
-        return remoteDataSource.getTvShowDetailedApiResponse()
+        return remoteDataSource.getTvShowDetailedApiResponse(tvShowDetailedUrl)
             .map(mapper::transform)
     }
 }
