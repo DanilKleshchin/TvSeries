@@ -25,7 +25,7 @@ class TvShowPopularPresenter(
     }
 
     override fun onAttach() {
-        tvShowPopularView.showLoadingView()
+        tvShowPopularView.showHideLoadingView(false)
         executeGetTvShowPopularListUseCase()
     }
 
@@ -37,6 +37,7 @@ class TvShowPopularPresenter(
     override fun onFullTvShowListScrolled() {
         if (currentPage < pageCount) {
             currentPage++
+            tvShowPopularView.showHideBottomLoadingView(false)
             getTvShowPopularListUseCase.execute(
                 GetTvShowPopularListUseCase.Params(currentPage)
             )
@@ -46,11 +47,11 @@ class TvShowPopularPresenter(
                     { tvShows ->
                         tvShowPopularList.addAll(tvShows)
                         tvShowPopularView.updateTvShowPopularList(tvShowPopularList)
-                        tvShowPopularView.hideLoadingView()
+                        tvShowPopularView.showHideBottomLoadingView(true)
                     },
                     {
                         it.printStackTrace()
-                        tvShowPopularView.hideLoadingView()
+                        tvShowPopularView.showHideBottomLoadingView(true)
                         tvShowPopularView.showRetry()
                         if (currentPage > FIRST_PAGE_NUMBER) {
                             currentPage--
@@ -79,11 +80,11 @@ class TvShowPopularPresenter(
                 { tvShows ->
                     tvShowPopularList.addAll(tvShows)
                     tvShowPopularView.showTvShowPopularList(tvShowPopularList)
-                    tvShowPopularView.hideLoadingView()
+                    tvShowPopularView.showHideLoadingView(true)
                 },
                 {
                     it.printStackTrace()
-                    tvShowPopularView.hideLoadingView()
+                    tvShowPopularView.showHideLoadingView(true)
                     tvShowPopularView.showRetry()
                 },
                 {

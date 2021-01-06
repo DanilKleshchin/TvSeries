@@ -32,13 +32,9 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTvShowPopularBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
         tvShowPopularPresenter.setView(this)
         tvShowPopularPresenter.onAttach()
+        return binding.root
     }
 
     override fun onDestroy() {
@@ -72,12 +68,20 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
         tvShowPopularPresenter.onTvShowPopularSelected(tvShowPopular)
     }
 
-    override fun showLoadingView() {
-
+    override fun showHideLoadingView(hide: Boolean) {
+        if (hide) {
+            binding.loadingView.visibility = View.GONE
+        } else {
+            binding.loadingView.visibility = View.VISIBLE
+        }
     }
 
-    override fun hideLoadingView() {
-
+    override fun showHideBottomLoadingView(hide: Boolean) {
+        if (hide) {
+            binding.bottomLoadingView.visibility = View.GONE
+        } else {
+            binding.bottomLoadingView.visibility = View.VISIBLE
+        }
     }
 
     override fun showRetry() {

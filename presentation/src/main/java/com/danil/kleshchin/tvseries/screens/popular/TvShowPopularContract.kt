@@ -7,8 +7,8 @@ interface TvShowPopularContract {
     interface View {
         fun showTvShowPopularList(tvShowPopularList: List<TvShowPopular>)
         fun updateTvShowPopularList(tvShowPopularList: List<TvShowPopular>)
-        fun showLoadingView()
-        fun hideLoadingView()
+        fun showHideLoadingView(hide: Boolean)
+        fun showHideBottomLoadingView(hide: Boolean)
         fun showRetry()
         fun hideRetry()
     }

@@ -6,10 +6,11 @@
     <dimen name="toolbar_padding">8dp</dimen>
     <dimen name="margin_primary">8dp</dimen>
     <dimen name="margin_big">20dp</dimen>
+    <dimen name="margin_items">25dp</dimen>
     <dimen name="margin_big_x">12dp</dimen>
     <dimen name="margin_small">4dp</dimen>
     <dimen name="padding_small">4dp</dimen>
     <dimen name="padding_primary">12dp</dimen>
     <dimen name="cardview_radius">4dp</dimen>
-    <dimen name="tv_show_popular_cardview_height">285dp</dimen>
+    <dimen name="tv_show_popular_cardview_height">250dp</dimen>
 </resources>
