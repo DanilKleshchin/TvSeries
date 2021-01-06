@@ -6,8 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import com.danil.kleshchin.tvseries.R
+import com.danil.kleshchin.tvseries.TvShowApplication
 import com.danil.kleshchin.tvseries.databinding.FragmentTvShowPopularBinding
 import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
+import com.danil.kleshchin.tvseries.screens.detailed.TvShowDetailedFragment
 import javax.inject.Inject
 
 class TvShowPopularFragment: Fragment(), TvShowPopularContract.View, TvShowPopularNavigator,
@@ -47,7 +51,7 @@ class TvShowPopularFragment: Fragment(), TvShowPopularContract.View, TvShowPopul
     }
 
     override fun onTvShowClick(tvShowPopular: TvShowPopular) {
-
+        tvShowPopularPresenter.onTvShowPopularSelected(tvShowPopular)
     }
 
     override fun showLoadingView() {
@@ -68,16 +72,17 @@ class TvShowPopularFragment: Fragment(), TvShowPopularContract.View, TvShowPopul
 
     override fun showDetailedScreen(tvShowPopular: TvShowPopular) {
         val context = activity ?: throw  IllegalStateException(ERROR_LOG_MESSAGE)
+        initTvShowDetailedFragment(context, tvShowPopular)
     }
 
-    //TODO where should I init feed component?
-    /*private fun initFeedView(context: FragmentActivity, section: Section) {
-        val feedFragment = FeedFragment.newInstance(section)
-        (context.application as NYTimesRSSFeedsApp).initFeedComponent(feedFragment)
-        (context.application as NYTimesRSSFeedsApp).getFeedComponent().inject(feedFragment)
+    //TODO where should I init this component?
+    private fun initTvShowDetailedFragment(context: FragmentActivity, tvShowPopular: TvShowPopular) {
+        val tvShowDetailedFragment = TvShowDetailedFragment.newInstance(tvShowPopular )
+        (context.application as TvShowApplication).initTvShowDetailedComponent(tvShowDetailedFragment)
+        (context.application as TvShowApplication).getTvShowDetailedComponent().inject(tvShowDetailedFragment)
         context.supportFragmentManager
             .beginTransaction()
-            .add(R.id.fragment_container, feedFragment)
+            .add(R.id.fragment_container, tvShowDetailedFragment)
             .commitNow()
-    }*/
+    }
 }
