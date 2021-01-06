@@ -5,4 +5,5 @@
     <string name="country">Country: %1$s</string>
     <string name="start_date">Start date: %1$s</string>
     <string name="status">Status: %1$s</string>
+    <string name="description_more">more…</string>
 </resources>

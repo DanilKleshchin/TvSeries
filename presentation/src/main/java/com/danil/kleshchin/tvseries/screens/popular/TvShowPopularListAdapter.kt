@@ -60,7 +60,7 @@ class TvShowPopularListAdapter(
                 startDate.text = startDateString
                 status.text = statusString
 
-                Picasso.get().load(tvShowPopular.iconUrl).into(icon);
+                Picasso.get().load(tvShowPopular.iconUrl).into(icon)
 
                 root.setOnClickListener { clickListener.onTvShowClick(tvShowPopular) }
             }

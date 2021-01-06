@@ -1,5 +1,7 @@
 package com.danil.kleshchin.tvseries.domain.entity
 
+import java.io.Serializable
+
 data class TvShowPopular(
         val id: Int,
         val name: String,
@@ -9,4 +11,4 @@ data class TvShowPopular(
         val network: String,
         val status: String,
         val iconUrl: String
-)
+) : Serializable
