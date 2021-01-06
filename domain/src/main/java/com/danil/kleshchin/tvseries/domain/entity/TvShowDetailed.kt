@@ -5,7 +5,7 @@ data class TvShowDetailed(
         val name: String,
         val pageUrl: String,
         val description: String,
-        val moreDescriptionUrl: String,
+        val moreDescriptionUrl: String?,
         val startDate: String,
         val country: String,
         val status: String,

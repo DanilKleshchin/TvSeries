@@ -28,7 +28,7 @@ class TvShowDetailedPresenter(
     }
 
     override fun onDescriptionMoreSelected(tvShowDetailed: TvShowDetailed) {
-        tvShowDetailedNavigator.showWebPage(tvShowDetailed.moreDescriptionUrl)
+        tvShowDetailed.moreDescriptionUrl?.let { tvShowDetailedNavigator.showWebPage(it) }
     }
 
     private fun executeGetTvShowDetailed(tvShowPopular: TvShowPopular) {

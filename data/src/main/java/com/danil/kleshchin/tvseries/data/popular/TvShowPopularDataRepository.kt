@@ -12,8 +12,17 @@ class TvShowPopularDataRepository @Inject constructor(
     private val mapper: TvShowPopularDataMapper
 ) : TvShowPopularRepository {
 
+    private var pageCount: Int = 0
+
     override fun getTvShowPopularList(pageNumber: Int): Observable<List<TvShowPopular>> {
         return remoteDataSource.getTvShowPopularApiResponse(pageNumber)
+            .doOnNext{
+                pageCount = it.pages
+            }
             .map(mapper::transform)
+    }
+
+    override fun getTvShowPopularPageCount(): Observable<Int> {
+        return Observable.just(pageCount)
     }
 }

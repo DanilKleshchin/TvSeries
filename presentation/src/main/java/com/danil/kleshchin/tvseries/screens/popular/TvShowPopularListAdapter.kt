@@ -10,7 +10,7 @@ import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
 import com.squareup.picasso.Picasso
 
 class TvShowPopularListAdapter(
-    private val tvShowPopularList: List<TvShowPopular>,
+    private var tvShowPopularList: List<TvShowPopular>,
     private val context: Context,
     private val tvShowPopularClickListener: OnTvShowPopularClickListener
 ) : RecyclerView.Adapter<TvShowPopularListAdapter.TvShowPopularViewHolder>() {
@@ -35,6 +35,10 @@ class TvShowPopularListAdapter(
         position: Int
     ) {
         holder.bind(tvShowPopularList[position])
+    }
+
+    fun updateTvShowPopularList(tvShowPopularList: List<TvShowPopular>) {
+        this.tvShowPopularList = tvShowPopularList
     }
 
     class TvShowPopularViewHolder(

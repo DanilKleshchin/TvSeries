@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.danil.kleshchin.tvseries.R
 import com.danil.kleshchin.tvseries.TvShowApplication
 import com.danil.kleshchin.tvseries.databinding.FragmentTvShowPopularBinding
@@ -14,7 +15,7 @@ import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
 import com.danil.kleshchin.tvseries.screens.detailed.TvShowDetailedFragment
 import javax.inject.Inject
 
-class TvShowPopularFragment: Fragment(), TvShowPopularContract.View, TvShowPopularNavigator,
+class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopularNavigator,
     TvShowPopularListAdapter.OnTvShowPopularClickListener {
 
     private val ERROR_LOG_MESSAGE = "TvShowPopularFragment fragment wasn't attached."
@@ -47,7 +48,24 @@ class TvShowPopularFragment: Fragment(), TvShowPopularContract.View, TvShowPopul
 
     override fun showTvShowPopularList(tvShowPopularList: List<TvShowPopular>) {
         val context = activity ?: throw  IllegalStateException(ERROR_LOG_MESSAGE)
-        binding.tvShowListView.adapter = TvShowPopularListAdapter(tvShowPopularList, context, this)
+        binding.apply {
+            tvShowListView.adapter = TvShowPopularListAdapter(tvShowPopularList, context, this@TvShowPopularFragment)
+            tvShowListView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    if (!tvShowListView.canScrollVertically(1)) {
+                        tvShowPopularPresenter.onFullTvShowListScrolled()
+                    }
+                }
+            })
+        }
+    }
+
+    override fun updateTvShowPopularList(tvShowPopularList: List<TvShowPopular>) {
+        val adapter = binding.tvShowListView.adapter as TvShowPopularListAdapter
+        val oldSize = adapter.itemCount
+        val newSize = tvShowPopularList.size
+        adapter.updateTvShowPopularList(tvShowPopularList)
+        adapter.notifyItemRangeInserted(oldSize, newSize)
     }
 
     override fun onTvShowClick(tvShowPopular: TvShowPopular) {
@@ -76,10 +94,16 @@ class TvShowPopularFragment: Fragment(), TvShowPopularContract.View, TvShowPopul
     }
 
     //TODO where should I init this component?
-    private fun initTvShowDetailedFragment(context: FragmentActivity, tvShowPopular: TvShowPopular) {
-        val tvShowDetailedFragment = TvShowDetailedFragment.newInstance(tvShowPopular )
-        (context.application as TvShowApplication).initTvShowDetailedComponent(tvShowDetailedFragment)
-        (context.application as TvShowApplication).getTvShowDetailedComponent().inject(tvShowDetailedFragment)
+    private fun initTvShowDetailedFragment(
+        context: FragmentActivity,
+        tvShowPopular: TvShowPopular
+    ) {
+        val tvShowDetailedFragment = TvShowDetailedFragment.newInstance(tvShowPopular)
+        (context.application as TvShowApplication).initTvShowDetailedComponent(
+            tvShowDetailedFragment
+        )
+        (context.application as TvShowApplication).getTvShowDetailedComponent()
+            .inject(tvShowDetailedFragment)
         context.supportFragmentManager
             .beginTransaction()
             .add(R.id.fragment_container, tvShowDetailedFragment)

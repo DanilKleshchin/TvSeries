@@ -6,4 +6,6 @@ import io.reactivex.Observable
 interface TvShowPopularRepository {
 
     fun getTvShowPopularPageCount(): Observable<Int>
+
+    fun getTvShowPopularList(pageNumber: Int): Observable<List<TvShowPopular>>
 }

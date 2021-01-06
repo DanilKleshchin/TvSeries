@@ -6,6 +6,7 @@ interface TvShowPopularContract {
 
     interface View {
         fun showTvShowPopularList(tvShowPopularList: List<TvShowPopular>)
+        fun updateTvShowPopularList(tvShowPopularList: List<TvShowPopular>)
         fun showLoadingView()
         fun hideLoadingView()
         fun showRetry()
@@ -16,5 +17,6 @@ interface TvShowPopularContract {
         fun onAttach()
         fun setView(view: View)
         fun onTvShowPopularSelected(tvShowPopular: TvShowPopular)
+        fun onFullTvShowListScrolled()
     }
 }
