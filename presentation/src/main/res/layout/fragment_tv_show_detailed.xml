@@ -22,10 +22,10 @@
             android:id="@+id/back_button"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:scaleType="fitXY"
             android:layout_gravity="center"
-            android:src="@drawable/arrow_back"
-            android:contentDescription="@null"/>
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/arrow_back" />
 
         <TextView
             android:id="@+id/name"
@@ -41,17 +41,112 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/tv_show_list_view"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="@dimen/margin_primary"
-        android:layout_marginEnd="@dimen/margin_primary"
-        android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        tools:listitem="@layout/item_tv_show_detailed_list" />
+        android:layout_height="match_parent">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:orientation="horizontal"
+            android:padding="@dimen/padding_primary">
 
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="300dp"
+                android:layout_height="450dp"
+                android:layout_marginTop="@dimen/margin_primary"
+                android:contentDescription="@null"
+                android:scaleType="fitXY"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_primary"
+                android:layout_marginTop="@dimen/margin_big_x"
+                android:layout_marginEnd="@dimen/margin_primary"
+                android:fontFamily="@font/ubuntu_light"
+                android:includeFontPadding="false"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/text_size_primary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/icon"
+                tools:text="desc" />
+
+            <TextView
+                android:id="@+id/description_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_primary"
+                android:layout_marginEnd="@dimen/margin_primary"
+                android:fontFamily="@font/ubuntu_light"
+                android:includeFontPadding="false"
+                android:text="@string/description_more"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/text_size_primary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/description" />
+
+            <TextView
+                android:id="@+id/network"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_big_x"
+                android:fontFamily="@font/ubuntu_light"
+                android:includeFontPadding="false"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/text_size_primary"
+                app:layout_constraintStart_toStartOf="@id/icon"
+                app:layout_constraintTop_toBottomOf="@id/description_more"
+                tools:text="The CW" />
+
+            <TextView
+                android:id="@+id/country"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/margin_big_x"
+                android:fontFamily="@font/ubuntu_light"
+                android:includeFontPadding="false"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/text_size_primary"
+                app:layout_constraintStart_toStartOf="@id/icon"
+                app:layout_constraintTop_toBottomOf="@id/network"
+                tools:text="RU" />
+
+            <TextView
+                android:id="@+id/start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/margin_big_x"
+                android:fontFamily="@font/ubuntu_light"
+                android:includeFontPadding="false"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/text_size_primary"
+                app:layout_constraintStart_toStartOf="@id/icon"
+                app:layout_constraintTop_toBottomOf="@id/country"
+                tools:text="2014-10-07" />
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/margin_big_x"
+                android:fontFamily="@font/ubuntu_light"
+                android:includeFontPadding="false"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/text_size_primary"
+                app:layout_constraintStart_toStartOf="@id/icon"
+                app:layout_constraintTop_toBottomOf="@id/start_date"
+                tools:text="Status" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

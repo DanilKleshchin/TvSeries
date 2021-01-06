@@ -7,13 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import com.danil.kleshchin.tvseries.R
 import com.danil.kleshchin.tvseries.databinding.FragmentTvShowDetailedBinding
 import com.danil.kleshchin.tvseries.domain.entity.TvShowDetailed
 import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
+import com.squareup.picasso.Picasso
 import javax.inject.Inject
 
-class TvShowDetailedFragment: Fragment(), TvShowDetailedContract.View, TvShowDetailedNavigator,
-    TvShowDetailedListAdapter.OnDescriptionMoreClickListener {
+class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDetailedNavigator {
 
     private val ERROR_LOG_MESSAGE = "TvShowDetailedFragment fragment wasn't attached."
 
@@ -74,13 +75,8 @@ class TvShowDetailedFragment: Fragment(), TvShowDetailedContract.View, TvShowDet
         binding.name.text = name
     }
 
-    override fun showTvShowDetailedList(tvShowDetailedList: List<TvShowDetailed>) {
-        val context = activity ?: throw  IllegalStateException(ERROR_LOG_MESSAGE)
-        binding.tvShowListView.adapter = TvShowDetailedListAdapter(tvShowDetailedList, context, this)
-    }
-
-    override fun onMoreClick(tvShowDetailed: TvShowDetailed) {
-
+    override fun showTvShowDetailed(tvShowDetailed: TvShowDetailed) {
+        bind(tvShowDetailed)
     }
 
     override fun showLoadingView() {
@@ -108,6 +104,34 @@ class TvShowDetailedFragment: Fragment(), TvShowDetailedContract.View, TvShowDet
         super.onSaveInstanceState(outState)
     }
 
+    private fun bind(tvShowDetailed: TvShowDetailed) {
+        binding.apply {
+            val resources = binding.root.resources
+            val networkString =
+                String.format(resources.getString(R.string.network), tvShowDetailed.network)
+            val countryString =
+                String.format(resources.getString(R.string.country), tvShowDetailed.country)
+            val startDateString =
+                String.format(resources.getString(R.string.start_date), tvShowDetailed.startDate)
+            val statusString =
+                String.format(resources.getString(R.string.status), tvShowDetailed.status)
+
+            description.text = tvShowDetailed.description
+            network.text = networkString
+            country.text = countryString
+            startDate.text = startDateString
+            status.text = statusString
+
+            Picasso.get().load(tvShowDetailed.iconUrl).into(icon)
+
+            descriptionMore.setOnClickListener {
+                tvShowDetailedPresenter.onDescriptionMoreSelected(
+                    tvShowDetailed
+                )
+            }
+        }
+    }
+
     private fun setBackPressedCallback() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -127,7 +151,9 @@ class TvShowDetailedFragment: Fragment(), TvShowDetailedContract.View, TvShowDet
 
     private fun initPresenterForTvShowPopular() {
         val tvShowPopular = getTvShowPopular()
-        tvShowDetailedPresenter.initialize(tvShowPopular ?: throw NullPointerException("Section is null"))
+        tvShowDetailedPresenter.initialize(
+            tvShowPopular ?: throw NullPointerException("Section is null")
+        )
     }
 
     private fun getTvShowPopular(): TvShowPopular? {

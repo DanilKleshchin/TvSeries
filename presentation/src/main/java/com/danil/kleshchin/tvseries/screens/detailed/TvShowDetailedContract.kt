@@ -6,7 +6,7 @@ import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
 interface TvShowDetailedContract {
 
     interface View {
-        fun showTvShowDetailedList(tvShowDetailedList: List<TvShowDetailed>)
+        fun showTvShowDetailed(tvShowDetailed: TvShowDetailed)
         fun showLoadingView()
         fun hideLoadingView()
         fun showRetry()

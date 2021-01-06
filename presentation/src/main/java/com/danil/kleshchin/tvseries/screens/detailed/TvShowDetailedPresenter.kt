@@ -38,9 +38,9 @@ class TvShowDetailedPresenter(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { tvShows ->
-                    tvShowDetailed = tvShows
-                    tvShowDetailedView.showTvShowDetailedList(listOf(tvShowDetailed))
+                { tvShow ->
+                    tvShowDetailed = tvShow
+                    tvShowDetailedView.showTvShowDetailed(tvShowDetailed)
                     tvShowDetailedView.hideLoadingView()
                 },
                 {
