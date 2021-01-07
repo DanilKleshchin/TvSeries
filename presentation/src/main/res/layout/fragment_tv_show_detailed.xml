@@ -18,9 +18,10 @@
 
         <ImageView
             android:id="@+id/back_button"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="@dimen/back_button_size"
+            android:layout_height="@dimen/back_button_size"
             android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/margin_primary"
             android:contentDescription="@null"
             android:scaleType="fitXY"
             android:src="@drawable/arrow_back" />
@@ -32,6 +33,7 @@
             android:layout_marginStart="@dimen/margin_small"
             android:layout_weight="1"
             android:fontFamily="@font/ubuntu_bold"
+            android:includeFontPadding="false"
             android:maxLines="1"
             android:text="@string/most_popular"
             android:textColor="@color/colorPrimary"
@@ -54,8 +56,8 @@
 
             <ImageView
                 android:id="@+id/icon"
-                android:layout_width="300dp"
-                android:layout_height="450dp"
+                android:layout_width="@dimen/detailed_image_width"
+                android:layout_height="@dimen/detailed_image_height"
                 android:layout_marginTop="@dimen/margin_primary"
                 android:contentDescription="@null"
                 android:scaleType="fitXY"
@@ -153,7 +155,7 @@
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/slider_episodes_pictures"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="@dimen/slider_image_height"
                 android:layout_marginTop="@dimen/margin_big"
                 android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="parent"
