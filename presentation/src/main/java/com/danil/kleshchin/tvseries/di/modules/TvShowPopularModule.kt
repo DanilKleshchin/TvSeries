@@ -1,6 +1,5 @@
 package com.danil.kleshchin.tvseries.di.modules
 
-import com.danil.kleshchin.tvseries.data.API_TIMEOUT_SECONDS
 import com.danil.kleshchin.tvseries.data.baseUrl
 import com.danil.kleshchin.tvseries.data.popular.TvShowPopularDataRepository
 import com.danil.kleshchin.tvseries.data.popular.datasource.network.TvShowPopularApi
@@ -14,12 +13,11 @@ import com.danil.kleshchin.tvseries.screens.popular.TvShowPopularNavigator
 import com.danil.kleshchin.tvseries.screens.popular.TvShowPopularPresenter
 import dagger.Module
 import dagger.Provides
+import io.reactivex.disposables.CompositeDisposable
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -30,12 +28,15 @@ class TvShowPopularModule(
     @Provides
     fun provideTvShowPopularPresenter(
         getTvShowPopularListUseCase: GetTvShowPopularListUseCase,
-        getTvShowPopularPageCountUseCase: GetTvShowPopularPageCountUseCase
+        getTvShowPopularPageCountUseCase: GetTvShowPopularPageCountUseCase,
+        compositeDisposable: CompositeDisposable
     ): TvShowPopularContract.Presenter =
         TvShowPopularPresenter(
             getTvShowPopularListUseCase,
             getTvShowPopularPageCountUseCase,
-            navigator)
+            navigator,
+            compositeDisposable
+        )
 
     @Provides
     @Singleton
@@ -57,16 +58,4 @@ class TvShowPopularModule(
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(TvShowPopularApi::class.java)
-
-    @Provides
-    fun provideOkHttpClient(): OkHttpClient {
-        val logging = HttpLoggingInterceptor()
-        logging.level = HttpLoggingInterceptor.Level.BODY
-        return OkHttpClient.Builder()
-            .connectTimeout(API_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-            .writeTimeout(API_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-            .readTimeout(API_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-            .addInterceptor(logging)
-            .build()
-    }
 }

@@ -1,6 +1,5 @@
 package com.danil.kleshchin.tvseries.screens.popular
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +10,6 @@ import com.squareup.picasso.Picasso
 
 class TvShowPopularListAdapter(
     private var tvShowPopularList: List<TvShowPopular>,
-    private val context: Context,
     private val tvShowPopularClickListener: OnTvShowPopularClickListener
 ) : RecyclerView.Adapter<TvShowPopularListAdapter.TvShowPopularViewHolder>() {
 
@@ -26,7 +24,7 @@ class TvShowPopularListAdapter(
         viewType: Int
     ): TvShowPopularViewHolder {
         val binding =
-            ItemTvShowPopularListBinding.inflate(LayoutInflater.from(context), parent, false)
+            ItemTvShowPopularListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TvShowPopularViewHolder(binding, tvShowPopularClickListener)
     }
 

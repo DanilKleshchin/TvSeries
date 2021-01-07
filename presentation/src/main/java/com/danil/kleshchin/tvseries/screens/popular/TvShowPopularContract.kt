@@ -1,5 +1,6 @@
 package com.danil.kleshchin.tvseries.screens.popular
 
+import com.danil.kleshchin.tvseries.BasePresenter
 import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
 
 interface TvShowPopularContract {
@@ -13,8 +14,7 @@ interface TvShowPopularContract {
         fun hideRetry()
     }
 
-    interface Presenter {
-        fun onAttach()
+    interface Presenter: BasePresenter {
         fun setView(view: View)
         fun onTvShowPopularSelected(tvShowPopular: TvShowPopular)
         fun onFullTvShowListScrolled()

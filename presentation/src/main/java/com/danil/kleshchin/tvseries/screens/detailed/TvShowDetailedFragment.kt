@@ -62,6 +62,11 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
         binding.backButton.setOnClickListener { finish() }
     }
 
+    override fun onStop() {
+        super.onStop()
+        tvShowDetailedPresenter.onDetach()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null

@@ -1,5 +1,6 @@
 package com.danil.kleshchin.tvseries.screens.detailed
 
+import com.danil.kleshchin.tvseries.BasePresenter
 import com.danil.kleshchin.tvseries.domain.entity.TvShowDetailed
 import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
 
@@ -13,8 +14,7 @@ interface TvShowDetailedContract {
         fun showTvShowDetailedName(name: String)
     }
 
-    interface Presenter {
-        fun onAttach()
+    interface Presenter: BasePresenter {
         fun setView(view: View)
         fun onDescriptionMoreSelected(tvShowDetailed: TvShowDetailed)
         fun initialize(tvShowPopular: TvShowPopular)

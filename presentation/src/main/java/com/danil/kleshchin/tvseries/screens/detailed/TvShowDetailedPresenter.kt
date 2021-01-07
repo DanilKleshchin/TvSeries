@@ -4,11 +4,13 @@ import com.danil.kleshchin.tvseries.domain.entity.TvShowDetailed
 import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
 import com.danil.kleshchin.tvseries.domain.interactor.detailed.GetTvShowDetailedUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class TvShowDetailedPresenter(
     private val getTvShowDetailedUseCase: GetTvShowDetailedUseCase,
-    private val tvShowDetailedNavigator: TvShowDetailedNavigator
+    private val tvShowDetailedNavigator: TvShowDetailedNavigator,
+    private val disposables: CompositeDisposable
 ) : TvShowDetailedContract.Presenter {
 
     private lateinit var tvShowDetailedView: TvShowDetailedContract.View
@@ -22,6 +24,10 @@ class TvShowDetailedPresenter(
         tvShowDetailedView.showHideLoadingView(false)
     }
 
+    override fun onDetach() {
+        disposables.dispose()
+    }
+
     override fun initialize(tvShowPopular: TvShowPopular) {
         tvShowDetailedView.showTvShowDetailedName(tvShowPopular.name)
         executeGetTvShowDetailed(tvShowPopular)
@@ -31,23 +37,26 @@ class TvShowDetailedPresenter(
         tvShowDetailed.moreDescriptionUrl?.let { tvShowDetailedNavigator.showWebPage(it) }
     }
 
+    //TODO ask about disposable
     private fun executeGetTvShowDetailed(tvShowPopular: TvShowPopular) {
-        getTvShowDetailedUseCase.execute(
-            GetTvShowDetailedUseCase.Params(tvShowPopular.detailUrl)
-        )
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { tvShow ->
-                    tvShowDetailed = tvShow
-                    tvShowDetailedView.showTvShowDetailed(tvShowDetailed)
-                    tvShowDetailedView.showHideLoadingView(true)
-                },
-                {
-                    it.printStackTrace()
-                    tvShowDetailedView.showHideLoadingView(true)
-                    tvShowDetailedView.showRetry()
-                }
+        disposables.add(
+            getTvShowDetailedUseCase.execute(
+                GetTvShowDetailedUseCase.Params(tvShowPopular.detailUrl)
             )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { tvShow ->
+                        tvShowDetailed = tvShow
+                        tvShowDetailedView.showTvShowDetailed(tvShowDetailed)
+                        tvShowDetailedView.showHideLoadingView(true)
+                    },
+                    {
+                        it.printStackTrace()
+                        tvShowDetailedView.showHideLoadingView(true)
+                        tvShowDetailedView.showRetry()
+                    }
+                )
+        )
     }
 }

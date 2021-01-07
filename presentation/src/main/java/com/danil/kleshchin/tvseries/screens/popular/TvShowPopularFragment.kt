@@ -1,6 +1,5 @@
 package com.danil.kleshchin.tvseries.screens.popular
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,9 +42,8 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
     }
 
     override fun showTvShowPopularList(tvShowPopularList: List<TvShowPopular>) {
-        val context = activity ?: throw  IllegalStateException(ERROR_LOG_MESSAGE)
         binding.apply {
-            tvShowListView.adapter = TvShowPopularListAdapter(tvShowPopularList, context, this@TvShowPopularFragment)
+            tvShowListView.adapter = TvShowPopularListAdapter(tvShowPopularList, this@TvShowPopularFragment)
             tvShowListView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     if (!tvShowListView.canScrollVertically(1)) {

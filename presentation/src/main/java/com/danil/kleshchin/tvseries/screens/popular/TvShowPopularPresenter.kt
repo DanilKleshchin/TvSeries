@@ -4,12 +4,14 @@ import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
 import com.danil.kleshchin.tvseries.domain.interactor.popular.GetTvShowPopularListUseCase
 import com.danil.kleshchin.tvseries.domain.interactor.popular.GetTvShowPopularPageCountUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class TvShowPopularPresenter(
     private val getTvShowPopularListUseCase: GetTvShowPopularListUseCase,
     private val getTvShowPopularPageCountUseCase: GetTvShowPopularPageCountUseCase,
-    private val tvShowPopularNavigator: TvShowPopularNavigator
+    private val tvShowPopularNavigator: TvShowPopularNavigator,
+    private val disposables: CompositeDisposable
 ) : TvShowPopularContract.Presenter {
 
     private val FIRST_PAGE_NUMBER = 1
@@ -27,6 +29,10 @@ class TvShowPopularPresenter(
     override fun onAttach() {
         tvShowPopularView.showHideLoadingView(false)
         executeGetTvShowPopularListUseCase()
+    }
+
+    override fun onDetach() {
+        disposables.dispose()
     }
 
     override fun onTvShowPopularSelected(tvShowPopular: TvShowPopular) {
@@ -70,26 +76,29 @@ class TvShowPopularPresenter(
             }
     }
 
+    //TODO ask about disposable
     private fun executeGetTvShowPopularListUseCase() {
-        getTvShowPopularListUseCase.execute(
-            GetTvShowPopularListUseCase.Params(currentPage)
-        )
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { tvShows ->
-                    tvShowPopularList.addAll(tvShows)
-                    tvShowPopularView.showTvShowPopularList(tvShowPopularList)
-                    tvShowPopularView.showHideLoadingView(true)
-                },
-                {
-                    it.printStackTrace()
-                    tvShowPopularView.showHideLoadingView(true)
-                    tvShowPopularView.showRetry()
-                },
-                {
-                    executeGetTvShowPopularPageCountUseCase()
-                }
+        disposables.add(
+            getTvShowPopularListUseCase.execute(
+                GetTvShowPopularListUseCase.Params(currentPage)
             )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { tvShows ->
+                        tvShowPopularList.addAll(tvShows)
+                        tvShowPopularView.showTvShowPopularList(tvShowPopularList)
+                        tvShowPopularView.showHideLoadingView(true)
+                    },
+                    {
+                        it.printStackTrace()
+                        tvShowPopularView.showHideLoadingView(true)
+                        tvShowPopularView.showRetry()
+                    },
+                    {
+                        executeGetTvShowPopularPageCountUseCase()
+                    }
+                )
+        )
     }
 }
