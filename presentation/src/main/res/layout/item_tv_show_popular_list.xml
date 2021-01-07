@@ -23,6 +23,18 @@
             android:padding="@dimen/padding_small"
             android:orientation="horizontal">
 
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="160dp"
+                android:layout_height="210dp"
+                android:contentDescription="@null"
+                android:scaleType="fitXY"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginStart="@dimen/margin_primary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_launcher"/>
+
             <TextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
@@ -34,23 +46,11 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/ubuntu_bold"
                 android:includeFontPadding="false"
-                android:layout_marginTop="@dimen/margin_small"
                 android:layout_marginStart="@dimen/margin_primary"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/icon"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/network"
                 tools:text="Movie title" />
-
-            <ImageView
-                android:id="@+id/icon"
-                android:layout_width="160dp"
-                android:layout_height="210dp"
-                android:contentDescription="@null"
-                android:scaleType="fitXY"
-                android:layout_marginTop="@dimen/margin_small"
-                android:layout_marginStart="@dimen/margin_primary"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/name"
-                tools:src="@drawable/ic_launcher"/>
 
             <TextView
                 android:id="@+id/network"
@@ -60,9 +60,9 @@
                 android:textSize="@dimen/text_size_primary"
                 android:fontFamily="@font/ubuntu_light"
                 android:includeFontPadding="false"
-                android:layout_marginTop="@dimen/margin_big_x"
                 android:layout_marginStart="@dimen/margin_primary"
                 app:layout_constraintStart_toEndOf="@id/icon"
+                app:layout_constraintBottom_toTopOf="@id/country"
                 app:layout_constraintTop_toBottomOf="@id/name"
                 tools:text="The CW" />
 
@@ -75,10 +75,10 @@
                 android:textSize="@dimen/text_size_primary"
                 android:fontFamily="@font/ubuntu_light"
                 android:includeFontPadding="false"
-                android:layout_marginTop="@dimen/margin_big_x"
                 android:layout_marginStart="@dimen/margin_primary"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/icon"
-                app:layout_constraintTop_toBottomOf="@id/network"
                 tools:text="RU" />
 
             <TextView
@@ -90,10 +90,10 @@
                 android:textSize="@dimen/text_size_primary"
                 android:fontFamily="@font/ubuntu_light"
                 android:includeFontPadding="false"
-                android:layout_marginTop="@dimen/margin_big_x"
                 android:layout_marginStart="@dimen/margin_primary"
                 app:layout_constraintStart_toEndOf="@id/icon"
                 app:layout_constraintTop_toBottomOf="@id/country"
+                app:layout_constraintBottom_toTopOf="@id/status"
                 tools:text="2014-10-07" />
 
             <TextView
@@ -105,10 +105,10 @@
                 android:textSize="@dimen/text_size_primary"
                 android:fontFamily="@font/ubuntu_light"
                 android:includeFontPadding="false"
-                android:layout_marginTop="@dimen/margin_big_x"
                 android:layout_marginStart="@dimen/margin_primary"
                 app:layout_constraintStart_toEndOf="@id/icon"
                 app:layout_constraintTop_toBottomOf="@id/start_date"
+                app:layout_constraintBottom_toBottomOf="parent"
                 tools:text="Status" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
