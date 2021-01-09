@@ -14,6 +14,7 @@ data class TvShowDetailed(
         val iconUrl: String,
         val rating: Double,
         val ratingCount: Int,
+        val runtime: Int,
         val genres: List<String>,
         val episodesPictures: List<String>
 )

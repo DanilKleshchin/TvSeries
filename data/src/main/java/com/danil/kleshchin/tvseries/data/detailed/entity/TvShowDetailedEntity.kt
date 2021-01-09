@@ -20,6 +20,7 @@ data class TvShowDetailedEntity(
     val country: String,
     val status: String,
     val network: String,
+    val runtime: Int,
 
     @SerializedName("youtube_link")
     val youTubeUrl: String?,

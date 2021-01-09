@@ -10,6 +10,7 @@ import com.danil.kleshchin.tvseries.domain.repository.detailed.TvShowDetailedRep
 import com.danil.kleshchin.tvseries.screens.detailed.TvShowDetailedContract
 import com.danil.kleshchin.tvseries.screens.detailed.TvShowDetailedNavigator
 import com.danil.kleshchin.tvseries.screens.detailed.TvShowDetailedPresenter
+import com.danil.kleshchin.tvseries.screens.detailed.models.TvShowDetailedModelMapper
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
@@ -24,11 +25,13 @@ class TvShowDetailedModule(private val navigator: TvShowDetailedNavigator) {
     @Provides
     fun provideTvShowDetailedPresenter(
         getTvShowDetailedUseCase: GetTvShowDetailedUseCase,
-        compositeDisposable: CompositeDisposable
+        compositeDisposable: CompositeDisposable,
+        mapper: TvShowDetailedModelMapper
     ): TvShowDetailedContract.Presenter =
         TvShowDetailedPresenter(getTvShowDetailedUseCase,
             navigator,
-            compositeDisposable
+            compositeDisposable,
+            mapper
         )
 
     @Provides

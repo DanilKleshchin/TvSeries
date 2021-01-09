@@ -1,7 +1,10 @@
 package com.danil.kleshchin.tvseries.screens.detailed
 
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,13 +12,15 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.DrawableRes
+import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.danil.kleshchin.tvseries.R
 import com.danil.kleshchin.tvseries.databinding.FragmentTvShowDetailedBinding
-import com.danil.kleshchin.tvseries.domain.entity.TvShowDetailed
 import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
+import com.danil.kleshchin.tvseries.screens.detailed.models.TvShowDetailedModel
 import com.squareup.picasso.Picasso
 import javax.inject.Inject
 
@@ -83,7 +88,7 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
         binding.name.text = name
     }
 
-    override fun showTvShowDetailed(tvShowDetailed: TvShowDetailed) {
+    override fun showTvShowDetailed(tvShowDetailed: TvShowDetailedModel) {
         bind(tvShowDetailed)
     }
 
@@ -105,6 +110,18 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
 
     override fun showWebPage(url: String) {
         val context = activity ?: throw  IllegalStateException(ERROR_LOG_MESSAGE)
+        val primaryColor = ContextCompat.getColor(context, R.color.colorPrimary)
+        val toolbarColor = ContextCompat.getColor(context, R.color.colorToolBar)
+        val secondaryToolbarColor = ContextCompat.getColor(context, R.color.colorPrimaryDark)
+        val params = CustomTabColorSchemeParams.Builder()
+            .setToolbarColor(toolbarColor)
+            .setSecondaryToolbarColor(secondaryToolbarColor)
+            .setNavigationBarColor(primaryColor)
+            .build()
+        CustomTabsIntent.Builder()
+            .setDefaultColorSchemeParams(params)
+            .build()
+            .launchUrl(context, Uri.parse(url))
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -112,24 +129,30 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
         super.onSaveInstanceState(outState)
     }
 
-    private fun bind(tvShowDetailed: TvShowDetailed) {
+    private fun bind(tvShowDetailed: TvShowDetailedModel) {
         val context = activity ?: throw  IllegalStateException(ERROR_LOG_MESSAGE)
         binding.apply {
             val resources = binding.root.resources
             val networkString =
-                String.format(resources.getString(R.string.network), tvShowDetailed.network)
-            val countryString =
-                String.format(resources.getString(R.string.country), tvShowDetailed.country)
+                String.format(resources.getString(R.string.network), tvShowDetailed.network, tvShowDetailed.country)
             val startDateString =
                 String.format(resources.getString(R.string.start_date), tvShowDetailed.startDate)
             val statusString =
                 String.format(resources.getString(R.string.status), tvShowDetailed.status)
+            val ratingString =
+                String.format(resources.getString(R.string.rating), tvShowDetailed.rating, tvShowDetailed.ratingCount)
+            val runtimeString =
+                String.format(resources.getString(R.string.runtime), tvShowDetailed.runtime)
+
+            setViewsVisibility(View.VISIBLE)
 
             description.text = tvShowDetailed.description
             network.text = networkString
-            country.text = countryString
             startDate.text = startDateString
             status.text = statusString
+            rating.text = ratingString
+            runtime.text = runtimeString
+            genres.text = tvShowDetailed.genres
 
             Picasso.get().load(tvShowDetailed.iconUrl).into(icon)
 
@@ -140,10 +163,22 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
 
             initPageIndicators(tvShowDetailed.episodesPictures.size, context)
 
-            descriptionMore.setOnClickListener {
-                tvShowDetailedPresenter.onDescriptionMoreSelected(
-                    tvShowDetailed
-                )
+            //TODO change this
+            readMore.setOnClickListener {
+                if (readMore.text == getString(R.string.read_more)) {
+                    description.ellipsize = null
+                    description.maxLines = Int.MAX_VALUE
+                    readMore.text = getString(R.string.read_less)
+                } else {
+                    readMore.text = getString(R.string.read_more)
+                    description.ellipsize = TextUtils.TruncateAt.END
+                    description.maxLines = 4
+                }
+                description.text = tvShowDetailed.description
+            }
+
+            buttonWebsite.setOnClickListener{
+                tvShowDetailedPresenter.onWebPageSelected(tvShowDetailed)
             }
 
             sliderEpisodesPictures.registerOnPageChangeCallback(object :
@@ -156,12 +191,22 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
         }
     }
 
+    private fun setViewsVisibility(visibility: Int) {
+        binding.apply {
+            description.visibility = visibility
+            network.visibility = visibility
+            startDate.visibility = visibility
+            status.visibility = visibility
+        }
+    }
+
     private fun initPageIndicators(pageCount: Int, context: Context) {
         episodesPicturesPageIndicators = ArrayList(pageCount)
         val layoutParams = LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
+        layoutParams.gravity = Gravity.CENTER
         layoutParams.setMargins(8, 0, 8, 0)
         for (i in 0 until pageCount) {
             val indicator = ImageView(context)
@@ -170,6 +215,7 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
             binding.sliderPageIndicator.addView(indicator)
             episodesPicturesPageIndicators.add(indicator)
         }
+        setCurrentPageIndicator(0)
     }
 
     private fun setCurrentPageIndicator(indicatorPosition: Int) {

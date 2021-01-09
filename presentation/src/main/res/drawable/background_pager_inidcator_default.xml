@@ -4,10 +4,10 @@
     android:shape="oval">
 
     <size
-        android:width="7dp"
-        android:height="7dp"/>
+        android:width="5dp"
+        android:height="5dp"/>
 
     <solid
-        android:color="@color/colorOtherItemBackground"/>
+        android:color="@color/colorOtherLightBackground"/>
 
 </shape>

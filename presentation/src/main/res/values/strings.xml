@@ -1,9 +1,14 @@
 <resources>
     <string name="app_name">Tv Series</string>
     <string name="most_popular">Most popular</string>
-    <string name="network">Network: %1$s</string>
+    <string name="network">Network: %1$s (%2$s)</string>
     <string name="country">Country: %1$s</string>
-    <string name="start_date">Start date: %1$s</string>
+    <string name="start_date">Started on: %1$s</string>
     <string name="status">Status: %1$s</string>
-    <string name="description_more"><u>Learn more…</u></string>
+    <string name="read_more">Read more</string>
+    <string name="read_less">Read less</string>
+    <string name="rating">\u0020%1$s from %2$s users</string>
+    <string name="runtime">\u0020%1$d min</string>
+    <string name="website_button">WEBSITE</string>
+    <string name="episodes_button">Episodes</string>
 </resources>

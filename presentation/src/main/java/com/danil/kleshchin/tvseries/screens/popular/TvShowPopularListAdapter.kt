@@ -48,9 +48,7 @@ class TvShowPopularListAdapter(
             binding.apply {
                 val resources = binding.root.resources
                 val networkString =
-                    String.format(resources.getString(R.string.network), tvShowPopular.network)
-                val countryString =
-                    String.format(resources.getString(R.string.country), tvShowPopular.country)
+                    String.format(resources.getString(R.string.network), tvShowPopular.network, tvShowPopular.country)
                 val startDateString =
                     String.format(resources.getString(R.string.start_date), tvShowPopular.startDate)
                 val statusString =
@@ -58,7 +56,6 @@ class TvShowPopularListAdapter(
 
                 name.text = tvShowPopular.name
                 network.text = networkString
-                country.text = countryString
                 startDate.text = startDateString
                 status.text = statusString
 

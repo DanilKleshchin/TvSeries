@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorBackground"
     android:orientation="vertical">
 
     <LinearLayout
@@ -30,13 +30,13 @@
             android:id="@+id/name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginStart="@dimen/margin_big"
             android:layout_weight="1"
             android:fontFamily="@font/ubuntu_bold"
             android:includeFontPadding="false"
             android:maxLines="1"
             android:text="@string/most_popular"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorTextPrimary"
             android:textSize="@dimen/text_size_big" />
 
     </LinearLayout>
@@ -50,126 +50,245 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:orientation="horizontal"
-            android:padding="@dimen/padding_primary">
-
-            <ImageView
-                android:id="@+id/icon"
-                android:layout_width="@dimen/detailed_image_width"
-                android:layout_height="@dimen/detailed_image_height"
-                android:layout_marginTop="@dimen/margin_primary"
-                android:contentDescription="@null"
-                android:scaleType="fitXY"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/ic_launcher" />
-
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_primary"
-                android:layout_marginTop="@dimen/margin_big_x"
-                android:layout_marginEnd="@dimen/margin_primary"
-                android:fontFamily="@font/ubuntu_light"
-                android:includeFontPadding="false"
-                android:textColor="@color/colorTextPrimary"
-                android:textSize="@dimen/text_size_primary"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/icon"
-                tools:text="desc" />
-
-            <TextView
-                android:id="@+id/description_more"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_primary"
-                android:layout_marginEnd="@dimen/margin_primary"
-                android:fontFamily="@font/ubuntu_light"
-                android:includeFontPadding="false"
-                android:text="@string/description_more"
-                android:textSize="@dimen/text_size_primary"
-                android:textColor="@color/colorTextLink"
-                android:textAllCaps="false"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/description"
-                style="@style/Widget.AppCompat.Button.Borderless.Colored"/>
-
-            <TextView
-                android:id="@+id/network"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_big_x"
-                android:fontFamily="@font/ubuntu_light"
-                android:includeFontPadding="false"
-                android:textColor="@color/colorTextPrimary"
-                android:textSize="@dimen/text_size_primary"
-                app:layout_constraintStart_toStartOf="@id/icon"
-                app:layout_constraintTop_toBottomOf="@id/description_more"
-                tools:text="The CW" />
-
-            <TextView
-                android:id="@+id/country"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/margin_big_x"
-                android:fontFamily="@font/ubuntu_light"
-                android:includeFontPadding="false"
-                android:textColor="@color/colorTextPrimary"
-                android:textSize="@dimen/text_size_primary"
-                app:layout_constraintStart_toStartOf="@id/icon"
-                app:layout_constraintTop_toBottomOf="@id/network"
-                tools:text="RU" />
-
-            <TextView
-                android:id="@+id/start_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/margin_big_x"
-                android:fontFamily="@font/ubuntu_light"
-                android:includeFontPadding="false"
-                android:textColor="@color/colorTextPrimary"
-                android:textSize="@dimen/text_size_primary"
-                app:layout_constraintStart_toStartOf="@id/icon"
-                app:layout_constraintTop_toBottomOf="@id/country"
-                tools:text="2014-10-07" />
-
-            <TextView
-                android:id="@+id/status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/margin_big_x"
-                android:fontFamily="@font/ubuntu_light"
-                android:includeFontPadding="false"
-                android:textColor="@color/colorTextPrimary"
-                android:textSize="@dimen/text_size_primary"
-                app:layout_constraintStart_toStartOf="@id/icon"
-                app:layout_constraintTop_toBottomOf="@id/start_date"
-                tools:text="Status" />
+            android:orientation="horizontal">
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/slider_episodes_pictures"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/slider_image_height"
-                android:layout_marginTop="@dimen/margin_big"
                 android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/margin_primary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/status"/>
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/fading_edge"
+                app:layout_constraintBottom_toBottomOf="@id/slider_episodes_pictures"/>
 
             <LinearLayout
                 android:id="@+id/slider_page_indicator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_marginBottom="@dimen/margin_primary"
+                android:gravity="end"
+                android:layout_marginEnd="@dimen/margin_primary"
+                android:layout_marginBottom="@dimen/margin_big_x"
                 app:layout_constraintBottom_toBottomOf="@id/slider_episodes_pictures"/>
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="@dimen/detailed_image_width"
+                android:layout_height="@dimen/detailed_image_height"
+                android:contentDescription="@null"
+                android:scaleType="fitXY"
+                android:layout_marginTop="170dp"
+                android:layout_marginStart="@dimen/margin_big"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_launcher"/>
+
+            <TextView
+                android:id="@+id/network"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_light"
+                android:includeFontPadding="false"
+                android:textColor="@color/colorTextNetwork"
+                android:textSize="@dimen/text_size_primary"
+                android:layout_marginStart="@dimen/margin_big"
+                android:layout_marginEnd="@dimen/margin_primary"
+                app:layout_constraintStart_toEndOf="@id/icon"
+                app:layout_constraintTop_toBottomOf="@id/slider_episodes_pictures"
+                app:layout_constraintBottom_toTopOf="@id/status"
+                tools:text="The CW (US)" />
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/ubuntu_light"
+                android:includeFontPadding="false"
+                android:textColor="@color/colorStatus"
+                android:textSize="@dimen/text_size_primary"
+                android:layout_marginStart="@dimen/margin_big"
+                android:layout_marginEnd="@dimen/margin_primary"
+                app:layout_constraintStart_toEndOf="@id/icon"
+                app:layout_constraintTop_toBottomOf="@id/network"
+                app:layout_constraintBottom_toTopOf="@id/start_date"
+                tools:text="Status" />
+
+            <TextView
+                android:id="@+id/start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/ubuntu_light"
+                android:includeFontPadding="false"
+                android:textColor="@color/colorStartDate"
+                android:textSize="@dimen/text_size_primary"
+                android:layout_marginStart="@dimen/margin_big"
+                android:layout_marginEnd="@dimen/margin_primary"
+                app:layout_constraintStart_toEndOf="@id/icon"
+                app:layout_constraintTop_toBottomOf="@id/status"
+                app:layout_constraintBottom_toBottomOf="@id/genres"
+                tools:text="2014-10-07" />
+
+            <TextView
+                android:id="@+id/genres"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/ubuntu_light"
+                android:includeFontPadding="false"
+                android:textColor="@color/colorStartDate"
+                android:textSize="@dimen/text_size_secondary"
+                android:layout_marginStart="@dimen/margin_big"
+                android:layout_marginEnd="@dimen/margin_primary"
+                app:layout_constraintStart_toEndOf="@id/icon"
+                app:layout_constraintTop_toBottomOf="@id/start_date"
+                app:layout_constraintBottom_toBottomOf="@id/icon"
+                tools:text="Drama | Action | Family" />
+
+            <View
+                android:id="@+id/top_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorOtherLightBackground"
+                android:layout_marginTop="@dimen/margin_primary"
+                android:layout_marginBottom="@dimen/margin_primary"
+                android:layout_marginStart="@dimen/margin_big_x"
+                android:layout_marginEnd="@dimen/margin_big_x"
+                app:layout_constraintTop_toBottomOf="@id/icon"
+                app:layout_constraintBottom_toTopOf="@id/rating"/>
+
+            <TextView
+                android:id="@+id/rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_light"
+                android:includeFontPadding="false"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/text_size_secondary"
+                android:gravity="center"
+                android:drawableStart="@drawable/ic_star_rating"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/runtime"
+                app:layout_constraintTop_toBottomOf="@id/top_divider"
+                app:layout_constraintBottom_toTopOf="@id/middle_divider"
+                tools:text=" 9.0 from  631 users" />
+
+            <TextView
+                android:id="@+id/runtime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_light"
+                android:includeFontPadding="false"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/text_size_secondary"
+                android:gravity="center"
+                android:drawableStart="@drawable/ic_runtime"
+                app:layout_constraintTop_toBottomOf="@id/top_divider"
+                app:layout_constraintBottom_toTopOf="@id/middle_divider"
+                app:layout_constraintStart_toEndOf="@id/rating"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text=" 60 Min" />
+
+            <View
+                android:id="@+id/middle_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorOtherLightBackground"
+                android:layout_marginTop="@dimen/margin_primary"
+                android:layout_marginBottom="@dimen/margin_primary"
+                android:layout_marginStart="@dimen/margin_big_x"
+                android:layout_marginEnd="@dimen/margin_big_x"
+                app:layout_constraintTop_toBottomOf="@id/rating"
+                app:layout_constraintBottom_toTopOf="@id/description"/>
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_big_x"
+                android:layout_marginStart="@dimen/margin_big_x"
+                android:layout_marginEnd="@dimen/margin_big_x"
+                android:fontFamily="@font/ubuntu_light"
+                android:includeFontPadding="false"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/text_size_primary"
+                android:ellipsize="end"
+                android:maxLines="4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/middle_divider"
+                app:layout_constraintBottom_toTopOf="@id/read_more"
+                tools:text="desc" />
+
+            <TextView
+                android:id="@+id/read_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_primary"
+                android:layout_marginEnd="@dimen/margin_primary"
+                android:fontFamily="@font/ubuntu_light"
+                android:includeFontPadding="false"
+                android:text="@string/read_more"
+                android:textSize="@dimen/text_size_primary"
+                android:textColor="@color/colorTextLink"
+                android:textAllCaps="false"
+                android:layout_marginBottom="@dimen/margin_primary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/description"
+                app:layout_constraintBottom_toBottomOf="@id/bottom_divider"/>
+
+            <View
+                android:id="@+id/bottom_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorOtherLightBackground"
+                android:layout_marginTop="@dimen/margin_primary"
+                android:layout_marginBottom="@dimen/margin_primary"
+                android:layout_marginStart="@dimen/margin_big_x"
+                android:layout_marginEnd="@dimen/margin_big_x"
+                app:layout_constraintTop_toBottomOf="@id/read_more"
+                app:layout_constraintBottom_toTopOf="@id/button_website"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_website"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/website_button"
+                android:textColor="@color/colorTextDark"
+                android:fontFamily="@font/ubuntu_light"
+                android:includeFontPadding="false"
+                android:layout_marginTop="@dimen/margin_big"
+                android:layout_marginBottom="@dimen/margin_primary"
+                app:cornerRadius="5dp"
+                app:backgroundTint="@color/colorTextNetwork"
+                app:layout_constraintTop_toBottomOf="@id/bottom_divider"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/button_episodes"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_episodes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/episodes_button"
+                android:textColor="@color/colorTextDark"
+                android:fontFamily="@font/ubuntu_light"
+                android:includeFontPadding="false"
+                android:layout_marginTop="@dimen/margin_big"
+                android:layout_marginBottom="@dimen/margin_primary"
+                app:cornerRadius="5dp"
+                app:backgroundTint="@color/colorTextLink"
+                app:layout_constraintTop_toBottomOf="@id/bottom_divider"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/button_website"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <ProgressBar
                 android:id="@+id/loading_view"
@@ -177,7 +296,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:layout_marginTop="@dimen/margin_big_x"
-                app:layout_constraintTop_toTopOf="@id/icon"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:visibility="visible"/>

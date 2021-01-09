@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#F8F8F8</color>
-    <color name="colorPrimaryDark">#121212</color>
-    <color name="colorToolBar">#000000</color>
-    <color name="colorItemBackground">#EAEAEA</color>
-    <color name="colorAccent">#2196F3</color>
+    <color name="colorPrimary">#132839</color>
+    <color name="colorPrimaryDark">#F2091219</color>
+    <color name="colorToolBar">#091219</color>
+    <color name="colorBackground">@color/colorPrimary</color>
+    <color name="colorItemBackground">#1E537C</color>
+    <color name="colorAccent">#FFEB3B</color>
     <color name="colorTextLink">#1191F8</color>
-    <color name="colorOtherItemBackground">#CEDBE6</color>
-    <color name="colorTextPrimary">#000000</color>
-    <color name="colorTextSecondary">#4A4A4A</color>
+    <color name="colorTextPrimary">#FFFFFF</color>
+    <color name="colorTextDark">#000000</color>
+    <color name="colorOtherLightBackground">#B5B5B5</color>
+    <color name="colorTextNetwork">#DCC928</color>
+    <color name="colorStartDate">#9C7235</color>
+    <color name="colorStatus">#3BAE3F</color>
 </resources>

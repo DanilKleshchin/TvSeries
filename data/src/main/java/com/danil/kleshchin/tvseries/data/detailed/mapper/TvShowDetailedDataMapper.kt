@@ -23,9 +23,10 @@ class TvShowDetailedDataMapper @Inject constructor() {
         val ratingCount = tvShowDetailedEntity.ratingCount
         val genres = tvShowDetailedEntity.genreList
         val episodesPictures = tvShowDetailedEntity.episodesPictures
+        val runtime = tvShowDetailedEntity.runtime
         return TvShowDetailed(
             id, name, pageUrl, description, descriptionUrl, startDate, country, status,
-            network, youTubeUrl, iconUrl, rating, ratingCount, genres, episodesPictures
+            network, youTubeUrl, iconUrl, rating, ratingCount, runtime, genres, episodesPictures
         )
     }
 
