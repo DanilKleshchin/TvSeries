@@ -31,6 +31,9 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTvShowPopularBinding.inflate(inflater, container, false)
+
+        initViewListeners()
+
         tvShowPopularPresenter.setView(this)
         tvShowPopularPresenter.onAttach()
         return binding.root
@@ -43,14 +46,8 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
 
     override fun showTvShowPopularList(tvShowPopularList: List<TvShowPopular>) {
         binding.apply {
-            tvShowListView.adapter = TvShowPopularListAdapter(tvShowPopularList, this@TvShowPopularFragment)
-            tvShowListView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    if (!tvShowListView.canScrollVertically(1)) {
-                        tvShowPopularPresenter.onFullTvShowListScrolled()
-                    }
-                }
-            })
+            tvShowListView.adapter =
+                TvShowPopularListAdapter(tvShowPopularList, this@TvShowPopularFragment)
         }
     }
 
@@ -67,11 +64,7 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
     }
 
     override fun showHideLoadingView(hide: Boolean) {
-        if (hide) {
-            binding.loadingView.visibility = View.GONE
-        } else {
-            binding.loadingView.visibility = View.VISIBLE
-        }
+        binding.loadingView.isRefreshing = !hide
     }
 
     override fun showHideBottomLoadingView(hide: Boolean) {
@@ -82,17 +75,41 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
         }
     }
 
-    override fun showRetry() {
-
-    }
-
-    override fun hideRetry() {
-
+    override fun showHideRetryView(hide: Boolean) {
+        binding.apply {
+            if (hide) {
+                emptyText.visibility = View.GONE
+                emptyButton.visibility = View.GONE
+                tvShowListView.visibility = View.VISIBLE
+            } else {
+                emptyText.visibility = View.VISIBLE
+                emptyButton.visibility = View.VISIBLE
+                tvShowListView.visibility = View.GONE
+            }
+        }
     }
 
     override fun showDetailedScreen(tvShowPopular: TvShowPopular) {
         val context = activity ?: throw  IllegalStateException(ERROR_LOG_MESSAGE)
         initTvShowDetailedFragment(context, tvShowPopular)
+    }
+
+    private fun initViewListeners() {
+        binding.apply {
+            loadingView.setOnRefreshListener {
+                tvShowPopularPresenter.onRefreshSelected()
+            }
+            emptyButton.setOnClickListener {
+                tvShowPopularPresenter.onRefreshSelected()
+            }
+            tvShowListView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    if (!tvShowListView.canScrollVertically(1)) {
+                        tvShowPopularPresenter.onFullTvShowListScrolled()
+                    }
+                }
+            })
+        }
     }
 
     //TODO where should I init this component?

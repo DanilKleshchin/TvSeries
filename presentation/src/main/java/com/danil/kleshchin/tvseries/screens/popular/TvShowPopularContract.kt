@@ -10,12 +10,12 @@ interface TvShowPopularContract {
         fun updateTvShowPopularList(tvShowPopularList: List<TvShowPopular>)
         fun showHideLoadingView(hide: Boolean)
         fun showHideBottomLoadingView(hide: Boolean)
-        fun showRetry()
-        fun hideRetry()
+        fun showHideRetryView(hide: Boolean)
     }
 
     interface Presenter: BasePresenter {
         fun setView(view: View)
+        fun onRefreshSelected()
         fun onTvShowPopularSelected(tvShowPopular: TvShowPopular)
         fun onFullTvShowListScrolled()
     }

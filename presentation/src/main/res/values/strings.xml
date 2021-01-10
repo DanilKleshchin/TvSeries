@@ -11,4 +11,6 @@
     <string name="runtime">\u0020%1$d min</string>
     <string name="website_button">WEBSITE</string>
     <string name="episodes_button">Episodes</string>
+    <string name="retry_message">Something went wrong… \nCheck your Internet connection and retry.</string>
+    <string name="retry_button_text">Retry</string>
 </resources>

@@ -36,10 +36,8 @@ class TvShowApplication : Application() {
 }
 /* TODO
     add network connection checking
-    add empty view add retry view
     add configuration changes checking
     add caching to DB
-    add custom tabs
     add default android click animation (https://guides.codepath.com/android/ripple-animation)
     add ability to sort movies by genres
     */

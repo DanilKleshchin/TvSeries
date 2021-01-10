@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -21,50 +21,79 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small"
             android:layout_weight="1"
+            android:fontFamily="@font/ubuntu_bold"
             android:maxLines="1"
             android:text="@string/most_popular"
-            android:fontFamily="@font/ubuntu_bold"
             android:textColor="@color/colorTextPrimary"
-            android:layout_marginStart="@dimen/margin_small"
             android:textSize="@dimen/text_size_big" />
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/tv_show_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="@dimen/margin_primary"
-        android:layout_marginEnd="@dimen/margin_primary"
-        android:orientation="vertical"
-        android:clipToPadding="false"
-        android:paddingBottom="@dimen/margin_big"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/item_tv_show_popular_list" />
-
-    <ProgressBar
-        android:id="@+id/bottom_loading_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_marginBottom="@dimen/margin_big_x"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:visibility="visible"/>
-
-    <ProgressBar
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/loading_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_marginTop="@dimen/margin_big_x"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:visibility="visible"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/tv_show_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_primary"
+                android:layout_marginEnd="@dimen/margin_primary"
+                android:clipToPadding="false"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/margin_big"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_tv_show_popular_list" />
+
+            <TextView
+                android:id="@+id/empty_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/retry_message"
+                android:textSize="@dimen/text_size_primary"
+                android:textColor="@color/colorTextPrimary"
+                android:fontFamily="@font/ubuntu_light"
+                android:layout_marginStart="@dimen/margin_big_x"
+                android:layout_marginEnd="@dimen/margin_big_x"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:visibility="gone"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/empty_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/retry_button_text"
+                android:textColor="@color/colorTextDark"
+                android:fontFamily="@font/ubuntu_light"
+                android:includeFontPadding="false"
+                android:layout_marginTop="@dimen/margin_big"
+                android:layout_below="@id/empty_text"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="@dimen/margin_big_x"
+                android:layout_marginEnd="@dimen/margin_big_x"
+                android:visibility="gone"
+                app:cornerRadius="5dp"
+                app:backgroundTint="@color/colorTextNetwork"/>
+
+            <ProgressBar
+                android:id="@+id/bottom_loading_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_big_x"
+                android:visibility="gone"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                tools:visibility="visible" />
+        </RelativeLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</LinearLayout>
