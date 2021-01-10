@@ -20,6 +20,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.danil.kleshchin.tvseries.R
 import com.danil.kleshchin.tvseries.databinding.FragmentTvShowDetailedBinding
 import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
+import com.danil.kleshchin.tvseries.fromHtml
 import com.danil.kleshchin.tvseries.screens.detailed.models.TvShowDetailedModel
 import com.squareup.picasso.Picasso
 import javax.inject.Inject
@@ -146,7 +147,7 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
 
             setViewsVisibility(View.VISIBLE)
 
-            description.text = tvShowDetailed.description
+            description.text = tvShowDetailed.description.fromHtml()
             network.text = networkString
             startDate.text = startDateString
             status.text = statusString

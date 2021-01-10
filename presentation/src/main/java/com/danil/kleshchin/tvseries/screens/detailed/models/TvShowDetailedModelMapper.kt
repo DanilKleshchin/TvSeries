@@ -1,26 +1,22 @@
 package com.danil.kleshchin.tvseries.screens.detailed.models
 
 import androidx.annotation.VisibleForTesting
-import androidx.core.text.HtmlCompat
 import com.danil.kleshchin.tvseries.domain.entity.TvShowDetailed
+import com.danil.kleshchin.tvseries.roundToTwoLastDigits
 import javax.inject.Inject
 
 class TvShowDetailedModelMapper @Inject constructor() {
 
     fun transform(tvShowDetailed: TvShowDetailed): TvShowDetailedModel {
-        val description =
-            HtmlCompat.fromHtml(tvShowDetailed.description, HtmlCompat.FROM_HTML_MODE_LEGACY)
-                .toString()
         val youTubeUrl = tvShowDetailed.youTubeUrl ?: "Unknown"
-        val ratingString = String.format("%.2f", tvShowDetailed.rating)
-        val ratingDouble = ratingString.toDouble()
+        val ratingDouble = tvShowDetailed.rating.roundToTwoLastDigits()
         val genres = getGenresAsString(tvShowDetailed.genres)
 
         return TvShowDetailedModel(
             tvShowDetailed.id,
             tvShowDetailed.name,
             tvShowDetailed.pageUrl,
-            description,
+            tvShowDetailed.description,
             tvShowDetailed.moreDescriptionUrl,
             tvShowDetailed.startDate,
             tvShowDetailed.country,
@@ -42,9 +38,9 @@ class TvShowDetailedModelMapper @Inject constructor() {
         if (genreList.isEmpty()) {
             return genres
         }
-        for (genre in genreList) {
-            genres += "$genre | "
+        genreList.forEach {
+            genre -> genres += "$genre | "
         }
-        return genres.substring(0, genres.length - 3) //Remove last two spaces and | sign
+        return genres.dropLast(3) //Remove last two spaces and | sign
     }
 }

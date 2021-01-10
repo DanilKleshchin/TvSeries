@@ -19,6 +19,7 @@ class TvShowDetailedMapperTest {
     private val pageUrl = "http://full.page"
     private val description = "Some description"
     private val moreDescriptionUrl = "http://more.com"
+    private val runtime = 60
     private val youTubeUrl = null
     private val rating = 6.5
     private val ratingDelta = 0.0001
@@ -68,6 +69,7 @@ class TvShowDetailedMapperTest {
             country,
             status,
             network,
+            runtime,
             youTubeUrl,
             iconUrl,
             rating,
