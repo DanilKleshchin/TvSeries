@@ -61,8 +61,6 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
 
         _binding = FragmentTvShowDetailedBinding.inflate(inflater, container, false)
         setBackPressedCallback()
-        tvShowDetailedPresenter.setView(this)
-        tvShowDetailedPresenter.onAttach()
         return binding.root
     }
 
@@ -72,7 +70,10 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
         tvShowDetailedPresenter.onAttach()
         initPresenterForTvShowPopular()
 
-        binding.backButton.setOnClickListener { finish() }
+        binding.apply {
+            emptyButton.setOnClickListener { tvShowDetailedPresenter.onRefreshSelected() }
+            backButton.setOnClickListener { finish() }
+        }
     }
 
     override fun onStop() {
@@ -97,12 +98,18 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
         }
     }
 
-    override fun showRetry() {
-
-    }
-
-    override fun hideRetry() {
-
+    override fun showHideRetryView(hide: Boolean) {
+        binding.apply {
+            if (hide) {
+                scrollView.visibility = View.VISIBLE
+                emptyButton.visibility = View.GONE
+                emptyText.visibility = View.GONE
+            } else {
+                scrollView.visibility = View.GONE
+                emptyButton.visibility = View.VISIBLE
+                emptyText.visibility = View.VISIBLE
+            }
+        }
     }
 
     override fun showWebPage(url: String) {
@@ -141,8 +148,6 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
             val runtimeString =
                 String.format(resources.getString(R.string.runtime), tvShowDetailed.runtime)
 
-            setViewsVisibility(View.VISIBLE)
-
             name.text = tvShowDetailed.name
             name.isSelected = true
             description.text = tvShowDetailed.description.fromHtml()
@@ -161,41 +166,7 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
             }
 
             initPageIndicators(tvShowDetailed.episodesPictures.size, context)
-
-            //TODO change this
-            readMore.setOnClickListener {
-                if (readMore.text == getString(R.string.read_more)) {
-                    description.ellipsize = null
-                    description.maxLines = Int.MAX_VALUE
-                    readMore.text = getString(R.string.read_less)
-                } else {
-                    readMore.text = getString(R.string.read_more)
-                    description.ellipsize = TextUtils.TruncateAt.END
-                    description.maxLines = 4
-                }
-                description.text = tvShowDetailed.description
-            }
-
-            buttonWebsite.setOnClickListener{
-                tvShowDetailedPresenter.onWebPageSelected(tvShowDetailed)
-            }
-
-            sliderEpisodesPictures.registerOnPageChangeCallback(object :
-                ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    super.onPageSelected(position)
-                    setCurrentPageIndicator(position)
-                }
-            })
-        }
-    }
-
-    private fun setViewsVisibility(visibility: Int) {
-        binding.apply {
-            description.visibility = visibility
-            network.visibility = visibility
-            startDate.visibility = visibility
-            status.visibility = visibility
+            initViewListeners(tvShowDetailed)
         }
     }
 
@@ -235,6 +206,40 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
 
     private fun setPageIndicatorColor(@DrawableRes color: Int, view: ImageView) {
         view.setImageDrawable(ContextCompat.getDrawable(view.context,color))
+    }
+
+    private fun initViewListeners(tvShowDetailed: TvShowDetailedModel) {
+        binding.apply {
+            //TODO change this
+            readMore.setOnClickListener {
+                if (readMore.text == getString(R.string.read_more)) {
+                    description.ellipsize = null
+                    description.maxLines = Int.MAX_VALUE
+                    readMore.text = getString(R.string.read_less)
+                } else {
+                    readMore.text = getString(R.string.read_more)
+                    description.ellipsize = TextUtils.TruncateAt.END
+                    description.maxLines = 4
+                }
+                description.text = tvShowDetailed.description
+            }
+
+            buttonWebsite.setOnClickListener {
+                tvShowDetailedPresenter.onWebPageSelected(tvShowDetailed)
+            }
+
+            buttonEpisodes.setOnClickListener {
+
+            }
+
+            sliderEpisodesPictures.registerOnPageChangeCallback(object :
+                ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    setCurrentPageIndicator(position)
+                }
+            })
+        }
     }
 
     private fun setBackPressedCallback() {

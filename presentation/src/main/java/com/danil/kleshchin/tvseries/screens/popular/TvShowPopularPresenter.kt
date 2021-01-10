@@ -27,7 +27,6 @@ class TvShowPopularPresenter(
     }
 
     override fun onAttach() {
-        tvShowPopularView.showHideLoadingView(false)
         executeGetTvShowPopularListUseCase()
     }
 
@@ -55,6 +54,7 @@ class TvShowPopularPresenter(
     //TODO ask about disposable
     private fun executeGetTvShowPopularListUseCase() {
         tvShowPopularView.showHideRetryView(true)
+        tvShowPopularView.showHideLoadingView(false)
         disposables.add(
             getTvShowPopularListUseCase.execute(
                 GetTvShowPopularListUseCase.Params(currentPage)

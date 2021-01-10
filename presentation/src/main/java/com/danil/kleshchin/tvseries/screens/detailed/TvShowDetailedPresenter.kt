@@ -16,6 +16,7 @@ class TvShowDetailedPresenter(
 ) : TvShowDetailedContract.Presenter {
 
     private lateinit var tvShowDetailedView: TvShowDetailedContract.View
+    private lateinit var tvShowPopular: TvShowPopular
     private lateinit var tvShowDetailed: TvShowDetailedModel
 
     override fun setView(view: TvShowDetailedContract.View) {
@@ -23,7 +24,7 @@ class TvShowDetailedPresenter(
     }
 
     override fun onAttach() {
-        tvShowDetailedView.showHideLoadingView(false)
+        //do nothing
     }
 
     override fun onDetach() {
@@ -31,6 +32,11 @@ class TvShowDetailedPresenter(
     }
 
     override fun initialize(tvShowPopular: TvShowPopular) {
+        this.tvShowPopular = tvShowPopular
+        executeGetTvShowDetailed(tvShowPopular)
+    }
+
+    override fun onRefreshSelected() {
         executeGetTvShowDetailed(tvShowPopular)
     }
 
@@ -40,6 +46,8 @@ class TvShowDetailedPresenter(
 
     //TODO ask about disposable
     private fun executeGetTvShowDetailed(tvShowPopular: TvShowPopular) {
+        tvShowDetailedView.showHideRetryView(true)
+        tvShowDetailedView.showHideLoadingView(false)
         disposables.add(
             getTvShowDetailedUseCase.execute(
                 GetTvShowDetailedUseCase.Params(tvShowPopular.detailUrl)
@@ -52,11 +60,12 @@ class TvShowDetailedPresenter(
                         tvShowDetailed = tvShow
                         tvShowDetailedView.showTvShowDetailed(tvShowDetailed)
                         tvShowDetailedView.showHideLoadingView(true)
+                        tvShowDetailedView.showHideRetryView(true)
                     },
                     {
                         it.printStackTrace()
                         tvShowDetailedView.showHideLoadingView(true)
-                        tvShowDetailedView.showRetry()
+                        tvShowDetailedView.showHideRetryView(false)
                     }
                 )
         )
