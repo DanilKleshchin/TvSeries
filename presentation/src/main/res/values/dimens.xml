@@ -18,6 +18,7 @@
     <dimen name="detailed_image_width">140dp</dimen>
     <dimen name="detailed_image_height">200dp</dimen>
     <dimen name="slider_image_height">200dp</dimen>
-    <dimen name="item_popular_image_width">160dp</dimen>
+    <dimen name="item_popular_image_width">150dp</dimen>
     <dimen name="item_popular_image_height">210dp</dimen>
+    <dimen name="popular_movie_title_width">210dp</dimen>
 </resources>

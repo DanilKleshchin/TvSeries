@@ -11,7 +11,6 @@ interface TvShowDetailedContract {
         fun showHideLoadingView(hide: Boolean)
         fun showRetry()
         fun hideRetry()
-        fun showTvShowDetailedName(name: String)
     }
 
     interface Presenter: BasePresenter {

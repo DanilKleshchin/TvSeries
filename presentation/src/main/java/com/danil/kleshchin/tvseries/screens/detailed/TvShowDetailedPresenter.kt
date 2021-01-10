@@ -31,7 +31,6 @@ class TvShowDetailedPresenter(
     }
 
     override fun initialize(tvShowPopular: TvShowPopular) {
-        tvShowDetailedView.showTvShowDetailedName(tvShowPopular.name)
         executeGetTvShowDetailed(tvShowPopular)
     }
 

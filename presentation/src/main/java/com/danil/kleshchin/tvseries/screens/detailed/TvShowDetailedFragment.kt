@@ -85,10 +85,6 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
         _binding = null
     }
 
-    override fun showTvShowDetailedName(name: String) {
-        binding.name.text = name
-    }
-
     override fun showTvShowDetailed(tvShowDetailed: TvShowDetailedModel) {
         bind(tvShowDetailed)
     }
@@ -147,6 +143,8 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
 
             setViewsVisibility(View.VISIBLE)
 
+            name.text = tvShowDetailed.name
+            name.isSelected = true
             description.text = tvShowDetailed.description.fromHtml()
             network.text = networkString
             startDate.text = startDateString
