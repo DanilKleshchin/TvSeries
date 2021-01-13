@@ -12,6 +12,7 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 class GetTvShowPopularListUseCaseTest {
 
+    private val pageNumber = 1
     private lateinit var getTvShowPopularListUseCase: GetTvShowPopularListUseCase
 
     @Mock
@@ -23,10 +24,10 @@ class GetTvShowPopularListUseCaseTest {
     }
 
     @Test
-    fun testGetFeedBySectionUseCase() {
-        getTvShowPopularListUseCase.execute(Unit)
+    fun testGetTvShowPopularListUseCase() {
+        getTvShowPopularListUseCase.execute(GetTvShowPopularListUseCase.Params(pageNumber))
 
-        Mockito.verify(mockTvShowRepository).getTvShowPopularList()
+        Mockito.verify(mockTvShowRepository).getTvShowPopularList(pageNumber)
         Mockito.verifyNoMoreInteractions(mockTvShowRepository)
     }
 }

@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.danil.kleshchin.tvseries.R
+import com.danil.kleshchin.tvseries.TvShowApplication
 import com.danil.kleshchin.tvseries.databinding.FragmentTvShowDetailedBinding
 import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
 import com.danil.kleshchin.tvseries.fromHtml
@@ -28,11 +29,10 @@ import javax.inject.Inject
 class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDetailedNavigator {
 
     private val ERROR_LOG_MESSAGE = "TvShowDetailedFragment fragment wasn't attached."
+    private val KEY_TV_SHOW_POPULAR = "KEY_TV_SHOW_POPULAR"
 
     @Inject
     lateinit var tvShowDetailedPresenter: TvShowDetailedContract.Presenter
-
-    private var tvShowPopular: TvShowPopular? = null
 
     private lateinit var episodesPicturesPageIndicators: ArrayList<ImageView>
 
@@ -40,13 +40,12 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
     private val binding get() = _binding!!
 
     companion object {
-        private val KEY_SECTION = "KEY_SECTION"
-        private val INSTANCE_STATE_PARAM_SECTION = "STATE_PARAM_SECTION"
+        private val KEY_TV_SHOW_POPULAR = "KEY_TV_SHOW_POPULAR"
 
         fun newInstance(tvShowPopular: TvShowPopular): TvShowDetailedFragment {
             val feedFragment = TvShowDetailedFragment()
             val args = Bundle()
-            args.putSerializable(KEY_SECTION, tvShowPopular)
+            args.putSerializable(KEY_TV_SHOW_POPULAR, tvShowPopular)
             feedFragment.arguments = args
             return feedFragment
         }
@@ -57,7 +56,8 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        initializeFragment(savedInstanceState)
+        (activity?.application as TvShowApplication).initTvShowDetailedComponent(this)
+        (activity?.application as TvShowApplication).getTvShowDetailedComponent().inject(this)
 
         _binding = FragmentTvShowDetailedBinding.inflate(inflater, container, false)
         setBackPressedCallback()
@@ -66,9 +66,7 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        tvShowDetailedPresenter.setView(this)
-        tvShowDetailedPresenter.onAttach()
-        initPresenterForTvShowPopular()
+        tvShowDetailedPresenter.subscribe(this, getStoredState(savedInstanceState))
 
         binding.apply {
             emptyButton.setOnClickListener { tvShowDetailedPresenter.onRefreshSelected() }
@@ -76,14 +74,15 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        tvShowDetailedPresenter.onDetach()
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        storeState(outState, tvShowDetailedPresenter.getState())
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onStop() {
+        super.onStop()
         _binding = null
+        tvShowDetailedPresenter.unsubscribe()
     }
 
     override fun showTvShowDetailed(tvShowDetailed: TvShowDetailedModel) {
@@ -128,23 +127,26 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
             .launchUrl(context, Uri.parse(url))
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putSerializable(INSTANCE_STATE_PARAM_SECTION, tvShowPopular)
-        super.onSaveInstanceState(outState)
-    }
-
     private fun bind(tvShowDetailed: TvShowDetailedModel) {
         val context = activity ?: throw  IllegalStateException(ERROR_LOG_MESSAGE)
         binding.apply {
             val resources = binding.root.resources
             val networkString =
-                String.format(resources.getString(R.string.network), tvShowDetailed.network, tvShowDetailed.country)
+                String.format(
+                    resources.getString(R.string.network),
+                    tvShowDetailed.network,
+                    tvShowDetailed.country
+                )
             val startDateString =
                 String.format(resources.getString(R.string.start_date), tvShowDetailed.startDate)
             val statusString =
                 String.format(resources.getString(R.string.status), tvShowDetailed.status)
             val ratingString =
-                String.format(resources.getString(R.string.rating), tvShowDetailed.rating, tvShowDetailed.ratingCount)
+                String.format(
+                    resources.getString(R.string.rating),
+                    tvShowDetailed.rating,
+                    tvShowDetailed.ratingCount
+                )
             val runtimeString =
                 String.format(resources.getString(R.string.runtime), tvShowDetailed.runtime)
 
@@ -205,7 +207,7 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
     }
 
     private fun setPageIndicatorColor(@DrawableRes color: Int, view: ImageView) {
-        view.setImageDrawable(ContextCompat.getDrawable(view.context,color))
+        view.setImageDrawable(ContextCompat.getDrawable(view.context, color))
     }
 
     private fun initViewListeners(tvShowDetailed: TvShowDetailedModel) {
@@ -251,29 +253,24 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
-    private fun initializeFragment(savedInstanceState: Bundle?) {
-        tvShowPopular = if (savedInstanceState == null) {
+    private fun storeState(outState: Bundle, state: TvShowDetailedContract.State) =
+        outState.putSerializable(KEY_TV_SHOW_POPULAR, state.getTvShowPopular())
+
+    private fun getStoredState(savedInstanceState: Bundle?): TvShowDetailedContract.State {
+        val tvShowPopular = if (savedInstanceState == null) {
             getTvShowPopular()
-        } else ({
-            savedInstanceState.getSerializable(INSTANCE_STATE_PARAM_SECTION)
-        }) as TvShowPopular?
+        } else {
+            savedInstanceState.getSerializable(KEY_TV_SHOW_POPULAR) as TvShowPopular
+        }
+        return TvShowDetailedState(tvShowPopular)
     }
 
-    private fun initPresenterForTvShowPopular() {
-        val tvShowPopular = getTvShowPopular()
-        tvShowDetailedPresenter.initialize(
-            tvShowPopular ?: throw NullPointerException("Section is null")
-        )
-    }
-
-    private fun getTvShowPopular(): TvShowPopular? {
-        return arguments?.getSerializable(KEY_SECTION) as TvShowPopular?
+    private fun getTvShowPopular(): TvShowPopular {
+        return arguments?.getSerializable(KEY_TV_SHOW_POPULAR) as TvShowPopular?
+            ?: throw NullPointerException("TvShowPopular is null")
     }
 
     private fun finish() {
-        activity?.supportFragmentManager
-            ?.beginTransaction()
-            ?.remove(this)
-            ?.commitNow()
+        activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commitNow()
     }
 }

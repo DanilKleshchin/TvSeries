@@ -1,6 +1,5 @@
 package com.danil.kleshchin.tvseries.screens.detailed
 
-import com.danil.kleshchin.tvseries.BasePresenter
 import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
 import com.danil.kleshchin.tvseries.screens.detailed.models.TvShowDetailedModel
 
@@ -12,10 +11,15 @@ interface TvShowDetailedContract {
         fun showHideRetryView(hide: Boolean)
     }
 
-    interface Presenter: BasePresenter {
-        fun setView(view: View)
+    interface Presenter {
+        fun subscribe(view: View, state: State)
+        fun unsubscribe()
+        fun getState(): State
         fun onRefreshSelected()
         fun onWebPageSelected(tvShowDetailed: TvShowDetailedModel)
-        fun initialize(tvShowPopular: TvShowPopular)
+    }
+
+    interface State {
+        fun getTvShowPopular(): TvShowPopular
     }
 }

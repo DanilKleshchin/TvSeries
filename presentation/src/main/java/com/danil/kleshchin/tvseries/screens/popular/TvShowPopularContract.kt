@@ -1,6 +1,5 @@
 package com.danil.kleshchin.tvseries.screens.popular
 
-import com.danil.kleshchin.tvseries.BasePresenter
 import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
 
 interface TvShowPopularContract {
@@ -13,10 +12,17 @@ interface TvShowPopularContract {
         fun showHideRetryView(hide: Boolean)
     }
 
-    interface Presenter: BasePresenter {
-        fun setView(view: View)
+    interface Presenter {
+        fun subscribe(view: View, state: State?)
+        fun unsubscribe()
+        fun getState(): State
         fun onRefreshSelected()
         fun onTvShowPopularSelected(tvShowPopular: TvShowPopular)
         fun onFullTvShowListScrolled()
+    }
+
+    interface State {
+        fun getCurrentPageNumber(): Int
+        fun getPagesCount(): Int
     }
 }

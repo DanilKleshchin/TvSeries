@@ -16,23 +16,28 @@ class TvShowPopularPresenter(
 
     private val FIRST_PAGE_NUMBER = 1
 
-    private lateinit var tvShowPopularView: TvShowPopularContract.View
+    private var tvShowPopularView: TvShowPopularContract.View? = null
     private var tvShowPopularList = arrayListOf<TvShowPopular>()
 
-    private var currentPage = FIRST_PAGE_NUMBER
-    private var pageCount = currentPage
+    private var currentPageNumber = FIRST_PAGE_NUMBER
+    private var pagesCount = currentPageNumber
 
-    override fun setView(view: TvShowPopularContract.View) {
-        this.tvShowPopularView = view
-    }
-
-    override fun onAttach() {
+    override fun subscribe(view: TvShowPopularContract.View, state: TvShowPopularContract.State?) {
+        tvShowPopularView = view
+        currentPageNumber = state?.getCurrentPageNumber() ?: FIRST_PAGE_NUMBER
+        pagesCount = state?.getPagesCount() ?: currentPageNumber
         executeGetTvShowPopularListUseCase()
     }
 
-    override fun onDetach() {
+    override fun unsubscribe() {
         disposables.dispose()
+        tvShowPopularView = null
+        tvShowPopularList = arrayListOf()
     }
+
+    //TODO ask about this state object creation
+    override fun getState(): TvShowPopularContract.State =
+        TvShowPopularState(currentPageNumber, pagesCount)
 
     override fun onTvShowPopularSelected(tvShowPopular: TvShowPopular) {
         tvShowPopularNavigator.showDetailedScreen(tvShowPopular)
@@ -47,31 +52,31 @@ class TvShowPopularPresenter(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                pageCount = it
+                pagesCount = it
             }
     }
 
     //TODO ask about disposable
     private fun executeGetTvShowPopularListUseCase() {
-        tvShowPopularView.showHideRetryView(true)
-        tvShowPopularView.showHideLoadingView(false)
+        tvShowPopularView?.showHideRetryView(true)
+        tvShowPopularView?.showHideLoadingView(false)
         disposables.add(
             getTvShowPopularListUseCase.execute(
-                GetTvShowPopularListUseCase.Params(currentPage)
+                GetTvShowPopularListUseCase.Params(currentPageNumber)
             )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { tvShows ->
-                        tvShowPopularView.showHideLoadingView(true)
-                        tvShowPopularView.showHideRetryView(true)
+                        tvShowPopularView?.showHideLoadingView(true)
+                        tvShowPopularView?.showHideRetryView(true)
                         tvShowPopularList = tvShows as ArrayList<TvShowPopular>
-                        tvShowPopularView.showTvShowPopularList(tvShowPopularList)
+                        tvShowPopularView?.showTvShowPopularList(tvShowPopularList)
                     },
                     {
                         it.printStackTrace()
-                        tvShowPopularView.showHideRetryView(false)
-                        tvShowPopularView.showHideLoadingView(true)
+                        tvShowPopularView?.showHideRetryView(false)
+                        tvShowPopularView?.showHideLoadingView(true)
                     },
                     {
                         executeGetTvShowPopularPageCountUseCase()
@@ -82,25 +87,25 @@ class TvShowPopularPresenter(
 
     //TODO think about this. Try to combine with executeGetTvShowPopularListUseCase()
     override fun onFullTvShowListScrolled() {
-        if (currentPage < pageCount) {
-            currentPage++
-            tvShowPopularView.showHideBottomLoadingView(false)
+        if (currentPageNumber < pagesCount) {
+            currentPageNumber++
+            tvShowPopularView?.showHideBottomLoadingView(false)
             getTvShowPopularListUseCase.execute(
-                GetTvShowPopularListUseCase.Params(currentPage)
+                GetTvShowPopularListUseCase.Params(currentPageNumber)
             )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { tvShows ->
-                        tvShowPopularView.showHideBottomLoadingView(true)
+                        tvShowPopularView?.showHideBottomLoadingView(true)
                         tvShowPopularList.addAll(tvShows)
-                        tvShowPopularView.updateTvShowPopularList(tvShowPopularList)
+                        tvShowPopularView?.updateTvShowPopularList(tvShowPopularList)
                     },
                     {
                         it.printStackTrace()
-                        tvShowPopularView.showHideBottomLoadingView(true)
-                        if (currentPage > FIRST_PAGE_NUMBER) {
-                            currentPage--
+                        tvShowPopularView?.showHideBottomLoadingView(true)
+                        if (currentPageNumber > FIRST_PAGE_NUMBER) {
+                            currentPageNumber--
                         }
                     }
                 )

@@ -36,9 +36,13 @@ class TvShowApplication : Application() {
 }
 /* TODO
     add network connection checking
-    add configuration changes checking
+    store popular list when configuration changes
     add caching to DB
     add default android click animation (https://guides.codepath.com/android/ripple-animation)
     add ability to sort movies by genres
+    если зайти в кино и перевернуть экран возвращает обратно
+    Сделать автоскролл названия фильма
+    Если выключить инет и нажать на фильм, то будет отображены пустые вьюхи
+    Если прилагу Несколько раз перевернуть Она вылетает Точнее При загрузке Если перевернуть
     */
 

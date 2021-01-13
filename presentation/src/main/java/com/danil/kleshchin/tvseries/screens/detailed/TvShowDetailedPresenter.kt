@@ -15,26 +15,24 @@ class TvShowDetailedPresenter(
     private val mapper: TvShowDetailedModelMapper
 ) : TvShowDetailedContract.Presenter {
 
-    private lateinit var tvShowDetailedView: TvShowDetailedContract.View
     private lateinit var tvShowPopular: TvShowPopular
     private lateinit var tvShowDetailed: TvShowDetailedModel
 
-    override fun setView(view: TvShowDetailedContract.View) {
-        this.tvShowDetailedView = view
-    }
+    private var tvShowDetailedView: TvShowDetailedContract.View? = null
 
-    override fun onAttach() {
-        //do nothing
-    }
-
-    override fun onDetach() {
-        disposables.dispose()
-    }
-
-    override fun initialize(tvShowPopular: TvShowPopular) {
-        this.tvShowPopular = tvShowPopular
+    override fun subscribe(view: TvShowDetailedContract.View, state: TvShowDetailedContract.State) {
+        tvShowDetailedView = view
+        tvShowPopular = state.getTvShowPopular()
         executeGetTvShowDetailed(tvShowPopular)
     }
+
+    override fun unsubscribe() {
+        disposables.dispose()
+        tvShowDetailedView = null
+    }
+
+    //TODO ask about this state object creation
+    override fun getState(): TvShowDetailedContract.State = TvShowDetailedState(tvShowPopular)
 
     override fun onRefreshSelected() {
         executeGetTvShowDetailed(tvShowPopular)
@@ -46,8 +44,8 @@ class TvShowDetailedPresenter(
 
     //TODO ask about disposable
     private fun executeGetTvShowDetailed(tvShowPopular: TvShowPopular) {
-        tvShowDetailedView.showHideRetryView(true)
-        tvShowDetailedView.showHideLoadingView(false)
+        tvShowDetailedView?.showHideRetryView(true)
+        tvShowDetailedView?.showHideLoadingView(false)
         disposables.add(
             getTvShowDetailedUseCase.execute(
                 GetTvShowDetailedUseCase.Params(tvShowPopular.detailUrl)
@@ -58,14 +56,14 @@ class TvShowDetailedPresenter(
                 .subscribe(
                     { tvShow ->
                         tvShowDetailed = tvShow
-                        tvShowDetailedView.showTvShowDetailed(tvShowDetailed)
-                        tvShowDetailedView.showHideLoadingView(true)
-                        tvShowDetailedView.showHideRetryView(true)
+                        tvShowDetailedView?.showTvShowDetailed(tvShowDetailed)
+                        tvShowDetailedView?.showHideLoadingView(true)
+                        tvShowDetailedView?.showHideRetryView(true)
                     },
                     {
                         it.printStackTrace()
-                        tvShowDetailedView.showHideLoadingView(true)
-                        tvShowDetailedView.showHideRetryView(false)
+                        tvShowDetailedView?.showHideLoadingView(true)
+                        tvShowDetailedView?.showHideRetryView(false)
                     }
                 )
         )

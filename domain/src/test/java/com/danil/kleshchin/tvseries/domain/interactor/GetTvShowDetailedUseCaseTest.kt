@@ -26,7 +26,7 @@ class GetTvShowDetailedUseCaseTest {
     }
 
     @Test
-    fun testGetFeedBySectionUseCase() {
+    fun testGetTvShowDetailedUseCase() {
         getTvShowDetailedUseCase.execute(GetTvShowDetailedUseCase.Params(MOVIE_DETAILED_URL))
 
         verify(mockTvShowDetailedRepository).getTvShowDetailed(MOVIE_DETAILED_URL)

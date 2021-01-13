@@ -18,6 +18,8 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
     TvShowPopularListAdapter.OnTvShowPopularClickListener {
 
     private val ERROR_LOG_MESSAGE = "TvShowPopularFragment fragment wasn't attached."
+    private val KEY_CURRENT_PAGE_NUMBER = "KEY_CURRENT_PAGE_NUMBER"
+    private val KEY_PAGES_COUNT = "KEY_PAGES_COUNT"
 
     @Inject
     lateinit var tvShowPopularPresenter: TvShowPopularContract.Presenter
@@ -30,18 +32,26 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        (activity?.application as TvShowApplication).initTvShowPopularComponent(this)
+        (activity?.application as TvShowApplication).getTvShowPopularComponent().inject(this)
+
         _binding = FragmentTvShowPopularBinding.inflate(inflater, container, false)
 
         initViewListeners()
 
-        tvShowPopularPresenter.setView(this)
-        tvShowPopularPresenter.onAttach()
+        tvShowPopularPresenter.subscribe(this, getStoredState(savedInstanceState))
         return binding.root
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        storeState(outState, tvShowPopularPresenter.getState())
+    }
+
+    override fun onStop() {
+        super.onStop()
         _binding = null
+        tvShowPopularPresenter.unsubscribe()
     }
 
     override fun showTvShowPopularList(tvShowPopularList: List<TvShowPopular>) {
@@ -112,20 +122,31 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
         }
     }
 
-    //TODO where should I init this component?
+    private fun storeState(outState: Bundle, state: TvShowPopularContract.State) =
+        outState.apply {
+            putInt(KEY_CURRENT_PAGE_NUMBER, state.getCurrentPageNumber())
+            putInt(KEY_PAGES_COUNT, state.getPagesCount())
+        }
+
+    private fun getStoredState(savedInstanceState: Bundle?): TvShowPopularContract.State? {
+        if (savedInstanceState == null) {
+            return null
+        }
+        val pageNumber = savedInstanceState.getInt(KEY_CURRENT_PAGE_NUMBER)
+        val pagesCount = savedInstanceState.getInt(KEY_PAGES_COUNT)
+        return TvShowPopularState(pageNumber, pagesCount)
+    }
+
+    //TODO where should I init this component? Mb create some helper?
     private fun initTvShowDetailedFragment(
         context: FragmentActivity,
         tvShowPopular: TvShowPopular
     ) {
         val tvShowDetailedFragment = TvShowDetailedFragment.newInstance(tvShowPopular)
-        (context.application as TvShowApplication).initTvShowDetailedComponent(
-            tvShowDetailedFragment
-        )
-        (context.application as TvShowApplication).getTvShowDetailedComponent()
-            .inject(tvShowDetailedFragment)
         context.supportFragmentManager
             .beginTransaction()
             .add(R.id.fragment_container, tvShowDetailedFragment)
-            .commitNow()
+            .addToBackStack("TvShowDetailedFragment")
+            .commit()
     }
 }
