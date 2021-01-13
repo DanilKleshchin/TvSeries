@@ -31,69 +31,72 @@
 
     </LinearLayout>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/loading_view"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tv_show_list_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/margin_primary"
+            android:layout_marginEnd="@dimen/margin_primary"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/margin_big"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_tv_show_popular_list" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/tv_show_list_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/margin_primary"
-                android:layout_marginEnd="@dimen/margin_primary"
-                android:clipToPadding="false"
-                android:orientation="vertical"
-                android:paddingBottom="@dimen/margin_big"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_tv_show_popular_list" />
+        <TextView
+            android:id="@+id/empty_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="@dimen/margin_big_x"
+            android:layout_marginEnd="@dimen/margin_big_x"
+            android:fontFamily="@font/ubuntu_light"
+            android:gravity="center"
+            android:text="@string/retry_message"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="@dimen/text_size_primary"
+            android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/empty_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/retry_message"
-                android:textSize="@dimen/text_size_primary"
-                android:textColor="@color/colorTextPrimary"
-                android:fontFamily="@font/ubuntu_light"
-                android:layout_marginStart="@dimen/margin_big_x"
-                android:layout_marginEnd="@dimen/margin_big_x"
-                android:gravity="center"
-                android:layout_centerInParent="true"
-                android:visibility="gone"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/empty_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/empty_text"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="@dimen/margin_big_x"
+            android:layout_marginTop="@dimen/margin_big"
+            android:layout_marginEnd="@dimen/margin_big_x"
+            android:fontFamily="@font/ubuntu_light"
+            android:includeFontPadding="false"
+            android:text="@string/retry_button_text"
+            android:textColor="@color/colorTextDark"
+            android:visibility="gone"
+            app:backgroundTint="@color/colorTextNetwork"
+            app:cornerRadius="5dp" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/empty_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/retry_button_text"
-                android:textColor="@color/colorTextDark"
-                android:fontFamily="@font/ubuntu_light"
-                android:includeFontPadding="false"
-                android:layout_marginTop="@dimen/margin_big"
-                android:layout_below="@id/empty_text"
-                android:layout_centerInParent="true"
-                android:layout_marginStart="@dimen/margin_big_x"
-                android:layout_marginEnd="@dimen/margin_big_x"
-                android:visibility="gone"
-                app:cornerRadius="5dp"
-                app:backgroundTint="@color/colorTextNetwork"/>
+        <ProgressBar
+            android:id="@+id/loading_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/margin_big_x"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
-            <ProgressBar
-                android:id="@+id/bottom_loading_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_big_x"
-                android:visibility="gone"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                tools:visibility="visible" />
-        </RelativeLayout>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <ProgressBar
+            android:id="@+id/bottom_loading_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/margin_big_x"
+            android:visibility="gone"
+            tools:visibility="visible" />
+    </RelativeLayout>
 
 </LinearLayout>

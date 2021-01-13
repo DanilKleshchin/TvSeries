@@ -16,9 +16,9 @@ interface TvShowPopularContract {
         fun subscribe(view: View, state: State?)
         fun unsubscribe()
         fun getState(): State
-        fun onRefreshSelected()
         fun onTvShowPopularSelected(tvShowPopular: TvShowPopular)
         fun onFullTvShowListScrolled()
+        fun onRetrySelected()
     }
 
     interface State {

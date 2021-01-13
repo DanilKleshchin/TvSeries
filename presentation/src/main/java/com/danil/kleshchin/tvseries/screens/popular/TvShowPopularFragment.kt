@@ -74,7 +74,11 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
     }
 
     override fun showHideLoadingView(hide: Boolean) {
-        binding.loadingView.isRefreshing = !hide
+        if (hide) {
+            binding.loadingView.visibility = View.GONE
+        } else {
+            binding.loadingView.visibility = View.VISIBLE
+        }
     }
 
     override fun showHideBottomLoadingView(hide: Boolean) {
@@ -106,11 +110,8 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
 
     private fun initViewListeners() {
         binding.apply {
-            loadingView.setOnRefreshListener {
-                tvShowPopularPresenter.onRefreshSelected()
-            }
             emptyButton.setOnClickListener {
-                tvShowPopularPresenter.onRefreshSelected()
+                tvShowPopularPresenter.onRetrySelected()
             }
             tvShowListView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
