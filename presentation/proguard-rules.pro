@@ -1,4 +1,2 @@
--keep class com.danil.kleshchin.tvseries.data.detailed.entity.TvShowDetailedEntityObject { *; }
--keep class com.danil.kleshchin.tvseries.data.detailed.entity.TvShowDetailedEntity { *; }
--keep class com.danil.kleshchin.tvseries.data.popular.entity.TvShowPopularEntityObject { *; }
--keep class com.danil.kleshchin.tvseries.data.popular.entity.TvShowPopularEntity { *; }
+-keep class com.danil.kleshchin.tvseries.data.detailed.entity.* { *; }
+-keep class com.danil.kleshchin.tvseries.data.popular.entity.* { *; }

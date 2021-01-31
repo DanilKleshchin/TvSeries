@@ -1,7 +1,10 @@
 package com.danil.kleshchin.tvseries.di.modules
 
+import android.content.Context
 import com.danil.kleshchin.tvseries.data.baseUrl
 import com.danil.kleshchin.tvseries.data.popular.TvShowPopularDataRepository
+import com.danil.kleshchin.tvseries.data.popular.datasource.local.TvShowPopularEntityDatabase
+import com.danil.kleshchin.tvseries.data.popular.datasource.local.TvShowPopularLocalDataSource
 import com.danil.kleshchin.tvseries.data.popular.datasource.network.TvShowPopularApi
 import com.danil.kleshchin.tvseries.data.popular.datasource.network.TvShowPopularRemoteDataSource
 import com.danil.kleshchin.tvseries.data.popular.mapper.TvShowPopularDataMapper
@@ -42,12 +45,18 @@ class TvShowPopularModule(
     @Singleton
     fun provideTvShowRepository(
         tvShowApi: TvShowPopularApi,
+        tvShowDatabase: TvShowPopularEntityDatabase,
         mapper: TvShowPopularDataMapper
     ): TvShowPopularRepository =
         TvShowPopularDataRepository(
             TvShowPopularRemoteDataSource(tvShowApi),
+            TvShowPopularLocalDataSource(tvShowDatabase),
             mapper
         )
+
+    @Provides
+    fun provideTvShowPopularDatabase(context: Context): TvShowPopularEntityDatabase =
+        TvShowPopularEntityDatabase.getInstance(context)
 
     @Provides
     fun provideFeedApi(okHttpClient: OkHttpClient): TvShowPopularApi =

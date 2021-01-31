@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class GetTvShowPopularPageCountUseCase @Inject constructor(
     private val tvShowPopularRepository: TvShowPopularRepository
-): UseCase<Int, Unit> {
+) : UseCase<Int, Unit> {
 
     override fun execute(params: Unit): Observable<Int> {
         return tvShowPopularRepository.getTvShowPopularPageCount()

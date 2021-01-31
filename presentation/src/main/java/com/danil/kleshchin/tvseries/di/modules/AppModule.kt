@@ -1,5 +1,6 @@
 package com.danil.kleshchin.tvseries.di.modules
 
+import android.content.Context
 import com.danil.kleshchin.tvseries.data.API_TIMEOUT_SECONDS
 import dagger.Module
 import dagger.Provides
@@ -9,7 +10,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
 
 @Module
-class AppModule {
+class AppModule(
+    private val context: Context
+) {
 
     @Provides
     fun provideOkHttpClient(): OkHttpClient {
@@ -22,6 +25,9 @@ class AppModule {
             .addInterceptor(logging)
             .build()
     }
+
+    @Provides
+    fun provideContext(): Context = context
 
     @Provides
     fun provideCompositeDisposable(): CompositeDisposable = CompositeDisposable()

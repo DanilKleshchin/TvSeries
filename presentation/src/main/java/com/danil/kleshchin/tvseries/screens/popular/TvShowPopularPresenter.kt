@@ -75,7 +75,11 @@ class TvShowPopularPresenter(
                         tvShowPopularView?.showHideLoadingView(true)
                         tvShowPopularView?.showHideBottomLoadingView(true)
                         tvShowPopularView?.showHideRetryView(true)
-                        tvShowPopularList.addAll(tvShows)
+                        tvShowPopularList = tvShows as ArrayList<TvShowPopular>
+                        if (tvShows.isEmpty()) {
+                            tvShowPopularView?.showHideRetryView(false)
+                            return@subscribe
+                        }
                         if (currentPageNumber > FIRST_PAGE_NUMBER) { //FIXME this creates bug when you load two or more pages and change configuration
                             tvShowPopularView?.updateTvShowPopularList(tvShowPopularList)
                         } else {

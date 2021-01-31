@@ -18,14 +18,14 @@ class TvShowApplication : Application() {
 
     fun initTvShowPopularComponent(tvShowPopularNavigator: TvShowPopularNavigator) {
         tvShowPopularComponent = DaggerTvShowPopularComponent.builder()
-            .appModule(AppModule())
+            .appModule(AppModule(this))
             .tvShowPopularModule(TvShowPopularModule(tvShowPopularNavigator))
             .build()
     }
 
     fun initTvShowDetailedComponent(tvShowDetailedNavigator: TvShowDetailedNavigator) {
         tvShowDetailedComponent = DaggerTvShowDetailedComponent.builder()
-            .appModule(AppModule())
+            .appModule(AppModule(this))
             .tvShowDetailedModule(TvShowDetailedModule(tvShowDetailedNavigator))
             .build()
     }
@@ -35,14 +35,14 @@ class TvShowApplication : Application() {
     fun getTvShowDetailedComponent() = tvShowDetailedComponent
 }
 /* TODO
-    add network connection checking
+    add network connection checking to repositories (probably create abstract with that method)
     store popular list when configuration changes
     add caching to DB
     add default android click animation (https://guides.codepath.com/android/ripple-animation)
     add ability to sort movies by genres
-    если зайти в кино и перевернуть экран возвращает обратно
-    Сделать автоскролл названия фильма
-    Если выключить инет и нажать на фильм, то будет отображены пустые вьюхи
     Если прилагу Несколько раз перевернуть Она вылетает Точнее При загрузке Если перевернуть
+
+
+    In the new version use MVVM + LiveData + ViewModel + Hilt + Navigation (try cicerone first)
     */
 
