@@ -28,7 +28,7 @@ class TvShowPopularDataMapper @Inject constructor() {
         return tvShowPopularList
     }
 
-    fun transform(tvShowPopularApiResponse: TvShowPopularEntityObject): List<TvShowPopular>{
+    fun transform(tvShowPopularApiResponse: TvShowPopularEntityObject): List<TvShowPopular> {
         return transform(tvShowPopularApiResponse.tvShowList)
     }
 }

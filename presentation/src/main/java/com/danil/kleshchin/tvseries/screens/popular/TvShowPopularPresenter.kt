@@ -75,7 +75,11 @@ class TvShowPopularPresenter(
                         tvShowPopularView?.showHideLoadingView(true)
                         tvShowPopularView?.showHideBottomLoadingView(true)
                         tvShowPopularView?.showHideRetryView(true)
-                        tvShowPopularList = tvShows as ArrayList<TvShowPopular>
+                        if (currentPageNumber >= FIRST_PAGE_NUMBER + 1) {
+                            tvShowPopularList.addAll(tvShows)
+                        } else {
+                            tvShowPopularList = tvShows as ArrayList<TvShowPopular>
+                        }
                         if (tvShows.isEmpty()) {
                             tvShowPopularView?.showHideRetryView(false)
                             return@subscribe
@@ -85,6 +89,7 @@ class TvShowPopularPresenter(
                         } else {
                             tvShowPopularView?.showTvShowPopularList(tvShowPopularList)
                         }
+                        executeGetTvShowPopularPageCountUseCase()
                     },
                     {
                         it.printStackTrace()
@@ -94,9 +99,6 @@ class TvShowPopularPresenter(
                         if (currentPageNumber > FIRST_PAGE_NUMBER) {
                             currentPageNumber--
                         }
-                    },
-                    {
-                        executeGetTvShowPopularPageCountUseCase()
                     }
                 )
         )

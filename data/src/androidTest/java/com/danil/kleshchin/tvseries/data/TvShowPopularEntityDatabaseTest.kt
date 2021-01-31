@@ -55,7 +55,7 @@ class TvShowPopularEntityDatabaseTest {
     @Throws(Exception::class)
     fun insertAndGetNight() {
         tvShowPopularEntityDao.insertTvShowPopularList(tvShowPopularList)
-        tvShowPopularEntityDao.getTvShowPopularList()
+        tvShowPopularEntityDao.getTvShowPopularListByPage()
             .subscribeOn(Schedulers.io())
             .doOnNext {
                 assertEquals(id, tvShowPopularEntity.id)

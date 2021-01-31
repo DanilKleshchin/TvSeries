@@ -8,7 +8,7 @@ class TvShowPopularLocalDataSource(
     private val tvShowPopularEntityDatabase: TvShowPopularEntityDatabase
 ) {
 
-    fun getTvShowPopularEntityList(pageNumber: Int): Observable<List<TvShowPopularEntity>> {
+    fun getTvShowPopularEntityList(): Observable<List<TvShowPopularEntity>> {
         return tvShowPopularEntityDatabase.tvShowPopularEntityDao.getTvShowPopularList()
     }
 
