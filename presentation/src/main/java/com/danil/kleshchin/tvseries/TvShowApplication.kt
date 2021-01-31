@@ -35,14 +35,12 @@ class TvShowApplication : Application() {
     fun getTvShowDetailedComponent() = tvShowDetailedComponent
 }
 /* TODO
-    add network connection checking to repositories (probably create abstract with that method)
     store popular list when configuration changes
-    add caching to DB
     add default android click animation (https://guides.codepath.com/android/ripple-animation)
     add ability to sort movies by genres
     Если прилагу Несколько раз перевернуть Она вылетает Точнее При загрузке Если перевернуть
 
 
-    In the new version use MVVM + LiveData + ViewModel + Hilt + Navigation (try cicerone first)
+    In the new version use MVVM + LiveData + ViewModel + Hilt + Navigation from Jetpack (try cicerone first)
     */
 

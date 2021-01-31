@@ -1,7 +1,9 @@
 package com.danil.kleshchin.tvseries.data.popular
 
+import android.content.Context
 import com.danil.kleshchin.tvseries.data.popular.datasource.local.TvShowPopularLocalDataSource
 import com.danil.kleshchin.tvseries.data.popular.datasource.network.TvShowPopularRemoteDataSource
+import com.danil.kleshchin.tvseries.data.popular.datasource.network.utils.isNetworkAvailable
 import com.danil.kleshchin.tvseries.data.popular.mapper.TvShowPopularDataMapper
 import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
 import com.danil.kleshchin.tvseries.domain.repository.popular.TvShowPopularRepository
@@ -12,6 +14,7 @@ import javax.inject.Inject
 class TvShowPopularDataRepository @Inject constructor(
     private val remoteDataSource: TvShowPopularRemoteDataSource,
     private val localDataSource: TvShowPopularLocalDataSource,
+    private val context: Context,
     private val mapper: TvShowPopularDataMapper,
 ) : TvShowPopularRepository {
 
@@ -22,7 +25,7 @@ class TvShowPopularDataRepository @Inject constructor(
             localDataSource.getTvShowPopularEntityList(pageNumber)
                 .map(mapper::transform),
             Observable.defer {
-                if (isNetworkAvailable()) {
+                if (isNetworkAvailable(context)) {
                     remoteDataSource.getTvShowPopularApiResponse(pageNumber)
                         .doOnNext { list ->
                             pageCount = list.pages
@@ -46,7 +49,4 @@ class TvShowPopularDataRepository @Inject constructor(
     override fun getTvShowPopularPageCount(): Observable<Int> {
         return Observable.just(pageCount)
     }
-
-    //TODO
-    private fun isNetworkAvailable() = true
 }

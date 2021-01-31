@@ -46,11 +46,13 @@ class TvShowPopularModule(
     fun provideTvShowRepository(
         tvShowApi: TvShowPopularApi,
         tvShowDatabase: TvShowPopularEntityDatabase,
+        context: Context,
         mapper: TvShowPopularDataMapper
     ): TvShowPopularRepository =
         TvShowPopularDataRepository(
             TvShowPopularRemoteDataSource(tvShowApi),
             TvShowPopularLocalDataSource(tvShowDatabase),
+            context,
             mapper
         )
 
