@@ -21,6 +21,7 @@ allprojects {
     }
 }
 
+//TODO move these version to a separate file
 ext {
     compile_sdk_version = 29
     min_sdk_version = 23
@@ -45,6 +46,7 @@ ext {
     logger_version = '3.12.2'
     gson_version = '2.7.2'
     picasso_version = '2.71828'
+    leak_canary_version = '2.6'
     junit_version = '4.13.1'
     mockito_version = '2.25.0'
     test_runner_version = '1.0.2'
