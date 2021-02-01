@@ -61,7 +61,7 @@ class TvShowPopularListAdapter(
 
                 Picasso.get().load(tvShowPopular.iconUrl).into(icon)
 
-                root.setOnClickListener { clickListener.onTvShowClick(tvShowPopular) }
+                cardView.setOnClickListener { clickListener.onTvShowClick(tvShowPopular) }
             }
         }
     }

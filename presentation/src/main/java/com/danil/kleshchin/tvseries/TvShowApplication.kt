@@ -36,7 +36,6 @@ class TvShowApplication : Application() {
 }
 /* TODO
     store popular list when configuration changes
-    add default android click animation (https://guides.codepath.com/android/ripple-animation)
     add ability to sort movies by genres
     Если прилагу Несколько раз перевернуть Она вылетает Точнее При загрузке Если перевернуть
 

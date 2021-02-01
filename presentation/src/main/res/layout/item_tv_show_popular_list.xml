@@ -8,10 +8,14 @@
     android:layout_marginBottom="@dimen/margin_primary">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/tv_show_popular_cardview_height"
         android:layout_margin="@dimen/margin_small"
         android:padding="@dimen/padding_small"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
         card_view:cardBackgroundColor="@color/colorItemBackground"
         card_view:cardCornerRadius="@dimen/cardview_radius">
 

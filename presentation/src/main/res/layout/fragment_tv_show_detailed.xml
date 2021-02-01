@@ -25,7 +25,10 @@
             android:layout_marginEnd="@dimen/margin_primary"
             android:contentDescription="@null"
             android:scaleType="fitXY"
-            android:src="@drawable/arrow_back" />
+            android:src="@drawable/arrow_back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"/>
 
         <TextView
             android:id="@+id/name"
