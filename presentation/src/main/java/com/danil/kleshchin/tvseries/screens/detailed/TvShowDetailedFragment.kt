@@ -34,7 +34,7 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
     @Inject
     lateinit var tvShowDetailedPresenter: TvShowDetailedContract.Presenter
 
-    private lateinit var episodesPicturesPageIndicators: ArrayList<ImageView>
+    private var episodesPicturesPageIndicators = arrayListOf<ImageView>()
 
     private var _binding: FragmentTvShowDetailedBinding? = null
     private val binding get() = _binding!!
@@ -81,6 +81,7 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
 
     override fun onStop() {
         super.onStop()
+        episodesPicturesPageIndicators = arrayListOf()
         _binding = null
         tvShowDetailedPresenter.unsubscribe()
     }
