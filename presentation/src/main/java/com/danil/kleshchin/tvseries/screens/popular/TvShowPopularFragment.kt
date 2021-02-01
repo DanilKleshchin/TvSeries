@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -38,6 +39,7 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
         _binding = FragmentTvShowPopularBinding.inflate(inflater, container, false)
 
         initViewListeners()
+        setBackPressedCallback()
 
         tvShowPopularPresenter.subscribe(this, getStoredState(savedInstanceState))
         return binding.root
@@ -123,6 +125,15 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
         }
     }
 
+    private fun setBackPressedCallback() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finish()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
     private fun storeState(outState: Bundle, state: TvShowPopularContract.State) =
         outState.apply {
             putInt(KEY_CURRENT_PAGE_NUMBER, state.getCurrentPageNumber())
@@ -149,5 +160,9 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
             .add(R.id.fragment_container, tvShowDetailedFragment)
             .addToBackStack("TvShowDetailedFragment")
             .commit()
+    }
+
+    private fun finish() {
+        activity?.finish()
     }
 }
