@@ -51,14 +51,17 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (activity?.application as TvShowApplication).initTvShowDetailedComponent(this)
+        (activity?.application as TvShowApplication).getTvShowDetailedComponent().inject(this)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        (activity?.application as TvShowApplication).initTvShowDetailedComponent(this)
-        (activity?.application as TvShowApplication).getTvShowDetailedComponent().inject(this)
-
         _binding = FragmentTvShowDetailedBinding.inflate(inflater, container, false)
         setBackPressedCallback()
         return binding.root
@@ -272,6 +275,6 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
     }
 
     private fun finish() {
-        activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commitNow()
+        activity?.supportFragmentManager?.popBackStack()
     }
 }

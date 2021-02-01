@@ -28,14 +28,17 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
     private var _binding: FragmentTvShowPopularBinding? = null
     private val binding get() = _binding!!
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (activity?.application as TvShowApplication).initTvShowPopularComponent(this)
+        (activity?.application as TvShowApplication).getTvShowPopularComponent().inject(this)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        (activity?.application as TvShowApplication).initTvShowPopularComponent(this)
-        (activity?.application as TvShowApplication).getTvShowPopularComponent().inject(this)
-
         _binding = FragmentTvShowPopularBinding.inflate(inflater, container, false)
 
         initViewListeners()
