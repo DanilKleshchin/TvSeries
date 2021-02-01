@@ -7,11 +7,13 @@ import javax.inject.Inject
 
 class TvShowPopularDataMapper @Inject constructor() {
 
+    private val UNKNOWN_STUB = "Unknown"
+
     fun transform(tvShowPopularEntity: TvShowPopularEntity): TvShowPopular {
         val id = tvShowPopularEntity.id
         val name = tvShowPopularEntity.name
         val detailUrl = tvShowPopularEntity.detailUrl
-        val startDate = tvShowPopularEntity.startDate
+        val startDate = tvShowPopularEntity.startDate ?: UNKNOWN_STUB
         val network = tvShowPopularEntity.network
         val country = tvShowPopularEntity.country
         val status = tvShowPopularEntity.status

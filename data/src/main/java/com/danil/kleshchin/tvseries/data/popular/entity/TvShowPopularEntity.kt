@@ -16,7 +16,7 @@ data class TvShowPopularEntity(
     val detailUrl: String,
 
     @SerializedName("start_date")
-    val startDate: String,
+    val startDate: String?,
 
     val country: String,
 
