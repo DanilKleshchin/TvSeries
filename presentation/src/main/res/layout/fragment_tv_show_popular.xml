@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/colorToolBar"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/toolbar_padding"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_weight="1"
+            android:fontFamily="@font/ubuntu_bold"
+            android:maxLines="1"
+            android:text="@string/most_popular"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="@dimen/text_size_big" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tv_show_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/margin_primary"
+            android:layout_marginEnd="@dimen/margin_primary"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/margin_big"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_tv_show_popular_list" />
+
+        <TextView
+            android:id="@+id/empty_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="@dimen/margin_big_x"
+            android:layout_marginEnd="@dimen/margin_big_x"
+            android:fontFamily="@font/ubuntu_light"
+            android:gravity="center"
+            android:text="@string/retry_message"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="@dimen/text_size_primary"
+            android:visibility="gone" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/empty_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/empty_text"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="@dimen/margin_big_x"
+            android:layout_marginTop="@dimen/margin_big"
+            android:layout_marginEnd="@dimen/margin_big_x"
+            android:fontFamily="@font/ubuntu_light"
+            android:includeFontPadding="false"
+            android:text="@string/retry_button_text"
+            android:textColor="@color/colorTextDark"
+            android:visibility="gone"
+            app:backgroundTint="@color/colorTextNetwork"
+            app:cornerRadius="5dp" />
+
+        <ProgressBar
+            android:id="@+id/loading_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/margin_big_x"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <ProgressBar
+            android:id="@+id/bottom_loading_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/margin_big_x"
+            android:visibility="gone"
+            tools:visibility="visible" />
+    </RelativeLayout>
+
+</LinearLayout>
