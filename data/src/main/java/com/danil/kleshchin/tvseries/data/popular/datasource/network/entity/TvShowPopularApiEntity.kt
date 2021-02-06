@@ -1,13 +1,9 @@
-package com.danil.kleshchin.tvseries.data.popular.entity
+package com.danil.kleshchin.tvseries.data.popular.datasource.network.entity
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.danil.kleshchin.tvseries.data.popular.datasource.local.TvShowPopularEntityDatabase
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-@Entity(tableName = TvShowPopularEntityDatabase.tableName)
-data class TvShowPopularEntity(
+data class TvShowPopularApiEntity(
     val id: Int,
 
     val name: String,
@@ -26,7 +22,4 @@ data class TvShowPopularEntity(
 
     @SerializedName("image_thumbnail_path")
     val iconUrl: String,
-
-    @PrimaryKey(autoGenerate = true)
-    val position: Int = 0
 ) : Serializable

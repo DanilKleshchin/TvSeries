@@ -18,16 +18,10 @@ class TvShowPopularDataRepository @Inject constructor(
     private val mapper: TvShowPopularDataMapper,
 ) : TvShowPopularRepository {
 
-    val FIRST_PAGE_NUMBER: Int = 1
-
     private var pageCount: Int = 0
 
     override fun getTvShowPopularList(pageNumber: Int): Observable<List<TvShowPopular>> {
-        //No need to load data from DB when page number is greater then 1
-        if (pageNumber > FIRST_PAGE_NUMBER) {
-            return getTvShowPopularListByPage(pageNumber)
-        }
-        return getFirstTvShowPopularListPage()
+        return getFirstTvShowPopularListPage(pageNumber)
     }
 
     //TODO ask about pageCount
@@ -35,18 +29,21 @@ class TvShowPopularDataRepository @Inject constructor(
         return Observable.just(pageCount)
     }
 
-    private fun getFirstTvShowPopularListPage(): Observable<List<TvShowPopular>> {
+    private fun getFirstTvShowPopularListPage(pageNumber: Int): Observable<List<TvShowPopular>> {
         return Observable.concatArrayEager(
-            localDataSource.getTvShowPopularEntityList()
-                .map(mapper::transform),
             Observable.defer {
                 if (isNetworkAvailable(context)) {
-                    remoteDataSource.getTvShowPopularApiResponse(FIRST_PAGE_NUMBER)
+                    remoteDataSource.getTvShowPopularApiResponse(pageNumber)
                         .doOnNext { list ->
                             pageCount = list.pages
-                            localDataSource.removeAll()
+                            localDataSource.removeTvShowPopularByPage(pageNumber)
                                 .andThen {
-                                    localDataSource.insertTvShowPopularEntityList(list.tvShowList)
+                                    localDataSource.insertTvShowPopularEntityList(
+                                        mapper.transformApiToDbEntityList(
+                                            list.tvShowListApi,
+                                            pageNumber
+                                        )
+                                    )
                                         .subscribeOn(Schedulers.io())
                                         .subscribe()
                                 }
@@ -55,24 +52,10 @@ class TvShowPopularDataRepository @Inject constructor(
                         }
                         .map(mapper::transform)
                 } else {
-                    Observable.empty()
+                    localDataSource.getTvShowPopularEntityListByPageNumber(pageNumber)
+                        .map(mapper::transformDbEntityList)
                 }
             }
         )
-    }
-
-    private fun getTvShowPopularListByPage(pageNumber: Int): Observable<List<TvShowPopular>> {
-        return Observable.defer {
-            if (isNetworkAvailable(context)) {
-                remoteDataSource.getTvShowPopularApiResponse(pageNumber)
-                    .doOnNext { list ->
-                        localDataSource.insertTvShowPopularEntityList(list.tvShowList)
-                            .subscribeOn(Schedulers.io())
-                    }
-                    .map(mapper::transform)
-            } else {
-                Observable.empty()
-            }
-        }
     }
 }

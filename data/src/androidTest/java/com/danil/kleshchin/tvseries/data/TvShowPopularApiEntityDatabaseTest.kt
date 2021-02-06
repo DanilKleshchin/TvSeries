@@ -5,7 +5,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.danil.kleshchin.tvseries.data.popular.datasource.local.TvShowPopularEntityDao
 import com.danil.kleshchin.tvseries.data.popular.datasource.local.TvShowPopularEntityDatabase
-import com.danil.kleshchin.tvseries.data.popular.entity.TvShowPopularEntity
+import com.danil.kleshchin.tvseries.data.popular.datasource.local.entity.TvShowPopularDbEntity
 import io.reactivex.schedulers.Schedulers
 import junit.framework.Assert.assertEquals
 import org.junit.After
@@ -15,7 +15,7 @@ import org.junit.runner.RunWith
 import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
-class TvShowPopularEntityDatabaseTest {
+class TvShowPopularApiEntityDatabaseTest {
 
     private val id = -1
     private val name = "testName"
@@ -25,9 +25,10 @@ class TvShowPopularEntityDatabaseTest {
     private val country = "RU"
     private val status = "ended"
     private val iconUrl = "http://some.icon.com"
+    private val pageNumber = 1
 
-    private lateinit var tvShowPopularList: List<TvShowPopularEntity>
-    private lateinit var tvShowPopularEntity: TvShowPopularEntity
+    private lateinit var tvShowPopularDbList: List<TvShowPopularDbEntity>
+    private lateinit var tvShowPopularDbEntity: TvShowPopularDbEntity
     private lateinit var tvShowPopularEntityDao: TvShowPopularEntityDao
     private lateinit var db: TvShowPopularEntityDatabase
 
@@ -42,7 +43,7 @@ class TvShowPopularEntityDatabaseTest {
             .build()
         tvShowPopularEntityDao = db.tvShowPopularEntityDao
 
-        initTvShowPopularApi()
+        initTvShowPopularDbEntity()
     }
 
     @After
@@ -53,36 +54,37 @@ class TvShowPopularEntityDatabaseTest {
 
     @Test
     @Throws(Exception::class)
-    fun insertAndGetNight() {
-        tvShowPopularEntityDao.insertTvShowPopularList(tvShowPopularList)
-        tvShowPopularEntityDao.getTvShowPopularListByPage()
+    fun insertAndGetTvShowPopularDbEntity() {
+        tvShowPopularEntityDao.insertTvShowPopularList(tvShowPopularDbList)
+        tvShowPopularEntityDao.getTvShowPopularListByPageNumber(pageNumber)
             .subscribeOn(Schedulers.io())
             .doOnNext {
-                assertEquals(id, tvShowPopularEntity.id)
-                assertEquals(name, tvShowPopularEntity.name)
-                assertEquals(detailUrl, tvShowPopularEntity.detailUrl)
-                assertEquals(startDate, tvShowPopularEntity.startDate)
-                assertEquals(country, tvShowPopularEntity.country)
-                assertEquals(network, tvShowPopularEntity.network)
-                assertEquals(status, tvShowPopularEntity.status)
-                assertEquals(iconUrl, tvShowPopularEntity.iconUrl)
+                assertEquals(id, tvShowPopularDbEntity.id)
+                assertEquals(name, tvShowPopularDbEntity.name)
+                assertEquals(detailUrl, tvShowPopularDbEntity.detailUrl)
+                assertEquals(startDate, tvShowPopularDbEntity.startDate)
+                assertEquals(country, tvShowPopularDbEntity.country)
+                assertEquals(network, tvShowPopularDbEntity.network)
+                assertEquals(status, tvShowPopularDbEntity.status)
+                assertEquals(iconUrl, tvShowPopularDbEntity.iconUrl)
             }
             .subscribe {
-                tvShowPopularEntity = it[0]
+                tvShowPopularDbEntity = it[0]
             }
     }
 
-    private fun initTvShowPopularApi() {
-        tvShowPopularList = arrayListOf(
-            TvShowPopularEntity(
+    private fun initTvShowPopularDbEntity() {
+        tvShowPopularDbList = arrayListOf(
+            TvShowPopularDbEntity(
                 id,
-                name,
-                detailUrl,
-                startDate,
-                country,
-                network,
-                status,
-                iconUrl
+                name = name,
+                detailUrl = detailUrl,
+                startDate = startDate,
+                country = country,
+                network = network,
+                status = status,
+                iconUrl = iconUrl,
+                pageNumber = pageNumber
             )
         )
     }

@@ -75,11 +75,7 @@ class TvShowPopularPresenter(
                         tvShowPopularView?.showHideLoadingView(true)
                         tvShowPopularView?.showHideBottomLoadingView(true)
                         tvShowPopularView?.showHideRetryView(true)
-                        if (currentPageNumber >= FIRST_PAGE_NUMBER + 1) {
-                            tvShowPopularList.addAll(tvShows)
-                        } else {
-                            tvShowPopularList = tvShows as ArrayList<TvShowPopular>
-                        }
+                        tvShowPopularList.addAll(tvShows)
                         if (tvShows.isEmpty()) {
                             tvShowPopularView?.showHideRetryView(false)
                             return@subscribe
