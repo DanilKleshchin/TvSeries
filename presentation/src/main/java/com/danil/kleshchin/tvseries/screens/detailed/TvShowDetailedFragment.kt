@@ -24,12 +24,17 @@ import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
 import com.danil.kleshchin.tvseries.fromHtml
 import com.danil.kleshchin.tvseries.screens.detailed.models.TvShowDetailedModel
 import com.squareup.picasso.Picasso
+import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDetailedNavigator {
 
     private val ERROR_LOG_MESSAGE = "TvShowDetailedFragment fragment wasn't attached."
     private val KEY_TV_SHOW_POPULAR = "KEY_TV_SHOW_POPULAR"
+
+    private val FRAGMENT_FINISHING_DELAY = 100L
 
     @Inject
     lateinit var tvShowDetailedPresenter: TvShowDetailedContract.Presenter
@@ -73,7 +78,14 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
 
         binding.apply {
             emptyButton.setOnClickListener { tvShowDetailedPresenter.onRefreshSelected() }
-            backButton.setOnClickListener { finish() }
+            backButton.setOnClickListener {
+                Completable.timer(
+                    FRAGMENT_FINISHING_DELAY,
+                    TimeUnit.MILLISECONDS,
+                    AndroidSchedulers.mainThread()
+                )
+                    .subscribe { finish() }
+            }
         }
     }
 

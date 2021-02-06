@@ -35,11 +35,6 @@ class TvShowApplication : Application() {
     fun getTvShowDetailedComponent() = tvShowDetailedComponent
 }
 /* TODO
-    store popular list when configuration changes
-    add ability to sort movies by genres
-    Если прилагу Несколько раз перевернуть Она вылетает Точнее При загрузке Если перевернуть
-
-
     In the new version use MVVM + LiveData + ViewModel + Hilt + Navigation from Jetpack (try cicerone first)
     */
 
