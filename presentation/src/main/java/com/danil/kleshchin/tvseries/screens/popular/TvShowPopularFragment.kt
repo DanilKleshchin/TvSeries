@@ -160,6 +160,10 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
         val tvShowDetailedFragment = TvShowDetailedFragment.newInstance(tvShowPopular)
         context.supportFragmentManager
             .beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_in,
+                R.anim.fade_out,
+            )
             .add(R.id.fragment_container, tvShowDetailedFragment)
             .addToBackStack("TvShowDetailedFragment")
             .commit()
