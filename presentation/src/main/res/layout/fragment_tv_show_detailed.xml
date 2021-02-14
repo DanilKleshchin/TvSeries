@@ -308,23 +308,6 @@
                 app:layout_constraintTop_toBottomOf="@id/bottom_divider"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/button_episodes"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_episodes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/episodes_button"
-                android:textColor="@color/colorTextDark"
-                android:fontFamily="@font/ubuntu_light"
-                android:includeFontPadding="false"
-                android:layout_marginTop="@dimen/margin_big"
-                android:layout_marginBottom="@dimen/margin_primary"
-                app:cornerRadius="5dp"
-                app:backgroundTint="@color/colorTextLink"
-                app:layout_constraintTop_toBottomOf="@id/bottom_divider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/button_website"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <ProgressBar

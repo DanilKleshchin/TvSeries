@@ -236,10 +236,6 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View {
                 tvShowDetailedPresenter.onWebPageSelected(tvShowDetailed)
             }
 
-            buttonEpisodes.setOnClickListener {
-
-            }
-
             sliderEpisodesPictures.registerOnPageChangeCallback(object :
                 ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
