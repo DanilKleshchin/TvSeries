@@ -32,7 +32,10 @@ class TvShowPopularPresenter(
 
     override fun onAttach() {
         if (tvShowPopularList.isEmpty()) {
-            loadTvShowPopularList()
+            loadTvShowPopularList{
+                tvShowPopularView?.showTvShowPopularList(tvShowPopularList)
+                executeGetTvShowPopularPageCountUseCase()
+            }
         } else {
             tvShowPopularView?.showTvShowPopularList(tvShowPopularList)
         }
@@ -56,22 +59,25 @@ class TvShowPopularPresenter(
         if (currentPageNumber < pagesCount) {
             currentPageNumber++
             tvShowPopularView?.showHideBottomLoadingView(false)
-            executeGetTvShowPopularListUseCase()
+            executeGetTvShowPopularListUseCase{
+                tvShowPopularView?.updateTvShowPopularList(tvShowPopularList)
+            }
         }
     }
 
     override fun onRetrySelected() {
-        loadTvShowPopularList()
+        loadTvShowPopularList{
+            tvShowPopularView?.showTvShowPopularList(tvShowPopularList)
+            executeGetTvShowPopularPageCountUseCase()
+        }
     }
 
-    private fun loadTvShowPopularList() {
+    private fun loadTvShowPopularList(showList: () -> Unit) {
         tvShowPopularView?.showHideLoadingView(false)
-        executeGetTvShowPopularListUseCase()
+        executeGetTvShowPopularListUseCase(showList)
     }
 
-    //TODO ask about disposable
-    //TODO try to refactor this
-    private fun executeGetTvShowPopularListUseCase() {
+    private fun executeGetTvShowPopularListUseCase(showList: () -> Unit) {
         tvShowPopularView?.showHideRetryView(true)
         disposables.add(
             getTvShowPopularListUseCase.execute(
@@ -89,12 +95,7 @@ class TvShowPopularPresenter(
                             tvShowPopularView?.showHideRetryView(false)
                             return@subscribe
                         }
-                        if (currentPageNumber > FIRST_PAGE_NUMBER) { //FIXME this creates bug when you load two or more pages and change configuration
-                            tvShowPopularView?.updateTvShowPopularList(tvShowPopularList)
-                        } else {
-                            tvShowPopularView?.showTvShowPopularList(tvShowPopularList)
-                        }
-                        executeGetTvShowPopularPageCountUseCase()
+                        showList.invoke()
                     },
                     {
                         it.printStackTrace()
