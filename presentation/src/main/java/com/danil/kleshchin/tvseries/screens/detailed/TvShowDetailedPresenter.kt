@@ -2,6 +2,7 @@ package com.danil.kleshchin.tvseries.screens.detailed
 
 import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
 import com.danil.kleshchin.tvseries.domain.interactor.detailed.GetTvShowDetailedUseCase
+import com.danil.kleshchin.tvseries.screens.CiceroneScreens
 import com.danil.kleshchin.tvseries.screens.detailed.models.TvShowDetailedModel
 import com.danil.kleshchin.tvseries.screens.detailed.models.TvShowDetailedModelMapper
 import com.github.terrakok.cicerone.Router
@@ -44,7 +45,7 @@ class TvShowDetailedPresenter(
     }
 
     override fun onWebPageSelected(tvShowDetailed: TvShowDetailedModel) {
-        tvShowDetailedView?.showWebPage(tvShowDetailed.pageUrl)
+        router.navigateTo(CiceroneScreens.webPageScreen(tvShowDetailed.pageUrl))
     }
 
     override fun onBackPressed() {

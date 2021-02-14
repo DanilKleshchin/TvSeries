@@ -18,11 +18,14 @@ class MainActivity : AppCompatActivity() {
         TvShowApplication.INSTANCE.initNavigationComponent(this)
         TvShowApplication.INSTANCE.getNavigationComponent().inject(this)
 
-        TvShowApplication.INSTANCE.navigatorHolder.setNavigator(navigator)
-
         if (savedInstanceState == null) {
             TvShowApplication.INSTANCE.router.navigateTo(CiceroneScreens.tvShowPopularScreen())
         }
+    }
+
+    override fun onResumeFragments() {
+        super.onResumeFragments()
+        TvShowApplication.INSTANCE.navigatorHolder.setNavigator(navigator)
     }
 
     override fun onPause() {

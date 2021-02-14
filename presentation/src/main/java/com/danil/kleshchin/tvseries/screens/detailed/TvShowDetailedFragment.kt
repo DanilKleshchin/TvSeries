@@ -1,7 +1,6 @@
 package com.danil.kleshchin.tvseries.screens.detailed
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.Gravity
@@ -12,8 +11,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.DrawableRes
-import androidx.browser.customtabs.CustomTabColorSchemeParams
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
@@ -115,22 +112,6 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View {
                 emptyText.visibility = View.VISIBLE
             }
         }
-    }
-
-    override fun showWebPage(url: String) {
-        val context = activity ?: throw  IllegalStateException(ERROR_LOG_MESSAGE)
-        val primaryColor = ContextCompat.getColor(context, R.color.colorPrimary)
-        val toolbarColor = ContextCompat.getColor(context, R.color.colorToolBar)
-        val secondaryToolbarColor = ContextCompat.getColor(context, R.color.colorPrimaryDark)
-        val params = CustomTabColorSchemeParams.Builder()
-            .setToolbarColor(toolbarColor)
-            .setSecondaryToolbarColor(secondaryToolbarColor)
-            .setNavigationBarColor(primaryColor)
-            .build()
-        CustomTabsIntent.Builder()
-            .setDefaultColorSchemeParams(params)
-            .build()
-            .launchUrl(context, Uri.parse(url))
     }
 
     private fun bind(tvShowDetailed: TvShowDetailedModel) {

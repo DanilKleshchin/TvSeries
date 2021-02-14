@@ -28,7 +28,6 @@ ext {
     target_sdk_version = 25
 
     material_design_version = '1.3.0'
-    custom_tabs_version = '1.3.0'
     constraint_layout_version = '2.0.4'
     picasso_version = '2.71828'
     cardview_version = '1.0.0'

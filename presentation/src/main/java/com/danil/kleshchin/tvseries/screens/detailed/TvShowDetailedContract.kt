@@ -9,7 +9,6 @@ interface TvShowDetailedContract {
         fun showTvShowDetailed(tvShowDetailed: TvShowDetailedModel)
         fun showHideLoadingView(hide: Boolean)
         fun showHideRetryView(hide: Boolean)
-        fun showWebPage(url: String)
     }
 
     interface Presenter {
