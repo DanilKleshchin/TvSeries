@@ -4,16 +4,21 @@ import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
 import com.danil.kleshchin.tvseries.domain.interactor.detailed.GetTvShowDetailedUseCase
 import com.danil.kleshchin.tvseries.screens.detailed.models.TvShowDetailedModel
 import com.danil.kleshchin.tvseries.screens.detailed.models.TvShowDetailedModelMapper
+import com.github.terrakok.cicerone.Router
+import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
 class TvShowDetailedPresenter(
     private val getTvShowDetailedUseCase: GetTvShowDetailedUseCase,
-    private val tvShowDetailedNavigator: TvShowDetailedNavigator,
     private val disposables: CompositeDisposable,
+    private val router: Router,
     private val mapper: TvShowDetailedModelMapper
 ) : TvShowDetailedContract.Presenter {
+
+    private val VIEW_FINISHING_DELAY = 100L
 
     private lateinit var tvShowPopular: TvShowPopular
     private lateinit var tvShowDetailed: TvShowDetailedModel
@@ -39,7 +44,17 @@ class TvShowDetailedPresenter(
     }
 
     override fun onWebPageSelected(tvShowDetailed: TvShowDetailedModel) {
-        tvShowDetailedNavigator.showWebPage(tvShowDetailed.pageUrl)
+        tvShowDetailedView?.showWebPage(tvShowDetailed.pageUrl)
+    }
+
+    override fun onBackPressed() {
+        Completable.timer(
+            VIEW_FINISHING_DELAY,
+            TimeUnit.MILLISECONDS,
+            AndroidSchedulers.mainThread()
+        )
+            .doOnComplete { router.exit() }
+            .subscribe()
     }
 
     //TODO ask about disposable

@@ -37,6 +37,7 @@ ext {
     rxkotlin_version = '2.1.0'
     rxandroid_version = '2.0.1'
     dagger_version = '2.16'
+    cicerone_version = '6.6'
     stetho_version = '1.5.1'
     room_version = '2.2.6'
     room_compiler_version = '1.1.1'

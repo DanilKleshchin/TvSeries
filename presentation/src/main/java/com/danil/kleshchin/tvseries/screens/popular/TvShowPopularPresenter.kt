@@ -3,6 +3,8 @@ package com.danil.kleshchin.tvseries.screens.popular
 import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
 import com.danil.kleshchin.tvseries.domain.interactor.popular.GetTvShowPopularListUseCase
 import com.danil.kleshchin.tvseries.domain.interactor.popular.GetTvShowPopularPageCountUseCase
+import com.danil.kleshchin.tvseries.screens.CiceroneScreens
+import com.github.terrakok.cicerone.Router
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -10,8 +12,8 @@ import io.reactivex.schedulers.Schedulers
 class TvShowPopularPresenter(
     private val getTvShowPopularListUseCase: GetTvShowPopularListUseCase,
     private val getTvShowPopularPageCountUseCase: GetTvShowPopularPageCountUseCase,
-    private val tvShowPopularNavigator: TvShowPopularNavigator,
-    private val disposables: CompositeDisposable
+    private val disposables: CompositeDisposable,
+    private val router: Router
 ) : TvShowPopularContract.Presenter {
 
     private val FIRST_PAGE_NUMBER = 1
@@ -40,7 +42,7 @@ class TvShowPopularPresenter(
         TvShowPopularState(currentPageNumber, pagesCount)
 
     override fun onTvShowPopularSelected(tvShowPopular: TvShowPopular) {
-        tvShowPopularNavigator.showDetailedScreen(tvShowPopular)
+        router.navigateTo(CiceroneScreens.tvShowDetailedScreen(tvShowPopular))
     }
 
     override fun onFullTvShowListScrolled() {

@@ -12,8 +12,8 @@ import com.danil.kleshchin.tvseries.domain.interactor.popular.GetTvShowPopularLi
 import com.danil.kleshchin.tvseries.domain.interactor.popular.GetTvShowPopularPageCountUseCase
 import com.danil.kleshchin.tvseries.domain.repository.popular.TvShowPopularRepository
 import com.danil.kleshchin.tvseries.screens.popular.TvShowPopularContract
-import com.danil.kleshchin.tvseries.screens.popular.TvShowPopularNavigator
 import com.danil.kleshchin.tvseries.screens.popular.TvShowPopularPresenter
+import com.github.terrakok.cicerone.Router
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
@@ -25,7 +25,7 @@ import javax.inject.Singleton
 
 @Module
 class TvShowPopularModule(
-    private val navigator: TvShowPopularNavigator
+    private val router: Router
 ) {
 
     @Provides
@@ -37,8 +37,8 @@ class TvShowPopularModule(
         TvShowPopularPresenter(
             getTvShowPopularListUseCase,
             getTvShowPopularPageCountUseCase,
-            navigator,
-            compositeDisposable
+            compositeDisposable,
+            router
         )
 
     @Provides

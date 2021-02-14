@@ -24,17 +24,12 @@ import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
 import com.danil.kleshchin.tvseries.fromHtml
 import com.danil.kleshchin.tvseries.screens.detailed.models.TvShowDetailedModel
 import com.squareup.picasso.Picasso
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDetailedNavigator {
+class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View {
 
     private val ERROR_LOG_MESSAGE = "TvShowDetailedFragment fragment wasn't attached."
     private val KEY_TV_SHOW_POPULAR = "KEY_TV_SHOW_POPULAR"
-
-    private val FRAGMENT_FINISHING_DELAY = 100L
 
     @Inject
     lateinit var tvShowDetailedPresenter: TvShowDetailedContract.Presenter
@@ -58,8 +53,8 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity?.application as TvShowApplication).initTvShowDetailedComponent(this)
-        (activity?.application as TvShowApplication).getTvShowDetailedComponent().inject(this)
+        TvShowApplication.INSTANCE.initTvShowDetailedComponent()
+        TvShowApplication.INSTANCE.getTvShowDetailedComponent().inject(this)
     }
 
     override fun onCreateView(
@@ -79,12 +74,7 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
         binding.apply {
             emptyButton.setOnClickListener { tvShowDetailedPresenter.onRefreshSelected() }
             backButton.setOnClickListener {
-                Completable.timer(
-                    FRAGMENT_FINISHING_DELAY,
-                    TimeUnit.MILLISECONDS,
-                    AndroidSchedulers.mainThread()
-                )
-                    .subscribe { finish() }
+                tvShowDetailedPresenter.onBackPressed()
             }
         }
     }
@@ -263,7 +253,7 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
     private fun setBackPressedCallback() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                finish()
+                tvShowDetailedPresenter.onBackPressed()
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
@@ -284,9 +274,5 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
     private fun getTvShowPopular(): TvShowPopular {
         return arguments?.getSerializable(KEY_TV_SHOW_POPULAR) as TvShowPopular?
             ?: throw NullPointerException("TvShowPopular is null")
-    }
-
-    private fun finish() {
-        activity?.supportFragmentManager?.popBackStack()
     }
 }

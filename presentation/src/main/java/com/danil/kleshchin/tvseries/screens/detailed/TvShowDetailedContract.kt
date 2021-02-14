@@ -9,6 +9,7 @@ interface TvShowDetailedContract {
         fun showTvShowDetailed(tvShowDetailed: TvShowDetailedModel)
         fun showHideLoadingView(hide: Boolean)
         fun showHideRetryView(hide: Boolean)
+        fun showWebPage(url: String)
     }
 
     interface Presenter {
@@ -17,6 +18,7 @@ interface TvShowDetailedContract {
         fun getState(): State
         fun onRefreshSelected()
         fun onWebPageSelected(tvShowDetailed: TvShowDetailedModel)
+        fun onBackPressed()
     }
 
     interface State {

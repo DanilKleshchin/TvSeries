@@ -1,40 +1,58 @@
 package com.danil.kleshchin.tvseries
 
 import android.app.Application
-import com.danil.kleshchin.tvseries.di.components.DaggerTvShowDetailedComponent
-import com.danil.kleshchin.tvseries.di.components.DaggerTvShowPopularComponent
-import com.danil.kleshchin.tvseries.di.components.TvShowDetailedComponent
-import com.danil.kleshchin.tvseries.di.components.TvShowPopularComponent
+import androidx.fragment.app.FragmentActivity
+import com.danil.kleshchin.tvseries.di.components.*
 import com.danil.kleshchin.tvseries.di.modules.AppModule
+import com.danil.kleshchin.tvseries.di.modules.NavigationModule
 import com.danil.kleshchin.tvseries.di.modules.TvShowDetailedModule
 import com.danil.kleshchin.tvseries.di.modules.TvShowPopularModule
-import com.danil.kleshchin.tvseries.screens.detailed.TvShowDetailedNavigator
-import com.danil.kleshchin.tvseries.screens.popular.TvShowPopularNavigator
+import com.github.terrakok.cicerone.Cicerone
+
 
 class TvShowApplication : Application() {
 
     private lateinit var tvShowPopularComponent: TvShowPopularComponent
     private lateinit var tvShowDetailedComponent: TvShowDetailedComponent
+    private lateinit var navigationComponent: NavigationComponent
 
-    fun initTvShowPopularComponent(tvShowPopularNavigator: TvShowPopularNavigator) {
-        tvShowPopularComponent = DaggerTvShowPopularComponent.builder()
-            .appModule(AppModule(this))
-            .tvShowPopularModule(TvShowPopularModule(tvShowPopularNavigator))
+    private val cicerone = Cicerone.create()
+    val router get() = cicerone.router
+    val navigatorHolder get() = cicerone.getNavigatorHolder()
+
+    companion object {
+        internal lateinit var INSTANCE: TvShowApplication
+            private set
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        INSTANCE = this
+    }
+
+    fun initNavigationComponent(activity: FragmentActivity) {
+        navigationComponent = DaggerNavigationComponent.builder()
+            .navigationModule(NavigationModule(activity))
             .build()
     }
 
-    fun initTvShowDetailedComponent(tvShowDetailedNavigator: TvShowDetailedNavigator) {
+    fun initTvShowPopularComponent() {
+        tvShowPopularComponent = DaggerTvShowPopularComponent.builder()
+            .appModule(AppModule(this))
+            .tvShowPopularModule(TvShowPopularModule(router))
+            .build()
+    }
+
+    fun initTvShowDetailedComponent() {
         tvShowDetailedComponent = DaggerTvShowDetailedComponent.builder()
             .appModule(AppModule(this))
-            .tvShowDetailedModule(TvShowDetailedModule(tvShowDetailedNavigator))
+            .tvShowDetailedModule(TvShowDetailedModule(router))
             .build()
     }
 
     fun getTvShowPopularComponent() = tvShowPopularComponent
 
     fun getTvShowDetailedComponent() = tvShowDetailedComponent
-}
-/* TODO
-    In the new version use MVVM + LiveData + ViewModel + Hilt + Navigation from Jetpack (try cicerone first)
-    */
 
+    fun getNavigationComponent() = navigationComponent
+}
