@@ -35,7 +35,7 @@ class TvShowPopularDataRepository @Inject constructor(
                                             pageNumber
                                         )
                                     )
-                                        .subscribeOn(Schedulers.io())
+                                        .subscribeOn(Schedulers.io()) //TODO needs to remove subscribes
                                         .subscribe()
                                 }
                                 .subscribeOn(Schedulers.io())

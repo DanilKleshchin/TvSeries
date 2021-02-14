@@ -114,11 +114,14 @@ class TvShowPopularPresenter(
                         tvShowPopularView?.showHideLoadingView(true)
                         tvShowPopularView?.showHideBottomLoadingView(true)
                         tvShowPopularView?.showHideRetryView(true)
-                        tvShowPopularList.addAll(tvShows)
                         if (tvShows.isEmpty()) {
                             tvShowPopularView?.showHideRetryView(false)
                             return@subscribe
                         }
+                        if (tvShows.equals(tvShowPopularList)) {
+                            return@subscribe //FIX this. Subscribe methods when saving to DB send the same list two times
+                        }
+                        tvShowPopularList.addAll(tvShows)
                         showList.invoke()
                     },
                     {
