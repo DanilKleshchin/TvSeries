@@ -11,8 +11,13 @@ import io.reactivex.Observable
 @Dao
 interface TvShowPopularEntityDao {
 
-    @Query("SELECT * FROM TV_SHOW_POPULAR WHERE pageNumber = :pageNumber")
-    fun getTvShowPopularListByPageNumber(pageNumber: Int): Observable<List<TvShowPopularDbEntity>>
+    @Query("SELECT * FROM TV_SHOW_POPULAR ORDER BY position")
+    fun getTvShowPopularList(): Observable<List<TvShowPopularDbEntity>>
+
+    @Query("SELECT * FROM TV_SHOW_POPULAR WHERE pageNumber <= :pageNumber ORDER BY position")
+    fun getTvShowPopularEntityListUpToPageNumberInclusive(
+        pageNumber: Int
+    ): Observable<List<TvShowPopularDbEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertTvShowPopularList(tvShowPopularList: List<TvShowPopularDbEntity>): Completable

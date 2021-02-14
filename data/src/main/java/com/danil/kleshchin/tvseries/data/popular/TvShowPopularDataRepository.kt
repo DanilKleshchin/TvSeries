@@ -20,16 +20,7 @@ class TvShowPopularDataRepository @Inject constructor(
 
     private var pageCount: Int = 0
 
-    override fun getTvShowPopularList(pageNumber: Int): Observable<List<TvShowPopular>> {
-        return getFirstTvShowPopularListPage(pageNumber)
-    }
-
-    //TODO ask about pageCount
-    override fun getTvShowPopularPageCount(): Observable<Int> {
-        return Observable.just(pageCount)
-    }
-
-    private fun getFirstTvShowPopularListPage(pageNumber: Int): Observable<List<TvShowPopular>> {
+    override fun getTvShowPopularListByPageNumber(pageNumber: Int): Observable<List<TvShowPopular>> {
         return Observable.concatArrayEager(
             Observable.defer {
                 if (isNetworkAvailable(context)) {
@@ -52,10 +43,22 @@ class TvShowPopularDataRepository @Inject constructor(
                         }
                         .map(mapper::transform)
                 } else {
-                    localDataSource.getTvShowPopularEntityListByPageNumber(pageNumber)
+                    localDataSource.getTvShowPopularEntityList()
                         .map(mapper::transformDbEntityList)
                 }
             }
         )
+    }
+
+    override fun getTvShowPopularListUpToPageNumberInclusive(
+        pageNumber: Int
+    ): Observable<List<TvShowPopular>> {
+        return localDataSource.getTvShowPopularEntityListUpToPageNumberInclusive(pageNumber)
+            .map(mapper::transformDbEntityList)
+    }
+
+    //TODO ask about pageCount
+    override fun getTvShowPopularPageCount(): Observable<Int> {
+        return Observable.just(pageCount)
     }
 }

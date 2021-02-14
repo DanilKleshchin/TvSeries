@@ -8,10 +8,17 @@ class TvShowPopularLocalDataSource(
     private val tvShowPopularEntityDatabase: TvShowPopularEntityDatabase
 ) {
 
-    fun getTvShowPopularEntityListByPageNumber(pageNumber: Int): Observable<List<TvShowPopularDbEntity>> {
-        return tvShowPopularEntityDatabase.tvShowPopularEntityDao.getTvShowPopularListByPageNumber(
-            pageNumber
-        )
+    fun getTvShowPopularEntityListUpToPageNumberInclusive(
+        pageNumber: Int
+    ): Observable<List<TvShowPopularDbEntity>> {
+        return tvShowPopularEntityDatabase.tvShowPopularEntityDao
+            .getTvShowPopularEntityListUpToPageNumberInclusive(
+                pageNumber
+            )
+    }
+
+    fun getTvShowPopularEntityList(): Observable<List<TvShowPopularDbEntity>> {
+        return tvShowPopularEntityDatabase.tvShowPopularEntityDao.getTvShowPopularList()
     }
 
     fun insertTvShowPopularEntityList(list: List<TvShowPopularDbEntity>): Completable {

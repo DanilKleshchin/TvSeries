@@ -1,16 +1,20 @@
 package com.danil.kleshchin.tvseries.screens.popular
 
 import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
-import com.danil.kleshchin.tvseries.domain.interactor.popular.GetTvShowPopularListUseCase
+import com.danil.kleshchin.tvseries.domain.interactor.popular.GetTvShowPopularListByPageNumberUseCase
+import com.danil.kleshchin.tvseries.domain.interactor.popular.GetTvShowPopularListUpToPageNumberUseCase
 import com.danil.kleshchin.tvseries.domain.interactor.popular.GetTvShowPopularPageCountUseCase
 import com.danil.kleshchin.tvseries.screens.CiceroneScreens
 import com.github.terrakok.cicerone.Router
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 
 class TvShowPopularPresenter(
-    private val getTvShowPopularListUseCase: GetTvShowPopularListUseCase,
+    private val getTvShowPopularListByPageNumberUseCase: GetTvShowPopularListByPageNumberUseCase,
+    private val getTvShowPopularListUpToPageNumberUseCase: GetTvShowPopularListUpToPageNumberUseCase,
     private val getTvShowPopularPageCountUseCase: GetTvShowPopularPageCountUseCase,
     private val disposables: CompositeDisposable,
     private val router: Router
@@ -32,12 +36,23 @@ class TvShowPopularPresenter(
 
     override fun onAttach() {
         if (tvShowPopularList.isEmpty()) {
-            loadTvShowPopularList{
-                tvShowPopularView?.showTvShowPopularList(tvShowPopularList)
-                executeGetTvShowPopularPageCountUseCase()
+            if (currentPageNumber > FIRST_PAGE_NUMBER) { //When the configuration was changed and current page is bigger than the first
+                executeGetTvShowPopularListUseCase(
+                    getTvShowPopularListUpToPageNumberUseCase.execute(
+                        GetTvShowPopularListUpToPageNumberUseCase.Params(currentPageNumber)
+                    )
+                ) {
+                    tvShowPopularView?.showTvShowPopularList(tvShowPopularList)
+                    executeGetTvShowPopularPageCountUseCase()
+                }
+            } else {
+                loadTvShowPopularList(FIRST_PAGE_NUMBER) { //Load items for the first time
+                    tvShowPopularView?.showTvShowPopularList(tvShowPopularList)
+                    executeGetTvShowPopularPageCountUseCase()
+                }
             }
         } else {
-            tvShowPopularView?.showTvShowPopularList(tvShowPopularList)
+            tvShowPopularView?.showTvShowPopularList(tvShowPopularList) //Show items when view is resumed after pausing
         }
     }
 
@@ -59,30 +74,39 @@ class TvShowPopularPresenter(
         if (currentPageNumber < pagesCount) {
             currentPageNumber++
             tvShowPopularView?.showHideBottomLoadingView(false)
-            executeGetTvShowPopularListUseCase{
+            executeGetTvShowPopularListUseCase(
+                getTvShowPopularListByPageNumberUseCase.execute(
+                    GetTvShowPopularListByPageNumberUseCase.Params(currentPageNumber)
+                )
+            ) {
                 tvShowPopularView?.updateTvShowPopularList(tvShowPopularList)
             }
         }
     }
 
     override fun onRetrySelected() {
-        loadTvShowPopularList{
+        loadTvShowPopularList(FIRST_PAGE_NUMBER) {
             tvShowPopularView?.showTvShowPopularList(tvShowPopularList)
             executeGetTvShowPopularPageCountUseCase()
         }
     }
 
-    private fun loadTvShowPopularList(showList: () -> Unit) {
+    private fun loadTvShowPopularList(pageNumber: Int, showList: () -> Unit) {
         tvShowPopularView?.showHideLoadingView(false)
-        executeGetTvShowPopularListUseCase(showList)
+        executeGetTvShowPopularListUseCase(
+            getTvShowPopularListByPageNumberUseCase.execute(
+                GetTvShowPopularListByPageNumberUseCase.Params(pageNumber)
+            ), showList
+        )
     }
 
-    private fun executeGetTvShowPopularListUseCase(showList: () -> Unit) {
+    private fun executeGetTvShowPopularListUseCase(
+        observableUseCase: Observable<List<TvShowPopular>>,
+        showList: () -> Unit
+    ) {
         tvShowPopularView?.showHideRetryView(true)
         disposables.add(
-            getTvShowPopularListUseCase.execute(
-                GetTvShowPopularListUseCase.Params(currentPageNumber)
-            )
+            observableUseCase
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

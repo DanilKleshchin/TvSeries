@@ -6,12 +6,12 @@ import com.danil.kleshchin.tvseries.domain.repository.popular.TvShowPopularRepos
 import io.reactivex.Observable
 import javax.inject.Inject
 
-class GetTvShowPopularListUseCase @Inject constructor(
+class GetTvShowPopularListByPageNumberUseCase @Inject constructor(
     private val tvShowPopularRepository: TvShowPopularRepository
-) : UseCase<List<TvShowPopular>, GetTvShowPopularListUseCase.Params> {
+) : UseCase<List<TvShowPopular>, GetTvShowPopularListByPageNumberUseCase.Params> {
 
     override fun execute(params: Params): Observable<List<TvShowPopular>> {
-        return tvShowPopularRepository.getTvShowPopularList(params.pageNumber)
+        return tvShowPopularRepository.getTvShowPopularListByPageNumber(params.pageNumber)
     }
 
     data class Params(
