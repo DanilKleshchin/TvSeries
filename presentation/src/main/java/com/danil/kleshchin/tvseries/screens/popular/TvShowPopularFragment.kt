@@ -28,6 +28,7 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View,
         super.onCreate(savedInstanceState)
         TvShowApplication.INSTANCE.initTvShowPopularComponent()
         TvShowApplication.INSTANCE.getTvShowPopularComponent().inject(this)
+        tvShowPopularPresenter.subscribe(this, getStoredState(savedInstanceState))
     }
 
     override fun onCreateView(
@@ -40,7 +41,8 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View,
         initViewListeners()
         setBackPressedCallback()
 
-        tvShowPopularPresenter.subscribe(this, getStoredState(savedInstanceState))
+        tvShowPopularPresenter.onAttach()
+
         return binding.root
     }
 
@@ -49,9 +51,13 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View,
         storeState(outState, tvShowPopularPresenter.getState())
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
         _binding = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         tvShowPopularPresenter.unsubscribe()
     }
 

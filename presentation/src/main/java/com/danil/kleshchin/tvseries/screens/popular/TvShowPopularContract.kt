@@ -14,6 +14,7 @@ interface TvShowPopularContract {
 
     interface Presenter {
         fun subscribe(view: View, state: State?)
+        fun onAttach()
         fun unsubscribe()
         fun getState(): State
         fun onTvShowPopularSelected(tvShowPopular: TvShowPopular)

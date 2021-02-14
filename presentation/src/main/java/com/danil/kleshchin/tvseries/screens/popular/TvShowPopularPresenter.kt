@@ -28,7 +28,14 @@ class TvShowPopularPresenter(
         tvShowPopularView = view
         currentPageNumber = state?.getCurrentPageNumber() ?: FIRST_PAGE_NUMBER
         pagesCount = state?.getPagesCount() ?: currentPageNumber
-        loadTvShowPopularList()
+    }
+
+    override fun onAttach() {
+        if (tvShowPopularList.isEmpty()) {
+            loadTvShowPopularList()
+        } else {
+            tvShowPopularView?.showTvShowPopularList(tvShowPopularList)
+        }
     }
 
     override fun unsubscribe() {

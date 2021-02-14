@@ -18,7 +18,7 @@ class TvShowDetailedPresenter(
     private val mapper: TvShowDetailedModelMapper
 ) : TvShowDetailedContract.Presenter {
 
-    private val VIEW_FINISHING_DELAY = 100L
+    private val VIEW_FINISHING_DELAY = 50L
 
     private lateinit var tvShowPopular: TvShowPopular
     private lateinit var tvShowDetailed: TvShowDetailedModel
