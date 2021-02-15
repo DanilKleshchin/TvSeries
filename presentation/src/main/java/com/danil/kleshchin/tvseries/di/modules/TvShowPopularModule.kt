@@ -3,6 +3,7 @@ package com.danil.kleshchin.tvseries.di.modules
 import android.content.Context
 import com.danil.kleshchin.tvseries.data.baseUrl
 import com.danil.kleshchin.tvseries.data.popular.TvShowPopularDataRepository
+import com.danil.kleshchin.tvseries.data.popular.datasource.local.TvShowPopularDataStore
 import com.danil.kleshchin.tvseries.data.popular.datasource.local.TvShowPopularEntityDatabase
 import com.danil.kleshchin.tvseries.data.popular.datasource.local.TvShowPopularLocalDataSource
 import com.danil.kleshchin.tvseries.data.popular.datasource.network.TvShowPopularApi
@@ -51,10 +52,12 @@ class TvShowPopularModule(
         tvShowDatabase: TvShowPopularEntityDatabase,
         context: Context,
         mapper: TvShowPopularDataMapper
+        dataStore: TvShowPopularDataStore
     ): TvShowPopularRepository =
         TvShowPopularDataRepository(
             TvShowPopularRemoteDataSource(tvShowApi),
             TvShowPopularLocalDataSource(tvShowDatabase),
+            dataStore,
             context,
             mapper
         )

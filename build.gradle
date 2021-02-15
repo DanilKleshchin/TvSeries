@@ -39,6 +39,7 @@ ext {
     cicerone_version = '6.6'
     stetho_version = '1.5.1'
     room_version = '2.2.6'
+    data_store_version = '1.0.0-alpha06'
     room_compiler_version = '1.1.1'
     app_compat_version = '1.2.0'
     recycler_version = '1.0.0'

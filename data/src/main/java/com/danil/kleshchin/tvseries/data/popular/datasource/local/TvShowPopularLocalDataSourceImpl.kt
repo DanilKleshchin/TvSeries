@@ -17,6 +17,15 @@ class TvShowPopularLocalDataSource(
             )
     }
 
+    fun getTvShowPopularEntityListByPageNumber(
+        pageNumber: Int
+    ): Observable<List<TvShowPopularDbEntity>> {
+        return tvShowPopularEntityDatabase.tvShowPopularEntityDao
+            .getTvShowPopularEntityListByPageNumber(
+                pageNumber
+            )
+    }
+
     fun getTvShowPopularEntityList(): Observable<List<TvShowPopularDbEntity>> {
         return tvShowPopularEntityDatabase.tvShowPopularEntityDao.getTvShowPopularList()
     }
