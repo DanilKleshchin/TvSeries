@@ -1,8 +1,8 @@
 package com.danil.kleshchin.tvseries.data.popular
 
 import android.content.Context
+import com.danil.kleshchin.tvseries.data.popular.datasource.local.TvShowPopularDataStore
 import com.danil.kleshchin.tvseries.data.popular.datasource.local.TvShowPopularLocalDataSource
-import com.danil.kleshchin.tvseries.data.popular.datasource.local.TvShowPopularDataSource
 import com.danil.kleshchin.tvseries.data.popular.datasource.network.TvShowPopularRemoteDataSource
 import com.danil.kleshchin.tvseries.data.popular.datasource.network.utils.isNetworkAvailable
 import com.danil.kleshchin.tvseries.data.popular.mapper.TvShowPopularDataMapper
@@ -10,7 +10,6 @@ import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
 import com.danil.kleshchin.tvseries.domain.repository.popular.TvShowPopularRepository
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -27,6 +26,8 @@ class TvShowPopularDataRepository @Inject constructor(
 
     override fun getTvShowPopularListByPageNumber(pageNumber: Int): Observable<List<TvShowPopular>> {
         return Observable.concatArrayEager(
+            localDataSource.getTvShowPopularEntityListByPageNumber(pageNumber)
+                .map(mapper::transformDbEntityList),
             Observable.defer {
                 if (isNetworkAvailable(context)) {
                     remoteDataSource.getTvShowPopularApiResponse(pageNumber)
@@ -48,8 +49,7 @@ class TvShowPopularDataRepository @Inject constructor(
                         }
                         .map(mapper::transform)
                 } else {
-                    localDataSource.getTvShowPopularEntityList()
-                        .map(mapper::transformDbEntityList)
+                    Observable.empty()
                 }
             }
         )

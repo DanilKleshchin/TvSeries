@@ -4,11 +4,11 @@ import com.danil.kleshchin.tvseries.data.popular.datasource.local.entity.TvShowP
 import io.reactivex.Completable
 import io.reactivex.Observable
 
-class TvShowPopularLocalDataSource(
+class TvShowPopularLocalDataSourceImpl (
     private val tvShowPopularEntityDatabase: TvShowPopularEntityDatabase
-) {
+) : TvShowPopularLocalDataSource {
 
-    fun getTvShowPopularEntityListUpToPageNumberInclusive(
+    override fun getTvShowPopularEntityListUpToPageNumberInclusive(
         pageNumber: Int
     ): Observable<List<TvShowPopularDbEntity>> {
         return tvShowPopularEntityDatabase.tvShowPopularEntityDao
@@ -17,7 +17,7 @@ class TvShowPopularLocalDataSource(
             )
     }
 
-    fun getTvShowPopularEntityListByPageNumber(
+    override fun getTvShowPopularEntityListByPageNumber(
         pageNumber: Int
     ): Observable<List<TvShowPopularDbEntity>> {
         return tvShowPopularEntityDatabase.tvShowPopularEntityDao
@@ -26,21 +26,21 @@ class TvShowPopularLocalDataSource(
             )
     }
 
-    fun getTvShowPopularEntityList(): Observable<List<TvShowPopularDbEntity>> {
+    override fun getTvShowPopularEntityList(): Observable<List<TvShowPopularDbEntity>> {
         return tvShowPopularEntityDatabase.tvShowPopularEntityDao.getTvShowPopularList()
     }
 
-    fun insertTvShowPopularEntityList(list: List<TvShowPopularDbEntity>): Completable {
+    override fun insertTvShowPopularEntityList(list: List<TvShowPopularDbEntity>): Completable {
         return tvShowPopularEntityDatabase.tvShowPopularEntityDao.insertTvShowPopularList(list)
     }
 
-    fun removeTvShowPopularByPage(pageNumber: Int): Completable {
+    override fun removeTvShowPopularByPage(pageNumber: Int): Completable {
         return tvShowPopularEntityDatabase.tvShowPopularEntityDao.removeTvShowPopularByPage(
             pageNumber
         )
     }
 
-    fun removeAll(): Completable {
+    override fun removeAll(): Completable {
         return tvShowPopularEntityDatabase.tvShowPopularEntityDao.removeAll()
     }
 }

@@ -14,6 +14,11 @@ interface TvShowPopularEntityDao {
     @Query("SELECT * FROM TV_SHOW_POPULAR ORDER BY position")
     fun getTvShowPopularList(): Observable<List<TvShowPopularDbEntity>>
 
+    @Query("SELECT * FROM TV_SHOW_POPULAR WHERE pageNumber = :pageNumber ORDER BY position")
+    fun getTvShowPopularEntityListByPageNumber(
+        pageNumber: Int
+    ): Observable<List<TvShowPopularDbEntity>>
+
     @Query("SELECT * FROM TV_SHOW_POPULAR WHERE pageNumber <= :pageNumber ORDER BY position")
     fun getTvShowPopularEntityListUpToPageNumberInclusive(
         pageNumber: Int
