@@ -36,6 +36,8 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View {
     private var _binding: FragmentTvShowDetailedBinding? = null
     private val binding get() = _binding!!
 
+    private var isMoreDescriptionDisplayed = false
+
     companion object {
         private val KEY_TV_SHOW_POPULAR = "KEY_TV_SHOW_POPULAR"
 
@@ -199,9 +201,10 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View {
 
     private fun initViewListeners(tvShowDetailed: TvShowDetailedModel) {
         binding.apply {
-            //TODO change this
             readMore.setOnClickListener {
-                if (readMore.text == getString(R.string.read_more)) {
+                isMoreDescriptionDisplayed = !isMoreDescriptionDisplayed
+
+                if (isMoreDescriptionDisplayed) {
                     description.ellipsize = null
                     description.maxLines = Int.MAX_VALUE
                     readMore.text = getString(R.string.read_less)
