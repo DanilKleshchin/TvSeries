@@ -14,7 +14,8 @@ class TvShowApplication : Application() {
 
     private lateinit var tvShowPopularComponent: TvShowPopularComponent
     private lateinit var tvShowDetailedComponent: TvShowDetailedComponent
-    private lateinit var navigationComponent: NavigationComponent
+
+    private var navigationComponent: NavigationComponent? = null
 
     private val cicerone = Cicerone.create()
     val router get() = cicerone.router
@@ -55,4 +56,8 @@ class TvShowApplication : Application() {
     fun getTvShowDetailedComponent() = tvShowDetailedComponent
 
     fun getNavigationComponent() = navigationComponent
+
+    fun removeNavigationComponent() {
+        navigationComponent = null
+    }
 }

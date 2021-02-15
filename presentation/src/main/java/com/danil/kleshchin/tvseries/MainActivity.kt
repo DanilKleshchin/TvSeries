@@ -15,12 +15,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
 
-        TvShowApplication.INSTANCE.initNavigationComponent(this)
-        TvShowApplication.INSTANCE.getNavigationComponent().inject(this)
-
         if (savedInstanceState == null) {
             TvShowApplication.INSTANCE.router.navigateTo(CiceroneScreens.tvShowPopularScreen())
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        TvShowApplication.INSTANCE.initNavigationComponent(this)
+        TvShowApplication.INSTANCE.getNavigationComponent()?.inject(this)
     }
 
     override fun onResumeFragments() {
@@ -31,5 +34,10 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         TvShowApplication.INSTANCE.navigatorHolder.removeNavigator()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        TvShowApplication.INSTANCE.removeNavigationComponent()
     }
 }
