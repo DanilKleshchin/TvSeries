@@ -35,6 +35,13 @@ class TvShowPopularListAdapter(
         holder.bind(tvShowPopularList[position])
     }
 
+    override fun onViewRecycled(holder: TvShowPopularViewHolder) {
+        holder.getBinding().icon.let {
+            Picasso.get().cancelRequest(it)
+        }
+        super.onViewRecycled(holder)
+    }
+
     fun updateTvShowPopularList(tvShowPopularList: List<TvShowPopular>) {
         this.tvShowPopularList = tvShowPopularList
     }
@@ -43,6 +50,8 @@ class TvShowPopularListAdapter(
         private val binding: ItemTvShowPopularListBinding,
         private val clickListener: OnTvShowPopularClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
+
+        fun getBinding() = binding
 
         fun bind(tvShowPopular: TvShowPopular) {
             binding.apply {

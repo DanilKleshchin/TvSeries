@@ -1,17 +1,23 @@
 package com.danil.kleshchin.tvseries.screens.popular
 
 import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
-import com.danil.kleshchin.tvseries.domain.interactor.popular.GetTvShowPopularListUseCase
+import com.danil.kleshchin.tvseries.domain.interactor.popular.GetTvShowPopularListByPageNumberUseCase
+import com.danil.kleshchin.tvseries.domain.interactor.popular.GetTvShowPopularListUpToPageNumberUseCase
 import com.danil.kleshchin.tvseries.domain.interactor.popular.GetTvShowPopularPageCountUseCase
+import com.danil.kleshchin.tvseries.screens.CiceroneScreens
+import com.github.terrakok.cicerone.Router
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 
 class TvShowPopularPresenter(
-    private val getTvShowPopularListUseCase: GetTvShowPopularListUseCase,
+    private val getTvShowPopularListByPageNumberUseCase: GetTvShowPopularListByPageNumberUseCase,
+    private val getTvShowPopularListUpToPageNumberUseCase: GetTvShowPopularListUpToPageNumberUseCase,
     private val getTvShowPopularPageCountUseCase: GetTvShowPopularPageCountUseCase,
-    private val tvShowPopularNavigator: TvShowPopularNavigator,
-    private val disposables: CompositeDisposable
+    private val disposables: CompositeDisposable,
+    private val router: Router
 ) : TvShowPopularContract.Presenter {
 
     private val FIRST_PAGE_NUMBER = 1
@@ -21,12 +27,35 @@ class TvShowPopularPresenter(
 
     private var currentPageNumber = FIRST_PAGE_NUMBER
     private var pagesCount = currentPageNumber
+    private var wasTvShowPopularListLoaded = false
 
     override fun subscribe(view: TvShowPopularContract.View, state: TvShowPopularContract.State?) {
         tvShowPopularView = view
         currentPageNumber = state?.getCurrentPageNumber() ?: FIRST_PAGE_NUMBER
         pagesCount = state?.getPagesCount() ?: currentPageNumber
-        loadTvShowPopularList()
+        wasTvShowPopularListLoaded = state?.getWasTvShowPopularListLoaded() ?: false
+    }
+
+    override fun onAttach() {
+        if (tvShowPopularList.isEmpty()) {
+            if (wasTvShowPopularListLoaded) { //When configuration was changed but list had been loaded
+                executeGetTvShowPopularListUseCase(
+                    getTvShowPopularListUpToPageNumberUseCase.execute(
+                        GetTvShowPopularListUpToPageNumberUseCase.Params(currentPageNumber)
+                    )
+                ) {
+                    tvShowPopularView?.showTvShowPopularList(tvShowPopularList)
+                    executeGetTvShowPopularPageCountUseCase()
+                }
+            } else {
+                loadTvShowPopularList(FIRST_PAGE_NUMBER) { //Load items for the first time
+                    tvShowPopularView?.showTvShowPopularList(tvShowPopularList)
+                    executeGetTvShowPopularPageCountUseCase()
+                }
+            }
+        } else {
+            tvShowPopularView?.showTvShowPopularList(tvShowPopularList) //Show items when view is resumed after pausing
+        }
     }
 
     override fun unsubscribe() {
@@ -35,39 +64,50 @@ class TvShowPopularPresenter(
         tvShowPopularList = arrayListOf()
     }
 
-    //TODO ask about this state object creation
     override fun getState(): TvShowPopularContract.State =
-        TvShowPopularState(currentPageNumber, pagesCount)
+        TvShowPopularState(currentPageNumber, pagesCount, wasTvShowPopularListLoaded)
 
     override fun onTvShowPopularSelected(tvShowPopular: TvShowPopular) {
-        tvShowPopularNavigator.showDetailedScreen(tvShowPopular)
+        router.navigateTo(CiceroneScreens.tvShowDetailedScreen(tvShowPopular))
     }
 
     override fun onFullTvShowListScrolled() {
         if (currentPageNumber < pagesCount) {
             currentPageNumber++
             tvShowPopularView?.showHideBottomLoadingView(false)
-            executeGetTvShowPopularListUseCase()
+            executeGetTvShowPopularListUseCase(
+                getTvShowPopularListByPageNumberUseCase.execute(
+                    GetTvShowPopularListByPageNumberUseCase.Params(currentPageNumber)
+                )
+            ) {
+                tvShowPopularView?.updateTvShowPopularList(tvShowPopularList)
+            }
         }
     }
 
     override fun onRetrySelected() {
-        loadTvShowPopularList()
+        loadTvShowPopularList(FIRST_PAGE_NUMBER) {
+            tvShowPopularView?.showTvShowPopularList(tvShowPopularList)
+            executeGetTvShowPopularPageCountUseCase()
+        }
     }
 
-    private fun loadTvShowPopularList() {
+    private fun loadTvShowPopularList(pageNumber: Int, showList: () -> Unit) {
         tvShowPopularView?.showHideLoadingView(false)
-        executeGetTvShowPopularListUseCase()
+        executeGetTvShowPopularListUseCase(
+            getTvShowPopularListByPageNumberUseCase.execute(
+                GetTvShowPopularListByPageNumberUseCase.Params(pageNumber)
+            ), showList
+        )
     }
 
-    //TODO ask about disposable
-    //TODO try to refactor this
-    private fun executeGetTvShowPopularListUseCase() {
+    private fun executeGetTvShowPopularListUseCase(
+        observableUseCase: Observable<List<TvShowPopular>>,
+        showList: () -> Unit
+    ) {
         tvShowPopularView?.showHideRetryView(true)
         disposables.add(
-            getTvShowPopularListUseCase.execute(
-                GetTvShowPopularListUseCase.Params(currentPageNumber)
-            )
+            observableUseCase
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -75,21 +115,14 @@ class TvShowPopularPresenter(
                         tvShowPopularView?.showHideLoadingView(true)
                         tvShowPopularView?.showHideBottomLoadingView(true)
                         tvShowPopularView?.showHideRetryView(true)
-                        if (currentPageNumber >= FIRST_PAGE_NUMBER + 1) {
-                            tvShowPopularList.addAll(tvShows)
-                        } else {
-                            tvShowPopularList = tvShows as ArrayList<TvShowPopular>
-                        }
                         if (tvShows.isEmpty()) {
                             tvShowPopularView?.showHideRetryView(false)
                             return@subscribe
                         }
-                        if (currentPageNumber > FIRST_PAGE_NUMBER) { //FIXME this creates bug when you load two or more pages and change configuration
-                            tvShowPopularView?.updateTvShowPopularList(tvShowPopularList)
-                        } else {
-                            tvShowPopularView?.showTvShowPopularList(tvShowPopularList)
-                        }
-                        executeGetTvShowPopularPageCountUseCase()
+                        tvShowPopularList.addAll(tvShows)
+                        wasTvShowPopularListLoaded = true
+                        showList.invoke()
+                        disposables.clear()
                     },
                     {
                         it.printStackTrace()

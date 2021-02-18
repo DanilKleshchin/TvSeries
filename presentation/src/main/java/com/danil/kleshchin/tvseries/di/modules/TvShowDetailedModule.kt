@@ -8,9 +8,9 @@ import com.danil.kleshchin.tvseries.data.detailed.mapper.TvShowDetailedDataMappe
 import com.danil.kleshchin.tvseries.domain.interactor.detailed.GetTvShowDetailedUseCase
 import com.danil.kleshchin.tvseries.domain.repository.detailed.TvShowDetailedRepository
 import com.danil.kleshchin.tvseries.screens.detailed.TvShowDetailedContract
-import com.danil.kleshchin.tvseries.screens.detailed.TvShowDetailedNavigator
 import com.danil.kleshchin.tvseries.screens.detailed.TvShowDetailedPresenter
 import com.danil.kleshchin.tvseries.screens.detailed.models.TvShowDetailedModelMapper
+import com.github.terrakok.cicerone.Router
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
@@ -20,7 +20,9 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 @Module
-class TvShowDetailedModule(private val navigator: TvShowDetailedNavigator) {
+class TvShowDetailedModule(
+    private val router: Router
+) {
 
     @Provides
     fun provideTvShowDetailedPresenter(
@@ -29,8 +31,8 @@ class TvShowDetailedModule(private val navigator: TvShowDetailedNavigator) {
         mapper: TvShowDetailedModelMapper
     ): TvShowDetailedContract.Presenter =
         TvShowDetailedPresenter(getTvShowDetailedUseCase,
-            navigator,
             compositeDisposable,
+            router,
             mapper
         )
 

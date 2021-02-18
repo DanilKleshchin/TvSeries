@@ -2,44 +2,42 @@ package com.danil.kleshchin.tvseries
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.danil.kleshchin.tvseries.screens.popular.TvShowPopularFragment
+import com.danil.kleshchin.tvseries.screens.CiceroneScreens
+import com.github.terrakok.cicerone.Navigator
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    private val TV_SHOW_POPULAR_TAG = "TV_SHOW_POPULAR_TAG"
-    private  var tvShowPopularFragment: TvShowPopularFragment = TvShowPopularFragment()
+    @Inject
+    lateinit var navigator: Navigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
 
-        initActivity(savedInstanceState)
-
         if (savedInstanceState == null) {
-            initTvShowPopularView()
+            TvShowApplication.INSTANCE.router.navigateTo(CiceroneScreens.tvShowPopularScreen())
         }
     }
 
-    private fun initTvShowPopularView() {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, tvShowPopularFragment)
-            .addToBackStack(TV_SHOW_POPULAR_TAG)
-            .commit()
+    override fun onResume() {
+        super.onResume()
+        TvShowApplication.INSTANCE.initNavigationComponent(this)
+        TvShowApplication.INSTANCE.getNavigationComponent()?.inject(this)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        supportFragmentManager.putFragment(outState, TV_SHOW_POPULAR_TAG, tvShowPopularFragment)
+    override fun onResumeFragments() {
+        super.onResumeFragments()
+        TvShowApplication.INSTANCE.navigatorHolder.setNavigator(navigator)
     }
 
-    private fun initActivity(savedInstanceState: Bundle?) {
-        tvShowPopularFragment = if (savedInstanceState == null) {
-            TvShowPopularFragment()
-        } else {
-            supportFragmentManager.getFragment(
-                savedInstanceState,
-                TV_SHOW_POPULAR_TAG
-            ) as TvShowPopularFragment
-        }
+    override fun onPause() {
+        super.onPause()
+        TvShowApplication.INSTANCE.navigatorHolder.removeNavigator()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        TvShowApplication.INSTANCE.removeNavigationComponent()
     }
 }

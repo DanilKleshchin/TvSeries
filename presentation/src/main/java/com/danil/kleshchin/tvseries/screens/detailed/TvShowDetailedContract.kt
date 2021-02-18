@@ -17,6 +17,7 @@ interface TvShowDetailedContract {
         fun getState(): State
         fun onRefreshSelected()
         fun onWebPageSelected(tvShowDetailed: TvShowDetailedModel)
+        fun onBackPressed()
     }
 
     interface State {

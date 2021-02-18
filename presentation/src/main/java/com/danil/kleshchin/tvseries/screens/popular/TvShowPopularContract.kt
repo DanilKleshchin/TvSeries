@@ -14,6 +14,7 @@ interface TvShowPopularContract {
 
     interface Presenter {
         fun subscribe(view: View, state: State?)
+        fun onAttach()
         fun unsubscribe()
         fun getState(): State
         fun onTvShowPopularSelected(tvShowPopular: TvShowPopular)
@@ -24,5 +25,6 @@ interface TvShowPopularContract {
     interface State {
         fun getCurrentPageNumber(): Int
         fun getPagesCount(): Int
+        fun getWasTvShowPopularListLoaded(): Boolean
     }
 }

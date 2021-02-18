@@ -1,7 +1,6 @@
 package com.danil.kleshchin.tvseries.screens.detailed
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.Gravity
@@ -12,8 +11,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.DrawableRes
-import androidx.browser.customtabs.CustomTabColorSchemeParams
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
@@ -26,7 +23,7 @@ import com.danil.kleshchin.tvseries.screens.detailed.models.TvShowDetailedModel
 import com.squareup.picasso.Picasso
 import javax.inject.Inject
 
-class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDetailedNavigator {
+class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View {
 
     private val ERROR_LOG_MESSAGE = "TvShowDetailedFragment fragment wasn't attached."
     private val KEY_TV_SHOW_POPULAR = "KEY_TV_SHOW_POPULAR"
@@ -38,6 +35,8 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
 
     private var _binding: FragmentTvShowDetailedBinding? = null
     private val binding get() = _binding!!
+
+    private var isMoreDescriptionDisplayed = false
 
     companion object {
         private val KEY_TV_SHOW_POPULAR = "KEY_TV_SHOW_POPULAR"
@@ -53,8 +52,8 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity?.application as TvShowApplication).initTvShowDetailedComponent(this)
-        (activity?.application as TvShowApplication).getTvShowDetailedComponent().inject(this)
+        TvShowApplication.INSTANCE.initTvShowDetailedComponent()
+        TvShowApplication.INSTANCE.getTvShowDetailedComponent().inject(this)
     }
 
     override fun onCreateView(
@@ -73,7 +72,9 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
 
         binding.apply {
             emptyButton.setOnClickListener { tvShowDetailedPresenter.onRefreshSelected() }
-            backButton.setOnClickListener { finish() }
+            backButton.setOnClickListener {
+                tvShowDetailedPresenter.onBackPressed()
+            }
         }
     }
 
@@ -113,22 +114,6 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
                 emptyText.visibility = View.VISIBLE
             }
         }
-    }
-
-    override fun showWebPage(url: String) {
-        val context = activity ?: throw  IllegalStateException(ERROR_LOG_MESSAGE)
-        val primaryColor = ContextCompat.getColor(context, R.color.colorPrimary)
-        val toolbarColor = ContextCompat.getColor(context, R.color.colorToolBar)
-        val secondaryToolbarColor = ContextCompat.getColor(context, R.color.colorPrimaryDark)
-        val params = CustomTabColorSchemeParams.Builder()
-            .setToolbarColor(toolbarColor)
-            .setSecondaryToolbarColor(secondaryToolbarColor)
-            .setNavigationBarColor(primaryColor)
-            .build()
-        CustomTabsIntent.Builder()
-            .setDefaultColorSchemeParams(params)
-            .build()
-            .launchUrl(context, Uri.parse(url))
     }
 
     private fun bind(tvShowDetailed: TvShowDetailedModel) {
@@ -216,9 +201,10 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
 
     private fun initViewListeners(tvShowDetailed: TvShowDetailedModel) {
         binding.apply {
-            //TODO change this
             readMore.setOnClickListener {
-                if (readMore.text == getString(R.string.read_more)) {
+                isMoreDescriptionDisplayed = !isMoreDescriptionDisplayed
+
+                if (isMoreDescriptionDisplayed) {
                     description.ellipsize = null
                     description.maxLines = Int.MAX_VALUE
                     readMore.text = getString(R.string.read_less)
@@ -234,10 +220,6 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
                 tvShowDetailedPresenter.onWebPageSelected(tvShowDetailed)
             }
 
-            buttonEpisodes.setOnClickListener {
-
-            }
-
             sliderEpisodesPictures.registerOnPageChangeCallback(object :
                 ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
@@ -251,7 +233,7 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
     private fun setBackPressedCallback() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                finish()
+                tvShowDetailedPresenter.onBackPressed()
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
@@ -272,9 +254,5 @@ class TvShowDetailedFragment : Fragment(), TvShowDetailedContract.View, TvShowDe
     private fun getTvShowPopular(): TvShowPopular {
         return arguments?.getSerializable(KEY_TV_SHOW_POPULAR) as TvShowPopular?
             ?: throw NullPointerException("TvShowPopular is null")
-    }
-
-    private fun finish() {
-        activity?.supportFragmentManager?.popBackStack()
     }
 }

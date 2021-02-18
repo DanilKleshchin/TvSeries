@@ -1,22 +1,24 @@
 package com.danil.kleshchin.tvseries.data.popular.datasource.local
 
-import com.danil.kleshchin.tvseries.data.popular.entity.TvShowPopularEntity
+import com.danil.kleshchin.tvseries.data.popular.datasource.local.entity.TvShowPopularDbEntity
 import io.reactivex.Completable
 import io.reactivex.Observable
 
-class TvShowPopularLocalDataSource(
-    private val tvShowPopularEntityDatabase: TvShowPopularEntityDatabase
-) {
+interface TvShowPopularLocalDataSource {
 
-    fun getTvShowPopularEntityList(): Observable<List<TvShowPopularEntity>> {
-        return tvShowPopularEntityDatabase.tvShowPopularEntityDao.getTvShowPopularList()
-    }
+    fun getTvShowPopularEntityListUpToPageNumberInclusive(
+        pageNumber: Int
+    ): Observable<List<TvShowPopularDbEntity>>
 
-    fun insertTvShowPopularEntityList(list: List<TvShowPopularEntity>): Completable {
-        return tvShowPopularEntityDatabase.tvShowPopularEntityDao.insertTvShowPopularList(list)
-    }
+    fun getTvShowPopularEntityListByPageNumber(
+        pageNumber: Int
+    ): Observable<List<TvShowPopularDbEntity>>
 
-    fun removeAll(): Completable {
-        return tvShowPopularEntityDatabase.tvShowPopularEntityDao.removeAll()
-    }
+    fun getTvShowPopularEntityList(): Observable<List<TvShowPopularDbEntity>>
+
+    fun insertTvShowPopularEntityList(list: List<TvShowPopularDbEntity>): Completable
+
+    fun removeTvShowPopularByPage(pageNumber: Int): Completable
+
+    fun removeAll(): Completable
 }

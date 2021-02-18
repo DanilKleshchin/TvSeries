@@ -3,17 +3,21 @@ package com.danil.kleshchin.tvseries.di.modules
 import android.content.Context
 import com.danil.kleshchin.tvseries.data.baseUrl
 import com.danil.kleshchin.tvseries.data.popular.TvShowPopularDataRepository
+import com.danil.kleshchin.tvseries.data.popular.datasource.local.TvShowPopularDataStore
 import com.danil.kleshchin.tvseries.data.popular.datasource.local.TvShowPopularEntityDatabase
 import com.danil.kleshchin.tvseries.data.popular.datasource.local.TvShowPopularLocalDataSource
+import com.danil.kleshchin.tvseries.data.popular.datasource.local.TvShowPopularLocalDataSourceImpl
 import com.danil.kleshchin.tvseries.data.popular.datasource.network.TvShowPopularApi
 import com.danil.kleshchin.tvseries.data.popular.datasource.network.TvShowPopularRemoteDataSource
+import com.danil.kleshchin.tvseries.data.popular.datasource.network.TvShowPopularRemoteDataSourceImpl
 import com.danil.kleshchin.tvseries.data.popular.mapper.TvShowPopularDataMapper
-import com.danil.kleshchin.tvseries.domain.interactor.popular.GetTvShowPopularListUseCase
+import com.danil.kleshchin.tvseries.domain.interactor.popular.GetTvShowPopularListByPageNumberUseCase
+import com.danil.kleshchin.tvseries.domain.interactor.popular.GetTvShowPopularListUpToPageNumberUseCase
 import com.danil.kleshchin.tvseries.domain.interactor.popular.GetTvShowPopularPageCountUseCase
 import com.danil.kleshchin.tvseries.domain.repository.popular.TvShowPopularRepository
 import com.danil.kleshchin.tvseries.screens.popular.TvShowPopularContract
-import com.danil.kleshchin.tvseries.screens.popular.TvShowPopularNavigator
 import com.danil.kleshchin.tvseries.screens.popular.TvShowPopularPresenter
+import com.github.terrakok.cicerone.Router
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
@@ -25,36 +29,52 @@ import javax.inject.Singleton
 
 @Module
 class TvShowPopularModule(
-    private val navigator: TvShowPopularNavigator
+    private val router: Router
 ) {
 
     @Provides
     fun provideTvShowPopularPresenter(
-        getTvShowPopularListUseCase: GetTvShowPopularListUseCase,
+        getTvShowPopularListByPageNumberUseCase: GetTvShowPopularListByPageNumberUseCase,
         getTvShowPopularPageCountUseCase: GetTvShowPopularPageCountUseCase,
+        getTvShowPopularListUpToPageNumberUseCase: GetTvShowPopularListUpToPageNumberUseCase,
         compositeDisposable: CompositeDisposable
     ): TvShowPopularContract.Presenter =
         TvShowPopularPresenter(
-            getTvShowPopularListUseCase,
+            getTvShowPopularListByPageNumberUseCase,
+            getTvShowPopularListUpToPageNumberUseCase,
             getTvShowPopularPageCountUseCase,
-            navigator,
-            compositeDisposable
+            compositeDisposable,
+            router
         )
 
     @Provides
     @Singleton
     fun provideTvShowRepository(
-        tvShowApi: TvShowPopularApi,
-        tvShowDatabase: TvShowPopularEntityDatabase,
         context: Context,
-        mapper: TvShowPopularDataMapper
+        mapper: TvShowPopularDataMapper,
+        remoteDataSourceImpl: TvShowPopularRemoteDataSource,
+        localDataSourceImpl: TvShowPopularLocalDataSource,
+        dataStore: TvShowPopularDataStore
     ): TvShowPopularRepository =
         TvShowPopularDataRepository(
-            TvShowPopularRemoteDataSource(tvShowApi),
-            TvShowPopularLocalDataSource(tvShowDatabase),
+            remoteDataSourceImpl,
+            localDataSourceImpl,
+            dataStore,
             context,
             mapper
         )
+
+    @Provides
+    fun provideTvShowPopularRemoteDataSource(
+        tvShowPopularApi: TvShowPopularApi
+    ): TvShowPopularRemoteDataSource =
+        TvShowPopularRemoteDataSourceImpl(tvShowPopularApi)
+
+    @Provides
+    fun provideTvShowPopularLocalDataSource(
+        tvShowPopularEntityDatabase: TvShowPopularEntityDatabase
+    ): TvShowPopularLocalDataSource = TvShowPopularLocalDataSourceImpl(tvShowPopularEntityDatabase)
+
 
     @Provides
     fun provideTvShowPopularDatabase(context: Context): TvShowPopularEntityDatabase =

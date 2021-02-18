@@ -1,6 +1,6 @@
 package com.danil.kleshchin.tvseries.domain.interactor
 
-import com.danil.kleshchin.tvseries.domain.interactor.popular.GetTvShowPopularListUseCase
+import com.danil.kleshchin.tvseries.domain.interactor.popular.GetTvShowPopularListByPageNumberUseCase
 import com.danil.kleshchin.tvseries.domain.repository.popular.TvShowPopularRepository
 import org.junit.Before
 import org.junit.Test
@@ -10,24 +10,24 @@ import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
-class GetTvShowPopularListUseCaseTest {
+class GetTvShowPopularListByPageNumberUseCaseTest {
 
     private val pageNumber = 1
-    private lateinit var getTvShowPopularListUseCase: GetTvShowPopularListUseCase
+    private lateinit var getTvShowPopularListByPageNumberUseCase: GetTvShowPopularListByPageNumberUseCase
 
     @Mock
     private lateinit var mockTvShowRepository: TvShowPopularRepository
 
     @Before
     fun setUp() {
-        getTvShowPopularListUseCase = GetTvShowPopularListUseCase(mockTvShowRepository)
+        getTvShowPopularListByPageNumberUseCase = GetTvShowPopularListByPageNumberUseCase(mockTvShowRepository)
     }
 
     @Test
     fun testGetTvShowPopularListUseCase() {
-        getTvShowPopularListUseCase.execute(GetTvShowPopularListUseCase.Params(pageNumber))
+        getTvShowPopularListByPageNumberUseCase.execute(GetTvShowPopularListByPageNumberUseCase.Params(pageNumber))
 
-        Mockito.verify(mockTvShowRepository).getTvShowPopularList(pageNumber)
+        Mockito.verify(mockTvShowRepository).getTvShowPopularListByPageNumber(pageNumber)
         Mockito.verifyNoMoreInteractions(mockTvShowRepository)
     }
 }

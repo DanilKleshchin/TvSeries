@@ -6,21 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.danil.kleshchin.tvseries.R
 import com.danil.kleshchin.tvseries.TvShowApplication
 import com.danil.kleshchin.tvseries.databinding.FragmentTvShowPopularBinding
 import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
-import com.danil.kleshchin.tvseries.screens.detailed.TvShowDetailedFragment
 import javax.inject.Inject
 
-class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopularNavigator,
+class TvShowPopularFragment : Fragment(), TvShowPopularContract.View,
     TvShowPopularListAdapter.OnTvShowPopularClickListener {
 
-    private val ERROR_LOG_MESSAGE = "TvShowPopularFragment fragment wasn't attached."
     private val KEY_CURRENT_PAGE_NUMBER = "KEY_CURRENT_PAGE_NUMBER"
     private val KEY_PAGES_COUNT = "KEY_PAGES_COUNT"
+    private val KEY_WAS_LIST_LOADED = "KEY_WAS_LIST_LOADED"
 
     @Inject
     lateinit var tvShowPopularPresenter: TvShowPopularContract.Presenter
@@ -30,8 +27,9 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity?.application as TvShowApplication).initTvShowPopularComponent(this)
-        (activity?.application as TvShowApplication).getTvShowPopularComponent().inject(this)
+        TvShowApplication.INSTANCE.initTvShowPopularComponent()
+        TvShowApplication.INSTANCE.getTvShowPopularComponent().inject(this)
+        tvShowPopularPresenter.subscribe(this, getStoredState(savedInstanceState))
     }
 
     override fun onCreateView(
@@ -44,7 +42,8 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
         initViewListeners()
         setBackPressedCallback()
 
-        tvShowPopularPresenter.subscribe(this, getStoredState(savedInstanceState))
+        tvShowPopularPresenter.onAttach()
+
         return binding.root
     }
 
@@ -53,9 +52,13 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
         storeState(outState, tvShowPopularPresenter.getState())
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
         _binding = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         tvShowPopularPresenter.unsubscribe()
     }
 
@@ -108,11 +111,6 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
         }
     }
 
-    override fun showDetailedScreen(tvShowPopular: TvShowPopular) {
-        val context = activity ?: throw  IllegalStateException(ERROR_LOG_MESSAGE)
-        initTvShowDetailedFragment(context, tvShowPopular)
-    }
-
     private fun initViewListeners() {
         binding.apply {
             emptyButton.setOnClickListener {
@@ -141,6 +139,7 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
         outState.apply {
             putInt(KEY_CURRENT_PAGE_NUMBER, state.getCurrentPageNumber())
             putInt(KEY_PAGES_COUNT, state.getPagesCount())
+            putBoolean(KEY_WAS_LIST_LOADED, state.getWasTvShowPopularListLoaded())
         }
 
     private fun getStoredState(savedInstanceState: Bundle?): TvShowPopularContract.State? {
@@ -149,20 +148,8 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View, TvShowPopu
         }
         val pageNumber = savedInstanceState.getInt(KEY_CURRENT_PAGE_NUMBER)
         val pagesCount = savedInstanceState.getInt(KEY_PAGES_COUNT)
-        return TvShowPopularState(pageNumber, pagesCount)
-    }
-
-    //TODO where should I init this component? Mb create some helper?
-    private fun initTvShowDetailedFragment(
-        context: FragmentActivity,
-        tvShowPopular: TvShowPopular
-    ) {
-        val tvShowDetailedFragment = TvShowDetailedFragment.newInstance(tvShowPopular)
-        context.supportFragmentManager
-            .beginTransaction()
-            .add(R.id.fragment_container, tvShowDetailedFragment)
-            .addToBackStack("TvShowDetailedFragment")
-            .commit()
+        val wasListLoaded = savedInstanceState.getBoolean(KEY_WAS_LIST_LOADED)
+        return TvShowPopularState(pageNumber, pagesCount, wasListLoaded)
     }
 
     private fun finish() {

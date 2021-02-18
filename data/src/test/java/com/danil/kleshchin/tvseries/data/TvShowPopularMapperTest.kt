@@ -1,6 +1,6 @@
 package com.danil.kleshchin.tvseries.data
 
-import com.danil.kleshchin.tvseries.data.popular.entity.TvShowPopularEntity
+import com.danil.kleshchin.tvseries.data.popular.datasource.network.entity.TvShowPopularApiEntity
 import com.danil.kleshchin.tvseries.data.popular.mapper.TvShowPopularDataMapper
 import com.danil.kleshchin.tvseries.domain.entity.TvShowPopular
 import org.junit.Assert.assertEquals
@@ -19,7 +19,7 @@ class TvShowPopularMapperTest {
     private val iconUrl = "http://some.icon.com"
 
     private lateinit var tvShowPopular: TvShowPopular
-    private lateinit var tvShowPopularEntity: TvShowPopularEntity
+    private lateinit var tvShowPopularApiEntity: TvShowPopularApiEntity
     private lateinit var tvShowPopularDataMapper: TvShowPopularDataMapper
 
     @Before
@@ -30,7 +30,7 @@ class TvShowPopularMapperTest {
 
     @Test
     fun test_popular_entity_happy() {
-        tvShowPopular = tvShowPopularDataMapper.transform(tvShowPopularEntity)
+        tvShowPopular = tvShowPopularDataMapper.transform(tvShowPopularApiEntity)
 
         assertEquals(id, tvShowPopular.id)
         assertEquals(name, tvShowPopular.name)
@@ -43,7 +43,7 @@ class TvShowPopularMapperTest {
     }
 
     private fun initTvShowPopularApi() {
-        tvShowPopularEntity = TvShowPopularEntity(
+        tvShowPopularApiEntity = TvShowPopularApiEntity(
             id,
             name,
             detailUrl,

@@ -7,5 +7,7 @@ interface TvShowPopularRepository {
 
     fun getTvShowPopularPageCount(): Observable<Int>
 
-    fun getTvShowPopularList(pageNumber: Int): Observable<List<TvShowPopular>>
+    fun getTvShowPopularListByPageNumber(pageNumber: Int): Observable<List<TvShowPopular>>
+
+    fun getTvShowPopularListUpToPageNumberInclusive(pageNumber: Int): Observable<List<TvShowPopular>>
 }

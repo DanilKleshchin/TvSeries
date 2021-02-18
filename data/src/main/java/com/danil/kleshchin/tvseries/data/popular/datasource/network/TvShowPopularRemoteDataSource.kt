@@ -1,13 +1,9 @@
 package com.danil.kleshchin.tvseries.data.popular.datasource.network
 
-import com.danil.kleshchin.tvseries.data.popular.entity.TvShowPopularEntityObject
+import com.danil.kleshchin.tvseries.data.popular.datasource.network.entity.TvShowPopularApiEntityObject
 import io.reactivex.Observable
 
-class TvShowPopularRemoteDataSource(
-    private val tvShowPopularApi: TvShowPopularApi
-) {
+interface TvShowPopularRemoteDataSource {
 
-    fun getTvShowPopularApiResponse(pageNumber: Int): Observable<TvShowPopularEntityObject> {
-        return tvShowPopularApi.getTvShowPopular(pageNumber)
-    }
+    fun getTvShowPopularApiResponse(pageNumber: Int): Observable<TvShowPopularApiEntityObject>
 }
