@@ -27,16 +27,18 @@ class TvShowPopularPresenter(
 
     private var currentPageNumber = FIRST_PAGE_NUMBER
     private var pagesCount = currentPageNumber
+    private var wasTvShowPopularListLoaded = false
 
     override fun subscribe(view: TvShowPopularContract.View, state: TvShowPopularContract.State?) {
         tvShowPopularView = view
         currentPageNumber = state?.getCurrentPageNumber() ?: FIRST_PAGE_NUMBER
         pagesCount = state?.getPagesCount() ?: currentPageNumber
+        wasTvShowPopularListLoaded = state?.getWasTvShowPopularListLoaded() ?: false
     }
 
     override fun onAttach() {
         if (tvShowPopularList.isEmpty()) {
-            if (currentPageNumber > FIRST_PAGE_NUMBER) { //When the configuration was changed and current page is bigger than the first
+            if (wasTvShowPopularListLoaded) { //When configuration was changed but list had been loaded
                 executeGetTvShowPopularListUseCase(
                     getTvShowPopularListUpToPageNumberUseCase.execute(
                         GetTvShowPopularListUpToPageNumberUseCase.Params(currentPageNumber)
@@ -62,9 +64,8 @@ class TvShowPopularPresenter(
         tvShowPopularList = arrayListOf()
     }
 
-    //TODO ask about this state object creation
     override fun getState(): TvShowPopularContract.State =
-        TvShowPopularState(currentPageNumber, pagesCount)
+        TvShowPopularState(currentPageNumber, pagesCount, wasTvShowPopularListLoaded)
 
     override fun onTvShowPopularSelected(tvShowPopular: TvShowPopular) {
         router.navigateTo(CiceroneScreens.tvShowDetailedScreen(tvShowPopular))
@@ -119,6 +120,7 @@ class TvShowPopularPresenter(
                             return@subscribe
                         }
                         tvShowPopularList.addAll(tvShows)
+                        wasTvShowPopularListLoaded = true
                         showList.invoke()
                         disposables.clear()
                     },

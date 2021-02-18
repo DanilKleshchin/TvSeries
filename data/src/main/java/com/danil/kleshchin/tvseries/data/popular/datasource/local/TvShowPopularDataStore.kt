@@ -21,12 +21,14 @@ class TvShowPopularDataStore @Inject constructor(
 
     private val dataStore: DataStore<Preferences> = context.createDataStore(PREFERENCES_NAME)
 
+    //TODO Use RxJava instead of coroutines. Wait until RxDataStore class will be fixed.
     suspend fun setPagesCount(pagesCount: Int) {
         dataStore.edit {
             it[PAGES_COUNT_KEY] = pagesCount
         }
     }
 
+    //TODO Use RxJava instead of coroutines. Wait until RxDataStore class will be fixed.
     fun getPagesCount(): Flow<Int> = dataStore.data
         .map {
             it[PAGES_COUNT_KEY] ?: 0

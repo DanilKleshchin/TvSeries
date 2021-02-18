@@ -25,5 +25,6 @@ interface TvShowPopularContract {
     interface State {
         fun getCurrentPageNumber(): Int
         fun getPagesCount(): Int
+        fun getWasTvShowPopularListLoaded(): Boolean
     }
 }

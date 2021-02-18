@@ -34,16 +34,14 @@ class TvShowPopularDataRepository @Inject constructor(
                         .doOnNext { list ->
                             storePagesCount(list.pages)
                             localDataSource.removeTvShowPopularByPage(pageNumber)
-                                .andThen {
+                                .andThen(
                                     localDataSource.insertTvShowPopularEntityList(
                                         mapper.transformApiToDbEntityList(
                                             list.tvShowListApi,
                                             pageNumber
                                         )
                                     )
-                                        .subscribeOn(Schedulers.io()) //TODO needs to remove subscribes
-                                        .subscribe()
-                                }
+                                )
                                 .subscribeOn(Schedulers.io())
                                 .subscribe()
                         }
@@ -62,6 +60,7 @@ class TvShowPopularDataRepository @Inject constructor(
             .map(mapper::transformDbEntityList)
     }
 
+    //TODO Use RxJava instead of coroutines. Wait until RxDataStore class will be fixed.
     override fun getTvShowPopularPageCount(): Observable<Int> {
         val pageCount: Int
         runBlocking {

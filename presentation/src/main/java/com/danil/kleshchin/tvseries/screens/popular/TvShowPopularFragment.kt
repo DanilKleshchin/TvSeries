@@ -17,6 +17,7 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View,
 
     private val KEY_CURRENT_PAGE_NUMBER = "KEY_CURRENT_PAGE_NUMBER"
     private val KEY_PAGES_COUNT = "KEY_PAGES_COUNT"
+    private val KEY_WAS_LIST_LOADED = "KEY_WAS_LIST_LOADED"
 
     @Inject
     lateinit var tvShowPopularPresenter: TvShowPopularContract.Presenter
@@ -138,6 +139,7 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View,
         outState.apply {
             putInt(KEY_CURRENT_PAGE_NUMBER, state.getCurrentPageNumber())
             putInt(KEY_PAGES_COUNT, state.getPagesCount())
+            putBoolean(KEY_WAS_LIST_LOADED, state.getWasTvShowPopularListLoaded())
         }
 
     private fun getStoredState(savedInstanceState: Bundle?): TvShowPopularContract.State? {
@@ -146,7 +148,8 @@ class TvShowPopularFragment : Fragment(), TvShowPopularContract.View,
         }
         val pageNumber = savedInstanceState.getInt(KEY_CURRENT_PAGE_NUMBER)
         val pagesCount = savedInstanceState.getInt(KEY_PAGES_COUNT)
-        return TvShowPopularState(pageNumber, pagesCount)
+        val wasListLoaded = savedInstanceState.getBoolean(KEY_WAS_LIST_LOADED)
+        return TvShowPopularState(pageNumber, pagesCount, wasListLoaded)
     }
 
     private fun finish() {
